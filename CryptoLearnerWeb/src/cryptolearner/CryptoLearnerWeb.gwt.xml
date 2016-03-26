@@ -28,4 +28,7 @@
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
+  
+  <!--  Gwt Boostrap 3 -->
+  <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 </module>
