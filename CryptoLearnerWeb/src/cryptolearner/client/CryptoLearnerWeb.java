@@ -86,7 +86,6 @@ public class CryptoLearnerWeb implements EntryPoint {
 		rightControl.setDataTarget("#menu");
 		rightControl.setNext(true);
 		rightControl.setIconType(IconType.CHEVRON_RIGHT);
-//		rightControl.getElement().setAttribute("style", "background-image: none; background-color: none; color: black; width: 400px;");
 		final CarouselControl leftControl = new CarouselControl();
 		leftControl.setDataTarget("#menu");
 		leftControl.setPrev(true);
@@ -113,40 +112,61 @@ public class CryptoLearnerWeb implements EntryPoint {
 
 	private CarouselSlide createMenuCarouselSlide(String slideTitle) {
 		CarouselSlide slide = new CarouselSlide();
+		
+		// add header to slide
 		PageHeader header = new PageHeader();
 		header.setText(slideTitle);
 		slide.add(header);
+		
+		// add separating div between header and buttons
 		Div divider = new Div();
 		divider.getElement().setAttribute("class", "divide100");
-		Div btnContainer = new Div();
+		
+		// create container to hold all buttons
+		Div parentBtnContainer = new Div();
+		
+		// create each button's individual container
+		Div btnOneContainer = new Div();
+		Div btnTwoContainer = new Div();
+		Div btnThreeContainer = new Div();
+		
+		// define the values of the class attribute for buttons and their containers
 		String containerClassValue = "col-lg-4 col-xs-12 col-md-4";
 		String btnClassValue = "btn btn-default col-lg-11 col-xs-12 col-md-11";
-		Div containerOne = new Div();
-		Div containerTwo = new Div();
-		Div containerThree = new Div();
-		containerOne.getElement().setAttribute("class", containerClassValue);
-		containerTwo.getElement().setAttribute("class", containerClassValue);
-		containerThree.getElement().setAttribute("class", containerClassValue);
 		
+		// set each container class type
+		btnOneContainer.getElement().setAttribute("class", containerClassValue);
+		btnTwoContainer.getElement().setAttribute("class", containerClassValue);
+		btnThreeContainer.getElement().setAttribute("class", containerClassValue);
+		
+		// set first challenge button
 		Button challengeOneBtn = new Button("Encrypt");
 		challengeOneBtn.setIcon(IconType.PENCIL_SQUARE_O);
 		challengeOneBtn.getElement().setAttribute("class", btnClassValue);
+		
+		// set second challenge button
 		Button challengeTwoBtn = new Button();
 		challengeTwoBtn.setIcon(IconType.LOCK);
 		challengeTwoBtn.getElement().setAttribute("class", btnClassValue);
+		
+		// set third challenge button
 		Button challengeThreeBtn = new Button();
 		challengeThreeBtn.setIcon(IconType.LOCK);
 		challengeThreeBtn.getElement().setAttribute("class", btnClassValue);
 		
-		containerOne.add(challengeOneBtn);
-		containerTwo.add(challengeTwoBtn);
-		containerThree.add(challengeThreeBtn);
+		// add each button to its container
+		btnOneContainer.add(challengeOneBtn);
+		btnTwoContainer.add(challengeTwoBtn);
+		btnThreeContainer.add(challengeThreeBtn);
 		
-		btnContainer.add(containerOne);
-		btnContainer.add(containerTwo);
-		btnContainer.add(containerThree);
+		// add each button container to the parent button container
+		parentBtnContainer.add(btnOneContainer);
+		parentBtnContainer.add(btnTwoContainer);
+		parentBtnContainer.add(btnThreeContainer);
+		
+		// add divider and parent button container to the carousel slide
 		slide.add(divider);
-		slide.add(btnContainer);
+		slide.add(parentBtnContainer);
 		return slide;
 	}
 }
