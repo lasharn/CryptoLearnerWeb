@@ -34,6 +34,35 @@ button {
 		width: 90% !important;
 	}
 
+/** Cipher wheel styling **/
+#cipher-wheel {
+    position: relative;
+    top: 0%;
+    left: 0%;
+    min-width: 200px;
+    max-width: 600px;
+    min-height: 200px;
+    max-height: 600px;
+}
+
+#outer-wheel {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    object-position: center;
+    width: 100%;
+}
+
+#inner-wheel {
+    margin-top: 11%;
+    left: 11%;
+    position: absolute;
+    cursor: pointer;
+    width: 78%;
+    object-position: center;
+    
+}
+
 /** Dividers */
 .divide10 {
 	width: 100%;
