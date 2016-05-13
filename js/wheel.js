@@ -17,6 +17,10 @@
 *                                                                         *
 ***************************************************************************/
 
+var key = 0;
+
+
+
 var rotateWheel=function(elem){
     var output={};
     //Preventing elem to being selected on IE
@@ -47,8 +51,53 @@ var rotateWheel=function(elem){
     var Dy=[];
     var dummy;
     //Public Methods
-    output.onchange=function(){};
+    output.onchange=function(e){
+        updateKey();
+    };
     //Private Methods
+    function updateKey() {
+        // set the value of the cipher key based on the current rotation
+        var keyText = document.getElementById("cipher-key");
+        //calculate value of key
+        key = (26 - (Math.round((output.deg % 360) / (360 / 26)))) % 26;
+        keyText.textContent = key; 
+    }
+    function snapToLetter(e) {
+        //setting control variables
+        var cursorRad;
+        var relativeRad;
+        var rotationRad;
+        cursorRad=getAngle(e);
+        relativeRad=cursorRad-rad;
+        var rotationRad=lastRad+relativeRad;
+        if(isNaN(rotationRad)) rotationRad=lastRad;
+        if(rotationRad<0) rotationRad=maxRad;
+        if(rotationRad>maxRad) rotationRad=0;
+        // set rotation to nearest letter
+        var rotationRad = (maxRad/26) * Math.round(rotationRad/(maxRad/26)); 
+        rad = cursorRad;
+
+        //applying rotation to element
+        elem.style.transform="rotate("+rotationRad+"rad)";
+        elem.style.MozTransform="rotate("+rotationRad+"rad)";
+        elem.style.WebkitTransform="rotate("+rotationRad+"rad)";
+        elem.style.OTransform="rotate("+rotationRad+"rad)";
+        elem.style.MsTransform="rotate("+rotationRad+"rad)";
+
+        //rotation Matrix for IExplorer
+        var iecos = Math.cos(cursorRad);
+        var iesin = Math.sin(cursorRad);
+        Dx[0]=-(size[0]/2)*iecos + (size[1]/2)*iesin + (size[0]/2);
+        Dx[1]=-(size[0]/2)*iesin - (size[1]/2)*iecos + (size[1]/2);
+        elem.style.filter  ="progid:DXImageTransform.Microsoft.Matrix(M11="+iecos+", M12="+-iesin+", M21="+iesin+", M22="+iecos+", Dx="+Dx[0]+", Dy="+Dx[1]+", SizingMethod=auto expand)";
+        elem.style.msFilter="progid:DXImageTransform.Microsoft.Matrix(M11="+iecos+", M12="+-iesin+", M21="+iesin+", M22="+iecos+", Dx="+Dx[0]+", Dy="+Dx[1]+", SizingMethod=auto expand)";
+
+        //assigning values to public properties
+        output.rad=rotationRad;
+        output.deg=maxDeg*output.rad/(2*Math.PI);
+        output.per=(output.rad*maxPer)/maxRad;
+        
+    }
     function preventDefault(e){
         //prevent event's default action
         if(window.event) e=window.event;
@@ -103,6 +152,7 @@ var rotateWheel=function(elem){
             drag=true;
         }else{
             drag=false;
+            snapToLetter(e);
         }
     }
     function rotate(e){
@@ -154,7 +204,7 @@ var rotateWheel=function(elem){
             lastRad=rotationRad;
             lastPer=output.per;
             lastFullRad=output.fullRad;
-            output.onchange();
+            output.onchange(e);
         }
     }
     
@@ -196,8 +246,19 @@ var cipherWheel = function(elem) {
     innerWheel.setAttribute("alt", "inner cipher wheel");
     innerWheel.setAttribute("id", "inner-wheel");
     var spinWheel = rotateWheel(innerWheel);
+    var keyDisplay = document.createElement("div");
+    keyDisplay.setAttribute("id", "key-display");
+    var keyText = document.createTextNode("Key: ");
+    keyDisplay.appendChild(keyText);
+    var keyValue = document.createElement("span");
+    keyValue.setAttribute("id", "cipher-key");
+    var valueText = document.createTextNode(key);
+    keyValue.appendChild(valueText);
+    keyDisplay.appendChild(keyValue);
+    
     elem.appendChild(outerWheel);
     elem.appendChild(innerWheel);
+    elem.appendChild(keyDisplay);
 }
 
 var elem=document.getElementById("cipher-wheel");
