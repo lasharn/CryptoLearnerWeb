@@ -65,11 +65,20 @@ button {
 
 #key-display {
     position: absolute;
-    font-size: 2em;
-    width: 20%;
-    top: 155%;
-    left: 40%;
+    font-size: 20px;
+    font-size: 1.5vmax;
+    width: 60%;
+    margin-top: 52%;
+    left: 20%;
     text-align: center;
+    pointer-events: none;
+}
+
+/** Caesar level styling **/
+
+#game {
+    width: 80%;
+    margin: auto;
 }
 
 /** Dividers */
@@ -91,14 +100,4 @@ button {
 .divide100 {
 	width: 100%;
 	height: 100px;
-}
-
-/** Cipher Wheel */
-#drawing_canvas {
-    position: absolute;
-   margin: auto;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
