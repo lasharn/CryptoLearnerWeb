@@ -18,9 +18,12 @@
         this.wordList = getWordList();
         $scope.key = Math.floor((Math.random() * 25) + 1);
         $scope.word = newWord();
+        $scope.answer = encryptCaesar($scope.word, $scope.key);
         $scope.setupChallenge = function() {
             $scope.key = Math.floor((Math.random() * 25) + 1);
             $scope.word = newWord();
+            $scope.answer = encryptCaesar($scope.word, $scope.key);
+            $scope.$apply();
         }
         
         function getWordList() {
@@ -45,7 +48,21 @@
         function newWord() {
             // retrieve a random word from the list of words
             var index = Math.floor(Math.random() * this.wordList.length);
-            return this.wordList[index];
+            return this.wordList[index].toUpperCase();
+        }
+        
+        function encryptCaesar(plainText, key) {
+            plainText = plainText.toUpperCase();
+            cipherTextArray = [];
+            for (i = 0; i < plainText.length; i++) {
+                newValue = plainText.charCodeAt(i) + key;
+                if (newValue > "Z".charCodeAt(0)) {
+                    newValue -= 26;    
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            cipherText = cipherTextArray.join("");
+            return cipherText;    
         }
     }]);
     
