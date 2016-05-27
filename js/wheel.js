@@ -248,8 +248,10 @@ var cipherWheel = function(elem) {
     var spinWheel = rotateWheel(innerWheel);
     var keyDisplay = document.createElement("div");
     keyDisplay.setAttribute("id", "key-display");
-    var keyText = document.createTextNode("Key: ");
-    keyDisplay.appendChild(keyText);
+    var keyIcon = document.createElement("i");
+    keyIcon.setAttribute("class", "fa fa-key");
+    keyIcon.setAttribute("style", "margin-right: 10px;");
+    keyDisplay.appendChild(keyIcon);
     var keyValue = document.createElement("span");
     keyValue.setAttribute("id", "cipher-key");
     var valueText = document.createTextNode(key);
