@@ -10,6 +10,8 @@
     
     app.controller('GameController', ['$scope', '$window', function($scope, $window) {
         this.state = levelState;
+        this.stage = levelState.currentStage;
+        this.maxStage = levelState.maxStage;
     }]);
     
     app.controller('CaesarLevelOne', ['$scope', '$window', function($scope, $window) {

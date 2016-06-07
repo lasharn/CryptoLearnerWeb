@@ -26,14 +26,24 @@
             <!-- Question -->
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <h2 class="text-center">Stage {{game.stage}} / {{game.maxStage}}</h2>
                     <h3 class="text-center">Encrypt &quot;{{word}}&quot; with a key of {{key}}. Answer: {{answer}}</h3>
                 </div>
             </div>
             <!-- Cipher Wheel -->
             <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
             <!-- Player Input -->
-            <div class="col-xs-12 col-md-6 col--6">
-            
+            <div class="col-xs-12 col-md-6 col-lg-6">
+                <!-- Answer display -->
+                <div class="letters col-xs-12 col-md-12 col-lg-12">
+                    <i class="fa fa-lock fa-2x"></i>
+                    <span ng-repeat="letter in answer track by $index">{{letter}}</span>
+                </div>
+                <!-- Plaintext display -->
+                <div class="letters col-xs-12 col-md-12 col-lg-12">
+                    <i class="fa fa-unlock fa-2x"></i>
+                    <span ng-repeat="letter in word track by $index" ng-hide="$last">{{letter}}</span>
+                </div>
             
             </div>
             
