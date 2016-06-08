@@ -27,7 +27,13 @@
             $scope.keyboard = createKeyboard($scope.answer);
             $scope.$apply();
         }
-        $scope.selectLetter = function(keyboard) {
+        
+        $scope.selectLetter = function(event, letter) {
+            if (!letter.isDisplayed) {
+                return;
+            }
+            $(event.currentTarget).find('span').text("as");
+            letter.isDisplayed = !letter.isDisplayed;
         }
         
         
@@ -96,7 +102,7 @@
 
         function Keyboard(letter) {
             this.char = letter;
-            this.isDisplayed = false;
+            this.isDisplayed = true;
         }
         
         function encryptCaesar(plainText, key) {

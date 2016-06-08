@@ -61,7 +61,7 @@
                 <div>
                     <div class="keyboard-row">
                         <div ng-class="['keyboard-box', letter.isDisplayed ? 'box-unselected' : 'box-selected']"
-                             ng-click="selectLetter()"
+                             ng-click="selectLetter($event, letter)"
                              ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
                             <div class="keyboard-box-content">
                                 <div>

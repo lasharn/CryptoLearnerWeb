@@ -220,11 +220,11 @@ button {
     background-color: #ebebeb;
 }
 
-.box-selected {
+.box-unselected {
     color: orange;
 }
 
-.box-unselected {
+.box-selected {
     color: purple;
     cursor: default;
 }
