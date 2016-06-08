@@ -27,7 +27,8 @@
             $scope.keyboard = createKeyboard($scope.answer);
             $scope.$apply();
         }
-        
+        $scope.selectLetter = function(keyboard) {
+        }
         
         
         function getWordList() {
@@ -72,22 +73,30 @@
             var KEYBOARD_SIZE = 10;
             var word = encryptedWord;
             var uniqueStr = "";
+            var keyboardArray = [];
             for (i = 0; i < word.length; i++) {
                 if (uniqueStr.indexOf(word.charAt(i)) == -1) {
                     uniqueStr += word[i];    
                 }
             }
             // pad the keyboard with random letters
-            while (uniqueStr.length < KEYBOARD_SIZE + 1) {
+            while (uniqueStr.length < KEYBOARD_SIZE) {
                 var newLetter = String.fromCharCode(Math.floor((Math.random() * 26)) + "A".charCodeAt(0));
                 if (uniqueStr.indexOf(newLetter) == -1) {
                     uniqueStr += newLetter;    
                 }
             }
-            console.log(uniqueStr);
             uniqueStr = shuffle(uniqueStr);
-            console.log(uniqueStr);
-            return uniqueStr;
+            //put the string into an array which has [string, bool] objects
+            for (i = 0; i < uniqueStr.length; i++) {
+                keyboardArray.push(new Keyboard(uniqueStr[i]));
+            }
+            return keyboardArray;
+        }
+
+        function Keyboard(letter) {
+            this.char = letter;
+            this.isDisplayed = false;
         }
         
         function encryptCaesar(plainText, key) {
@@ -172,3 +181,6 @@
     };                             
         
 })();
+
+var letterWidth = $('.answer-box').width();
+$('.answer-box').css({'height':letterWidth+'px'});

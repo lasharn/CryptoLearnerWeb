@@ -33,16 +33,54 @@
             <!-- Cipher Wheel -->
             <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
             <!-- Player Input -->
-            <div class="col-xs-12 col-md-6 col-lg-6">
+            <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
                 <!-- Answer display -->
-                <div class="letters col-xs-12 col-md-12 col-lg-12">
+                <div class="answer-section">
                     <i class="fa fa-lock fa-2x"></i>
-                    <span ng-repeat="letter in answer track by $index">{{letter}}</span>
+                    <div class="answer-box" ng-repeat="letter in answer track by $index">
+                        <div class='answer-box-content'>
+                            <div>
+                                <span ng-attr-id="{{ 'answer-' + $index }}"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Plaintext display -->
-                <div class="letters col-xs-12 col-md-12 col-lg-12">
+                <div class="plaintext-section">
                     <i class="fa fa-unlock fa-2x"></i>
-                    <span ng-repeat="letter in word track by $index" ng-hide="$last">{{letter}}</span>
+                    <div class="plaintext-box" ng-repeat="letter in word track by $index" ng-hide="$last">
+                        <div class="plaintext-box-content">
+                            <div>
+                                <span>{{letter}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divide100"></div>
+                <!-- Keyboard display -->
+                <div>
+                    <div class="keyboard-row">
+                        <div ng-class="['keyboard-box', letter.isDisplayed ? 'box-unselected' : 'box-selected']"
+                             ng-click="selectLetter()"
+                             ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
+                            <div class="keyboard-box-content">
+                                <div>
+                                    <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div ng-class="['keyboard-box', letter.isDisplayed ? 'box-unselected' : 'box-selected']"
+                             ng-click="letter.isDisplayed = !letter.isDisplayed"
+                             ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
+                            <div class="keyboard-box-content">
+                                <div>
+                                    <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             
             </div>
