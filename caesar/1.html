@@ -36,11 +36,15 @@
             <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
                 <!-- Answer display -->
                 <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
-                    <i class="fa fa-lock fa-2x"></i>
+                    <div class="icon-box">
+                        <div class="box-content">
+                            <i class="fa fa-lock fa-2x"></i>
+                        </div>
+                    </div>
                     <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
                          ng-click="deselectLetter(letter)"
                          ng-repeat="letter in answerKeyboard track by $index">
-                        <div class='answer-box-content'>
+                        <div class='box-content'>
                             <div>
                                 <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
                             </div>
@@ -49,9 +53,13 @@
                 </div>
                 <!-- Plaintext display -->
                 <div class="plaintext-section">
-                    <i class="fa fa-unlock fa-2x"></i>
+                    <div class="icon-box">
+                        <div class="box-content">
+                            <i class="fa fa-unlock fa-2x"></i>
+                        </div>
+                    </div>
                     <div class="plaintext-box" ng-repeat="letter in word track by $index" ng-hide="$last">
-                        <div class="plaintext-box-content">
+                        <div class="box-content">
                             <div>
                                 <span>{{letter}}</span>
                             </div>
@@ -65,7 +73,7 @@
                         <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                              ng-click="selectLetter($event, letter)"
                              ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
-                            <div class="keyboard-box-content">
+                            <div class="box-content">
                                 <div>
                                     <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
                                 </div>
@@ -76,7 +84,7 @@
                         <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                              ng-click="selectLetter($event, letter)"
                              ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
-                            <div class="keyboard-box-content">
+                            <div class="box-content">
                                 <div>
                                     <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
                                 </div>

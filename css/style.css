@@ -85,11 +85,16 @@ button {
     margin: auto;
 }
 
-#playerInput i {
+.icon-box {
+    display: inline-block;
+    position: relative;
     width: 10%;
-    float: left;
-    margin-right: 5%;
-    margin-top: 2%;
+    height: 0;
+    padding-bottom: 10%;
+    margin:1%;
+    overflow:hidden;
+    font-size: 20px; 
+    font-size: 1.5vw;
 }
 
 /** Answer styling **/
@@ -116,8 +121,7 @@ button {
 }
 
 .answer-box {
-    float:left;
-    display: inline;
+    display: inline-block;
     position: relative;
     width: 10%;
     height: 0;
@@ -129,7 +133,7 @@ button {
     color: white;
 }
 
-.answer-box-content {
+.box-content {
     position:  absolute;
     top: 0;
     left: 0;
@@ -137,16 +141,22 @@ button {
     right: 0;
 }
 
-.answer-box-content div {
+.box-content div {
     display: table;
     width: 100%;
     height: 100%;
 }
 
-.answer-box-content span {
+.box-content span {
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+}
+
+.box-content i {
+    display: block;
+    vertical-align: middle;
+    text-align: center;
 }
 
 /** Letter styling **/
@@ -165,8 +175,8 @@ button {
 }
 
 .plaintext-box {
-    float:left;
-    display: inline;
+/*    float:left;*/
+    display: inline-block;
     position: relative;
     width: 10%;
     height: 0;
@@ -176,26 +186,6 @@ button {
     border-radius: 15%;
     background-color: #e1e1e1;
     color: #7d7d7d;
-}
-
-.plaintext-box-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
-.plaintext-box-content div {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.plaintext-box-content span {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
 }
 
 
@@ -216,8 +206,8 @@ button {
 }
 
 .keyboard-box {
-    float:left;
-    display: inline;
+/*    float:left;*/
+    display: inline-block;
     position: relative;
     width: 13%;
     height: 0;
@@ -241,26 +231,6 @@ button {
 
 .clickable {
     cursor: pointer;
-}
-
-.keyboard-box-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
-.keyboard-box-content div {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.keyboard-box-content span {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
 }
 
 /** Dividers */
