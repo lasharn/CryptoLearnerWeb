@@ -35,12 +35,14 @@
             <!-- Player Input -->
             <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
                 <!-- Answer display -->
-                <div class="answer-section">
+                <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
                     <i class="fa fa-lock fa-2x"></i>
-                    <div class="answer-box" ng-repeat="letter in answer track by $index">
+                    <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+                         ng-click="deselectLetter(letter)"
+                         ng-repeat="letter in answerKeyboard track by $index">
                         <div class='answer-box-content'>
                             <div>
-                                <span ng-attr-id="{{ 'answer-' + $index }}"></span>
+                                <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
                             </div>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                 <!-- Keyboard display -->
                 <div>
                     <div class="keyboard-row">
-                        <div ng-class="['keyboard-box', letter.isDisplayed ? 'box-unselected' : 'box-selected']"
+                        <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                              ng-click="selectLetter($event, letter)"
                              ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
                             <div class="keyboard-box-content">
@@ -71,8 +73,8 @@
                         </div>
                     </div>
                     <div class="keyboard-row">
-                        <div ng-class="['keyboard-box', letter.isDisplayed ? 'box-unselected' : 'box-selected']"
-                             ng-click="letter.isDisplayed = !letter.isDisplayed"
+                        <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                             ng-click="selectLetter($event, letter)"
                              ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
                             <div class="keyboard-box-content">
                                 <div>

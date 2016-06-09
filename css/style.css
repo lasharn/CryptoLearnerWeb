@@ -93,6 +93,15 @@ button {
 }
 
 /** Answer styling **/
+
+.incorrect-answer span {
+    color: #a94442;
+}
+
+.correct-answer span {
+    color: #3c763d;
+}
+
 .answer-section {
     width: 80%;
     text-align: center;
@@ -220,13 +229,18 @@ button {
     background-color: #ebebeb;
 }
 
-.box-unselected {
-    color: orange;
+.box-selectable {
+    color: #7b7b7b;
 }
 
-.box-selected {
-    color: purple;
+.box-unselectable {
+    background-color: #fafafa;
+    color: #ebebeb;
     cursor: default;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .keyboard-box-content {
