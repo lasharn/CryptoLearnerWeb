@@ -95,11 +95,11 @@ button {
 /** Answer styling **/
 
 .incorrect-answer span {
-    color: #a94442;
+    color: #FF5454;
 }
 
 .correct-answer span {
-    color: #3c763d;
+    color: #54FF62;
 }
 
 .answer-section {
