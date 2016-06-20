@@ -65,16 +65,10 @@ var rotateWheel=function(elem){
     function snapToLetter(e) {
         //setting control variables
         var cursorRad;
-        var relativeRad;
         var rotationRad;
         cursorRad=getAngle(e);
-        relativeRad=cursorRad-rad;
-        var rotationRad=lastRad+relativeRad;
-        if(isNaN(rotationRad)) rotationRad=lastRad;
-        if(rotationRad<0) rotationRad=maxRad;
-        if(rotationRad>maxRad) rotationRad=0;
         // set rotation to nearest letter
-        var rotationRad = (maxRad/26) * Math.round(rotationRad/(maxRad/26)); 
+        var rotationRad = (maxRad/26) * -key;
         rad = cursorRad;
 
         //applying rotation to element
