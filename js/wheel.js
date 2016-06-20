@@ -257,12 +257,24 @@ var cipherWheel = function(elem) {
     var valueText = document.createTextNode(key);
     keyValue.appendChild(valueText);
     keyDisplay.appendChild(keyValue);
+
+    // var cipherHeight = outerWheel.width;
+    // elem.style.minHeight = cipherHeight+"px";
     
     elem.appendChild(outerWheel);
     elem.appendChild(innerWheel);
     elem.appendChild(keyDisplay);
+
 }
 
 var elem=document.getElementById("cipher-wheel");
 var cipherWheel=cipherWheel(elem);
 
+$(window).on("resize", function() {
+
+    var cipherWheel = document.getElementById("cipher-wheel");
+    var cipherHeight = cipherWheel.firstElementChild.offsetWidth;
+    cipherWheel.style.minHeight = cipherHeight+"px";
+});
+
+$(window).trigger('resize');

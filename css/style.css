@@ -43,10 +43,10 @@ button {
     position: relative;
     top: 0%;
     left: 0%;
-    min-width: 200px;
-    max-width: 600px;
-    min-height: 200px;
-    max-height: 600px;
+    /*min-width: 200px;*/
+    /*max-width: 600px;*/
+    /*min-height: 200px;*/
+    /*max-height: 600px;*/
 }
 
 #outer-wheel {
@@ -118,6 +118,7 @@ button {
     user-select: none;
     cursor: default;
     clear: both;
+    margin: 0 auto;
 }
 
 .answer-box {
@@ -161,19 +162,6 @@ button {
 
 /** Letter styling **/
 
-.plaintext-section {
-    width: 80%;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1.2em;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: default;
-    clear: both;
-}
-
 .plaintext-box {
 /*    float:left;*/
     display: inline-block;
@@ -192,7 +180,6 @@ button {
 /** Keyboard styling**/
 
 .keyboard-row {
-    /*margin-left: 12%;*/
     width: 80%;
     text-align: center;
     font-weight: 600;
@@ -203,6 +190,7 @@ button {
     user-select: none;
     cursor: default;
     clear: both;
+    margin: 0 auto;
 }
 
 .keyboard-box {

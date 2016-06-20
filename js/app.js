@@ -265,11 +265,14 @@
     }];
     
     var levelState = {
-        currentStage: 0,
+        currentStage: 1,
         maxStage: 3
-    };                             
+    };
+    
+    
         
 })();
+
 
 //var letterWidth = $('.answer-box').width();
 //$('.answer-box').css({'height':letterWidth+'px'});
