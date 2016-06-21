@@ -9,9 +9,47 @@
     }]);
     
     app.controller('GameController', ['$scope', '$window', function($scope, $window) {
-        this.state = levelState;
-        this.stage = levelState.currentStage;
-        this.maxStage = levelState.maxStage;
+        $scope.state = levelState;
+        $scope.stage = levelState.currentStage;
+        $scope.maxStage = levelState.maxStage;
+        $scope.gameOrder = ['caesar/1','caesar/2', 'caesar/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3', 'substitution/1', 'substitution/2', 'substitution/3'];
+        $scope.currentLevelIndex = getCurrentLevelIndex();
+
+        createNextStageModal();
+        createNextChallengeModal();
+
+        $scope.showModal = function () {
+            $scope.stage++;
+            if ($scope.stage == $scope.maxStage + 1) {
+                // show next challenge modal
+                $('#next-challenge-modal').modal('show');
+                return;
+            }
+            $('#next-stage-modal').modal('show');
+        }
+        $scope.nextChallenge = function () {
+            //navigate to main menu if at last level or current level not detected
+            if ($scope.currentLevelIndex == $scope.gameOrder.length - 1 || $scope.currentLevelIndex == -1) {
+                $window.location.href = '/';
+                return;
+            }
+            // navigate to next page
+            var nextLevel = $scope.gameOrder[$scope.currentLevelIndex + 1];
+            $window.location.href = '/' + nextLevel + '.html';
+            return;
+        }
+
+        $scope.nextStage = function () {
+            console.log("next stage");
+            $scope.$broadcast('nextStage');
+        }
+
+        function getCurrentLevelIndex () {
+            var path = $window.location.pathname;
+            path = path.match(/\/\w*\/\d/);
+            var index = $scope.gameOrder.indexOf(path);
+            return index;
+        }
     }]);
     
     app.controller('CaesarLevelOne', ['$scope', '$window', function($scope, $window) {
@@ -23,7 +61,10 @@
         $scope.keyboard = createKeyboard($scope.answer);
         $scope.incorrectAnswer = false;
         $scope.correctAnswer = false;
-        $scope.setupChallenge = function() {
+        $scope.$on('nextStage', function(e) {
+            $scope.setupStage();
+        });
+        $scope.setupStage = function() {
             $scope.key = Math.floor((Math.random() * 25) + 1);
             $scope.word = newWord();
             $scope.answer = encryptCaesar($scope.word, $scope.key);
@@ -31,7 +72,6 @@
             $scope.keyboard = createKeyboard($scope.answer);
             $scope.incorrectAnswer = false;
             $scope.correctAnswer = false;
-            $scope.$apply();
         }
         
         $scope.selectLetter = function(event, letter) {
@@ -60,7 +100,9 @@
             if (answerFilled()) {
                 $scope.correctAnswer = checkSuccess();
                 $scope.incorrectAnswer = !$scope.correctAnswer;
-                console.log($scope.incorrectAnswer);
+                if ($scope.correctAnswer) {
+                    $scope.showModal();
+                }
             }
         }
         
@@ -268,11 +310,89 @@
         currentStage: 1,
         maxStage: 3
     };
-    
-    
+
+
         
 })();
 
+function createNextStageModal () {
+    var game = document.getElementById('game');
+    var modal = document.createElement("div");
+    modal.setAttribute("id", "next-stage-modal");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-labelledby", "successLabel");
+    modal.setAttribute("aria-hidden", "true");
+    var dialog = document.createElement("div");
+    dialog.setAttribute("class", "modal-dialog");
+    var content = document.createElement("div");
+    content.setAttribute("class", "modal-content");
+    var header = document.createElement("div");
+    header.setAttribute("class", "modal-header");
+    var h3 = document.createElement("h3");
+    h3.setAttribute("id", "successLabel");
+    h3.appendChild(document.createTextNode("Correct!"));
+    var body = document.createElement("div");
+    body.setAttribute("class", "modal-body");
+    var para = document.createElement("p");
+    para.appendChild(document.createTextNode("You got it!"));
+    var footer = document.createElement("div");
+    footer.setAttribute("class", "modal-footer");
+    var btn = document.createElement("button");
+    btn.setAttribute("class", "btn btn-primary");
+    btn.setAttribute("data-dismiss", "modal");
+    btn.setAttribute("ng-click", "nextStage()");
+    btn.innerText = "Continue";
 
-//var letterWidth = $('.answer-box').width();
-//$('.answer-box').css({'height':letterWidth+'px'});
+    game.appendChild(modal);
+    modal.appendChild(dialog);
+    dialog.appendChild(content);
+    content.appendChild(header);
+    header.appendChild(h3);
+    content.appendChild(body);
+    body.appendChild(para);
+    content.appendChild(footer);
+    footer.appendChild(btn);
+}
+
+function createNextChallengeModal () {
+    var game = document.getElementById('game');
+    var modal = document.createElement("div");
+    modal.setAttribute("id", "next-challenge-modal");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-labelledby", "successLabel");
+    modal.setAttribute("aria-hidden", "true");
+    var dialog = document.createElement("div");
+    dialog.setAttribute("class", "modal-dialog");
+    var content = document.createElement("div");
+    content.setAttribute("class", "modal-content");
+    var header = document.createElement("div");
+    header.setAttribute("class", "modal-header");
+    var h3 = document.createElement("h3");
+    h3.setAttribute("id", "successLabel");
+    h3.appendChild(document.createTextNode("Challenge Complete!"));
+    var body = document.createElement("div");
+    body.setAttribute("class", "modal-body");
+    var para = document.createElement("p");
+    para.appendChild(document.createTextNode("You have unlocked the next challenge!"));
+    var footer = document.createElement("div");
+    footer.setAttribute("class", "modal-footer");
+    var btn = document.createElement("button");
+    btn.setAttribute("class", "btn btn-primary");
+    btn.setAttribute("data-dismiss", "modal");
+    btn.setAttribute("ng-click", "nextChallenge()");
+    btn.innerText = "Next Challenge";
+
+    game.appendChild(modal);
+    modal.appendChild(dialog);
+    dialog.appendChild(content);
+    content.appendChild(header);
+    header.appendChild(h3);
+    content.appendChild(body);
+    body.appendChild(para);
+    content.appendChild(footer);
+    footer.appendChild(btn);
+}
