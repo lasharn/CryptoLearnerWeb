@@ -112,6 +112,7 @@ button {
     text-align: center;
     font-weight: 600;
     font-size: 1.2em;
+    font-size: 1.5vmax;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -183,7 +184,7 @@ button {
     width: 80%;
     text-align: center;
     font-weight: 600;
-    font-size: 1.2em;
+    font-size: 2vmax;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

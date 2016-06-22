@@ -1,18 +1,91 @@
 (function () {
-    var app = angular.module('cryptoLearner', ['ui.bootstrap']);
-    app.controller('MenuController', ['$scope', '$window', function($scope, $window) {
+    var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
+    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3', 'substitution/1', 'substitution/2', 'substitution/3'];
+    app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
-        this.levels = levels;
+        $scope.gameOrder = levelOrder;
+        setupCookies();
+
+        function setupCookies() {
+            $cookies.put($scope.gameOrder[0], true);
+            $scope.gameOrder.forEach(setupCookie)
+        }
+        function setupCookie(level) {
+            var cookieValue = $cookies.get(level);
+            if (cookieValue == null) {
+                // lock levels that don't have a cookie
+                $cookies.put(level, false);
+            }
+        }
         $scope.go = function (path) {
             $window.location.href = path;
         };
+
+        this.levels = [{
+            name: 'Caesar Cipher',
+            level: 'caesar',
+            buttons: [{
+                name: 'Encrypt',
+                isUnlocked: $cookies.get($scope.gameOrder[0]),
+                icon: 'glyphicon-pencil',
+                challenge: 1
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[1]),
+                icon: '',
+                challenge: 2
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[2]),
+                icon: '',
+                challenge: 3
+            }]
+        }, {
+            name: 'Vigenere Cipher',
+            level: 'vigenere',
+            buttons: [{
+                name: 'Encrypt',
+                isUnlocked: $cookies.get($scope.gameOrder[3]),
+                icon: 'glyphicon-pencil',
+                challenge: 1
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                icon: '',
+                challenge: 2
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[5]),
+                icon: '',
+                challenge: 3
+            }]
+        }, {
+            name: 'Substitution Cipher',
+            level: 'substitution',
+            buttons: [{
+                name: 'Encrypt',
+                isUnlocked: $cookies.get($scope.gameOrder[6]),
+                icon: 'glyphicon-pencil',
+                challenge: 1
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[7]),
+                icon: '',
+                challenge: 2
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[8]),
+                icon: '',
+                challenge: 3
+            }]
+        }];
     }]);
 
-    app.controller('GameController', ['$scope', '$window', '$compile', function($scope, $window, $compile) {
+    app.controller('GameController', ['$scope', '$window', '$compile', '$cookies', function($scope, $window, $compile, $cookies) {
         $scope.state = levelState;
         $scope.stage = levelState.currentStage;
         $scope.maxStage = levelState.maxStage;
-        $scope.gameOrder = ['caesar/1','caesar/2', 'caesar/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3', 'substitution/1', 'substitution/2', 'substitution/3'];
+        $scope.gameOrder = levelOrder;
         $scope.currentLevelIndex = getCurrentLevelIndex();
 
         createNextStageModal();
@@ -20,6 +93,8 @@
 
         $scope.showModal = function () {
             if ($scope.stage == $scope.maxStage) {
+                // unlock next challenge
+                if ($scope.currentLevelIndex < $scope.gameOrder.length - 1) $cookies.put($scope.gameOrder[$scope.currentLevelIndex+1], true);
                 // show next challenge modal
                 $('#next-challenge-modal').modal('show');
                 return;
@@ -327,65 +402,6 @@
             return cipherText;    
         }
     }]);
-    
-    var levels = [{
-        name: 'Caesar Cipher',
-        level: 'caesar',
-        buttons: [{
-            name: 'Encrypt',
-            isLocked: false,
-            icon: 'glyphicon-pencil',
-            challenge: 1
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 2
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 3
-        }]
-    }, {
-        name: 'Vigenere Cipher',
-        level: 'vigenere',
-        buttons: [{
-            name: 'Encrypt',
-            isLocked: false,
-            icon: 'glyphicon-pencil',
-            challenge: 1
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 2
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 3
-        }]
-    }, {
-        name: 'Substitution Cipher',
-        level: 'substitution',
-        buttons: [{
-            name: 'Encrypt',
-            isLocked: false,
-            icon: 'glyphicon-pencil',
-            challenge: 1
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 2
-        }, {
-            name: '',
-            isLocked: true,
-            icon: '',
-            challenge: 3
-        }]
-    }];
     
     var levelState = {
         currentStage: 1,
