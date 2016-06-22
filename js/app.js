@@ -88,8 +88,7 @@
         $scope.gameOrder = levelOrder;
         $scope.currentLevelIndex = getCurrentLevelIndex();
 
-        createNextStageModal();
-        createNextChallengeModal();
+        setup();
 
         $scope.showModal = function () {
             if ($scope.stage == $scope.maxStage) {
@@ -206,6 +205,24 @@
             body.appendChild(para);
             content.appendChild(footer);
             $("#nextStageFooter").append(btn);
+        }
+
+        function setup() {
+            var isErrorPage = enforceLevelAccess();
+            if (!isErrorPage) {
+                createNextStageModal();
+                createNextChallengeModal();
+            }
+        }
+        function enforceLevelAccess() {
+            if ($cookies.get($scope.gameOrder[$scope.currentLevelIndex]) == null || $cookies.get($scope.gameOrder[$scope.currentLevelIndex]) == 'false') {
+                var body = $("body").html("<div><h1 class='text-center' style='font-size: 5vmax'>Level Locked!</h1>"
+                + "<i class='fa fa-lock' style='font-size: 20vmax; width: 100%; display: inline-block; text-align: center; vertical-align: bottom'></i>"
+                + "<a href='../index.html' style='font-size: 2vmax; text-align: center; vertical-align: bottom; display: inline-block; width: 100%'>Return to main menu</a>"
+                + "</div>");
+                return true;
+            }
+            return false;
         }
     }]);
     app.controller('CaesarLevelOne', ['$scope', '$window', function($scope, $window) {
