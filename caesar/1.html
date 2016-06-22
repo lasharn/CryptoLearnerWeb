@@ -29,7 +29,8 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-                    <h3 class="text-center">Encrypt &quot;{{word}}&quot; with a key of {{key}}. Answer: {{answer}}</h3>
+                    <h3 class="text-center">Encrypt &quot;{{plaintext}}&quot; with a key of {{key}}. Answer:
+                        {{ciphertext}}</h3>
                 </div>
             </div>
             <!-- Cipher Wheel -->
@@ -60,7 +61,7 @@
                             <i class="fa fa-unlock fa-2x"></i>
                         </div>
                     </div>
-                    <div class="plaintext-box" ng-repeat="letter in word track by $index" ng-hide="$last">
+                    <div class="plaintext-box" ng-repeat="letter in plaintext track by $index" ng-hide="$last">
                         <div class="box-content">
                             <div>
                                 <span>{{letter}}</span>

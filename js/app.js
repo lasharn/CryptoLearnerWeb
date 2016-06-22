@@ -228,10 +228,11 @@
     app.controller('CaesarLevelOne', ['$scope', '$window', function($scope, $window) {
         this.wordList = getWordList();
         $scope.key = Math.floor((Math.random() * 25) + 1);
-        $scope.word = newWord();
-        $scope.answer = encryptCaesar($scope.word, $scope.key);
-        $scope.answerKeyboard = retrieveAnswer($scope.answer);
-        $scope.keyboard = createKeyboard($scope.answer);
+        $scope.plaintext = newWord();
+        $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+        $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
+        $scope.answerKeyboard = retrieveAnswer($scope.answertext);
+        $scope.keyboard = createKeyboard($scope.answertext);
         $scope.incorrectAnswer = false;
         $scope.correctAnswer = false;
         $scope.$on('nextStage', function(e) {
@@ -239,10 +240,11 @@
         });
         $scope.setupStage = function() {
             $scope.key = Math.floor((Math.random() * 25) + 1);
-            $scope.word = newWord();
-            $scope.answer = encryptCaesar($scope.word, $scope.key);
-            $scope.answerKeyboard = retrieveAnswer($scope.answer);
-            $scope.keyboard = createKeyboard($scope.answer);
+            $scope.plaintext = newWord();
+            $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext.slice(0, $scope.plaintext.length()-1);
+            $scope.answerKeyboard = retrieveAnswer($scope.answertext);
+            $scope.keyboard = createKeyboard($scope.answertext);
             $scope.incorrectAnswer = false;
             $scope.correctAnswer = false;
         }
@@ -341,7 +343,7 @@
         }
         
         function newWord() {
-            // retrieve a random word from the list of words
+            // retrieve a random plaintext from the list of words
             var index = Math.floor(Math.random() * this.wordList.length);
             return this.wordList[index].toUpperCase();
         }
@@ -359,9 +361,9 @@
             return a.join("");
         }
         
-        function createKeyboard(encryptedWord) {
+        function createKeyboard(answerWord) {
             var KEYBOARD_SIZE = 10;
-            var word = encryptedWord;
+            var word = answerWord;
             var uniqueStr = "";
             var keyboardArray = [];
             for (i = 0; i < word.length; i++) {
@@ -395,10 +397,10 @@
             this.deselectable = false;
         }
         
-        function retrieveAnswer(cipherText) {
+        function retrieveAnswer(answerText) {
             var answerLetterArr = [];
-            for (i = 0; i < cipherText.length; i++) {
-                answerLetterArr.push(new AnswerLetter(cipherText[i]));   
+            for (i = 0; i < answerText.length; i++) {
+                answerLetterArr.push(new AnswerLetter(answerText[i]));
             }
             return answerLetterArr;
         }

@@ -27,7 +27,7 @@
                         <div class="divide50"></div>
                         <div>
                             <div class="col-xs-12 col-md-4 col-lg-4" ng-repeat="btn in level.buttons">
-                                <button ng-disabled="btn.isUnlocked === 'false' || btn.isUnlocked == null" class="btn btn-default btn-lg" ng-click="go('/' + level.level + '/' + btn.challenge + '.html')">
+                                <button ng-disabled="btn.isUnlocked === 'false' || btn.isUnlocked == null" class="btn btn-default btn-lg" ng-click="go('./' + level.level + '/' + btn.challenge + '.html')">
                                     <span ng-class="['glyphicon', btn.isUnlocked === 'false' || btn.isUnlocked == null ? 'glyphicon-lock' : btn.icon]" aria-hidden="true"></span> {{btn.name}}
                                 </button>
                             </div>

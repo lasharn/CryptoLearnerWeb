@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app="cryptoLearner">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script src="https://use.fontawesome.com/13139b496b.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script type="text/javascript" src="../js/p2.min.js"></script>
+
+    <title>Caesar Cipher Challenge 2</title>
+</head>
+
+<body ng-controller="GameController as game">
+<header>
+    <h1 class="text-center">Caesar Cipher Challenge 1: Decrypt</h1>
+</header>
+<div id="game" ng-controller="CaesarLevelOne as level">
+    <div class="divide50"></div>
+    <!-- Question -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
+            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; with a key of {{key}}. Answer:
+                {{plaintext}}</h3>
+        </div>
+    </div>
+    <!-- Cipher Wheel -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
+    <!-- Player Input -->
+    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Answer display -->
+        <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
+            <div class="icon-box">
+                <div class="box-content">
+                    <i class="fa fa-lock fa-2x"></i>
+                </div>
+            </div>
+            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+                 ng-click="deselectLetter(letter)"
+                 ng-repeat="letter in answerKeyboard track by $index" ng-hide="$last">
+                <div class='box-content'>
+                    <div>
+                        <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ciphertext display -->
+        <div class="answer-section">
+            <div class="icon-box">
+                <div class="box-content">
+                    <i class="fa fa-unlock fa-2x"></i>
+                </div>
+            </div>
+            <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
+                <div class="box-content">
+                    <div>
+                        <span>{{letter}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="divide100"></div>
+        <!-- Keyboard display -->
+        <div>
+            <div class="keyboard-row">
+                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                     ng-click="selectLetter($event, letter)"
+                     ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
+                    <div class="box-content">
+                        <div>
+                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="keyboard-row">
+                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                     ng-click="selectLetter($event, letter)"
+                     ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
+                    <div class="box-content">
+                        <div>
+                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript" src="../js/wheel.js"></script>
