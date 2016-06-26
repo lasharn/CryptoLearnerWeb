@@ -38,6 +38,17 @@ button {
 		width: 90% !important;
 	}
 
+/** General level styling **/
+#navBar {
+    width: 80%;
+    margin: auto;
+    clear: both;
+}
+
+#homeBtn {
+    float: left;
+}
+
 /** Cipher wheel styling **/
 #cipher-wheel {
     position: relative;

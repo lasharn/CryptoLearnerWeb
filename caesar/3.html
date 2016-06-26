@@ -16,23 +16,24 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <script type="text/javascript" src="../js/p2.min.js"></script>
 
-    <title>Caesar Cipher Challenge 2</title>
+    <title>Caesar Cipher Challenge 1</title>
 </head>
 
 <body ng-controller="GameController as game">
 <div id="navBar">
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
+
 <div id="game" ng-controller="CaesarLevel as level">
     <header>
-        <h1 class="text-center">Caesar Cipher Challenge 2: Decrypt</h1>
+        <h1 class="text-center">Caesar Cipher Challenge 3: Brute Force</h1>
     </header>
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; with a key of {{key}}. Answer:
+            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; without knowing the key. Answer:
                 {{plaintext}}</h3>
         </div>
     </div>

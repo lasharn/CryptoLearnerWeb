@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
-    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3', 'substitution/1', 'substitution/2', 'substitution/3'];
+    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
@@ -41,25 +41,6 @@
                 challenge: 3
             }]
         }, {
-            name: 'Vigenere Cipher',
-            level: 'vigenere',
-            buttons: [{
-                name: 'Encrypt',
-                isUnlocked: $cookies.get($scope.gameOrder[3]),
-                icon: 'glyphicon-pencil',
-                challenge: 1
-            }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[4]),
-                icon: '',
-                challenge: 2
-            }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[5]),
-                icon: '',
-                challenge: 3
-            }]
-        }, {
             name: 'Substitution Cipher',
             level: 'substitution',
             buttons: [{
@@ -78,6 +59,25 @@
                 icon: '',
                 challenge: 3
             }]
+        }, {
+            name: 'Vigenere Cipher',
+            level: 'vigenere',
+            buttons: [{
+                name: 'Encrypt',
+                isUnlocked: $cookies.get($scope.gameOrder[3]),
+                icon: 'glyphicon-pencil',
+                challenge: 1
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                icon: '',
+                challenge: 2
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[5]),
+                icon: '',
+                challenge: 3
+            }]
         }];
     }]);
 
@@ -93,7 +93,7 @@
         $scope.showModal = function () {
             if ($scope.stage == $scope.maxStage) {
                 // unlock next challenge
-                if ($scope.currentLevelIndex < $scope.gameOrder.length - 1) $cookies.put($scope.gameOrder[$scope.currentLevelIndex+1], true);
+                if ($scope.currentLevelIndex < $scope.gameOrder.length - 1) $cookieStore.put($scope.gameOrder[$scope.currentLevelIndex+1], true);
                 // show next challenge modal
                 $('#next-challenge-modal').modal('show');
                 return;
