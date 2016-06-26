@@ -93,7 +93,7 @@
         $scope.showModal = function () {
             if ($scope.stage == $scope.maxStage) {
                 // unlock next challenge
-                if ($scope.currentLevelIndex < $scope.gameOrder.length - 1) $cookies.put($scope.gameOrder[$scope.currentLevelIndex+1], true);
+                if ($scope.currentLevelIndex < $scope.gameOrder.length - 1) $cookies.put($scope.gameOrder[$scope.currentLevelIndex+1], true, {'path':'/'});
                 // show next challenge modal
                 $('#next-challenge-modal').modal('show');
                 return;
