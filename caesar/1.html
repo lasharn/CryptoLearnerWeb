@@ -23,7 +23,7 @@
         <header>
             <h1 class="text-center">Caesar Cipher Challenge 1: Encrypt</h1>
         </header>
-        <div id="game" ng-controller="CaesarLevelOne as level">
+        <div id="game" ng-controller="CaesarLevel as level">
             <div class="divide50"></div>
             <!-- Question -->
             <div class="panel panel-default">
@@ -61,7 +61,7 @@
                             <i class="fa fa-unlock fa-2x"></i>
                         </div>
                     </div>
-                    <div class="plaintext-box" ng-repeat="letter in plaintext track by $index" ng-hide="$last">
+                    <div class="plaintext-box" ng-repeat="letter in plaintext track by $index">
                         <div class="box-content">
                             <div>
                                 <span>{{letter}}</span>

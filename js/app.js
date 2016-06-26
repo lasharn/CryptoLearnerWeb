@@ -225,7 +225,7 @@
             return false;
         }
     }]);
-    app.controller('CaesarLevelOne', ['$scope', '$window', function($scope, $window) {
+    app.controller('CaesarLevel', ['$scope', '$window', function($scope, $window) {
         this.wordList = getWordList();
         $scope.key = Math.floor((Math.random() * 25) + 1);
         $scope.plaintext = newWord();
@@ -242,7 +242,7 @@
             $scope.key = Math.floor((Math.random() * 25) + 1);
             $scope.plaintext = newWord();
             $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext.slice(0, $scope.plaintext.length()-1);
+            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
             $scope.answerKeyboard = retrieveAnswer($scope.answertext);
             $scope.keyboard = createKeyboard($scope.answertext);
             $scope.incorrectAnswer = false;
@@ -345,7 +345,10 @@
         function newWord() {
             // retrieve a random plaintext from the list of words
             var index = Math.floor(Math.random() * this.wordList.length);
-            return this.wordList[index].toUpperCase();
+            var newWord = this.wordList[index].toUpperCase();
+            // remove the newline character at the end of each word
+            newWord = newWord.slice(0, newWord.length - 1);
+            return newWord;
         }
 
         function shuffle(str) {

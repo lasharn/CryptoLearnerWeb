@@ -16,14 +16,14 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <script type="text/javascript" src="../js/p2.min.js"></script>
 
-    <title>Caesar Cipher Challenge 2</title>
+    <title>Caesar Cipher Challenge 1</title>
 </head>
 
 <body ng-controller="GameController as game">
 <header>
-    <h1 class="text-center">Caesar Cipher Challenge 1: Decrypt</h1>
+    <h1 class="text-center">Caesar Cipher Challenge 2: Decrypt</h1>
 </header>
-<div id="game" ng-controller="CaesarLevelOne as level">
+<div id="game" ng-controller="CaesarLevel as level">
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
@@ -46,7 +46,7 @@
             </div>
             <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
                  ng-click="deselectLetter(letter)"
-                 ng-repeat="letter in answerKeyboard track by $index" ng-hide="$last">
+                 ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
                     <div>
                         <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
