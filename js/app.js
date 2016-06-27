@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
-    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
+    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
@@ -45,38 +45,38 @@
             level: 'substitution',
             buttons: [{
                 name: 'Encrypt',
-                isUnlocked: $cookies.get($scope.gameOrder[6]),
+                isUnlocked: $cookies.get($scope.gameOrder[3]),
                 icon: 'glyphicon-pencil',
+                challenge: 'intro'
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                icon: '',
                 challenge: 1
             }, {
                 name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[7]),
+                isUnlocked: $cookies.get($scope.gameOrder[5]),
                 icon: '',
                 challenge: 2
-            }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[8]),
-                icon: '',
-                challenge: 3
             }]
         }, {
             name: 'Vigenere Cipher',
             level: 'vigenere',
             buttons: [{
                 name: 'Encrypt',
-                isUnlocked: $cookies.get($scope.gameOrder[3]),
+                isUnlocked: $cookies.get($scope.gameOrder[6]),
                 icon: 'glyphicon-pencil',
+                challenge: 'intro'
+            }, {
+                name: '',
+                isUnlocked: $cookies.get($scope.gameOrder[7]),
+                icon: '',
                 challenge: 1
             }, {
                 name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                isUnlocked: $cookies.get($scope.gameOrder[8]),
                 icon: '',
                 challenge: 2
-            }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[5]),
-                icon: '',
-                challenge: 3
             }]
         }];
     }]);
@@ -119,7 +119,7 @@
 
         function getCurrentLevelIndex () {
             var path = $window.location.pathname;
-            path = path.match(/\w*\/\d/).toString();
+            path = path.match(/\w*\/\w*\.html/).toString().replace(".html", "");
             var index = $scope.gameOrder.indexOf(path);
             return index;
         }
@@ -422,6 +422,61 @@
             // remove non-alphabetical characters
             cipherText = cipherText.replace(/\W+/g, "");
             return cipherText;    
+        }
+    }]);
+
+    app.controller('SubstitutionBaseController', ['$scope', '$window', function($scope, $window) {
+        $scope.sentence = getSentenceObject();
+        $scope.mapping = createNewMapping();
+
+
+        function getSentenceObject() {
+            return "this is a sample sentence";
+        }
+
+        function createNewMapping() {
+            var mapping = {};
+            var alphabet = new Array();
+            // create array of ordered alphabet
+            for (i = 0; i < 26; i++) {
+                alphabet[i] = String.fromCharCode(i + "A".charCodeAt(0));
+            }
+            // shuffle alphabet
+            var shuffledAlphabet = shuffleArray(alphabet).slice();
+            // map the ordered alphabet to shuffled queue
+            for (i = 0; i < alphabet.length - 1; i++) {
+                var currentShuffledLetter = shuffledAlphabet.shift();
+                // map to the top of queue if key doesn't match value (i.e. "A" won't map to "A")
+                if (alphabet[i] != currentShuffledLetter) {
+                    mapping[alphabet[i]] = currentShuffledLetter;
+                } else {
+                    // if mapping is invalid, push letter to back of queue and take the next one
+                    shuffledAlphabet.push(currentShuffledLetter);
+                    // get the next top one. guaranteed to be different
+                    mapping[alphabet[i]] = shuffledAlphabet.shift();
+                }
+            }
+            // handle mapping the last letter ("Z")
+            var lastLetter = shuffledAlphabet.shift();
+            if (alphabet[alphabet.length-1] != lastLetter) {
+                mapping[alphabet[alphabet.length-1]] = lastLetter;
+            } else {
+                // if the letters match, need to swap with another entry
+                var firstValue = mapping[alphabet[0]];
+                mapping[alphabet[0]] = lastLetter;
+                mapping[alphabet[alphabet.length-1]] = firstValue;
+            }
+            return mapping;
+        }
+        function shuffleArray(array) {
+            var j, x, i;
+            for (i = array.length; i; i -= 1) {
+                j = Math.floor(Math.random() * i);
+                x = array[i - 1];
+                array[i - 1] = array[j];
+                array[j] = x;
+            }
+            return array;
         }
     }]);
     
