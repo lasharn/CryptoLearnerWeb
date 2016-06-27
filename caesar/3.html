@@ -45,7 +45,7 @@
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-lock fa-2x"></i>
+                    <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
             <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
@@ -62,7 +62,7 @@
         <div class="answer-section">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-unlock fa-2x"></i>
+                    <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
             <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
