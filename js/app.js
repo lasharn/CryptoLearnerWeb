@@ -435,38 +435,46 @@
         }
 
         function createNewMapping() {
-            var mapping = {};
+            var mapping = [];
             var alphabet = new Array();
+            var shuffledAlphabet = new Array();
             // create array of ordered alphabet
             for (i = 0; i < 26; i++) {
                 alphabet[i] = String.fromCharCode(i + "A".charCodeAt(0));
+                shuffledAlphabet[i] = alphabet[i];
             }
-            // shuffle alphabet
-            var shuffledAlphabet = shuffleArray(alphabet).slice();
+            // shuffle the shuffledAlphabet
+            var shuffledAlphabet = shuffleArray(shuffledAlphabet);
             // map the ordered alphabet to shuffled queue
             for (i = 0; i < alphabet.length - 1; i++) {
                 var currentShuffledLetter = shuffledAlphabet.shift();
                 // map to the top of queue if key doesn't match value (i.e. "A" won't map to "A")
                 if (alphabet[i] != currentShuffledLetter) {
-                    mapping[alphabet[i]] = currentShuffledLetter;
+                    mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
                 } else {
                     // if mapping is invalid, push letter to back of queue and take the next one
                     shuffledAlphabet.push(currentShuffledLetter);
                     // get the next top one. guaranteed to be different
-                    mapping[alphabet[i]] = shuffledAlphabet.shift();
+                    currentShuffledLetter = shuffledAlphabet.shift();   
+                    mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
                 }
             }
             // handle mapping the last letter ("Z")
             var lastLetter = shuffledAlphabet.shift();
             if (alphabet[alphabet.length-1] != lastLetter) {
-                mapping[alphabet[alphabet.length-1]] = lastLetter;
+                mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], lastLetter);
             } else {
                 // if the letters match, need to swap with another entry
-                var firstValue = mapping[alphabet[0]];
-                mapping[alphabet[0]] = lastLetter;
-                mapping[alphabet[alphabet.length-1]] = firstValue;
+                var firstValue = mapping[0].cipherLetter;
+                mapping[0] = new Mapping(alphabet[0], lastLetter);
+                mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], currentShuffledLetter);
             }
             return mapping;
+        }
+
+        function Mapping(plain, cipher) {
+            this.keyLetter = plain;
+            this.cipherLetter = cipher;
         }
         function shuffleArray(array) {
             var j, x, i;
