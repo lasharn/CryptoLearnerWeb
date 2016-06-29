@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
-    var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
+    var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     var wordList = getWordList();
     function getWordList() {
         // read the list of words in the words.txt file
@@ -69,6 +69,17 @@
         return a.join("");
     }
 
+    function shuffleArray(array) {
+        var j, x, i;
+        for (i = array.length; i; i -= 1) {
+            j = Math.floor(Math.random() * i);
+            x = array[i - 1];
+            array[i - 1] = array[j];
+            array[j] = x;
+        }
+        return array;
+    }
+
     function KeyboardLetter(letter) {
         this.char = letter;
         this.selectable = true;
@@ -112,18 +123,23 @@
             name: 'Caesar Cipher',
             level: 'caesar',
             buttons: [{
-                name: 'Encrypt',
+                name: 'Introduction',
                 isUnlocked: $cookies.get($scope.gameOrder[0]),
-                icon: 'glyphicon-pencil',
-                challenge: 1
+                icon: 'fa-puzzle-piece',
+                challenge: 'intro'
             }, {
-                name: '',
+                name: 'Encrypt',
                 isUnlocked: $cookies.get($scope.gameOrder[1]),
                 icon: '',
+                challenge: 1
+            }, {
+                name: 'Decrypt',
+                isUnlocked: $cookies.get($scope.gameOrder[2]),
+                icon: 'fa-unlock-alt',
                 challenge: 2
             }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[2]),
+                name: 'Brute Force',
+                isUnlocked: $cookies.get($scope.gameOrder[3]),
                 icon: '',
                 challenge: 3
             }]
@@ -131,18 +147,18 @@
             name: 'Substitution Cipher',
             level: 'substitution',
             buttons: [{
-                name: 'Encrypt',
-                isUnlocked: $cookies.get($scope.gameOrder[3]),
-                icon: 'glyphicon-pencil',
+                name: 'Introduction',
+                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                icon: 'fa-puzzle-piece',
                 challenge: 'intro'
             }, {
-                name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[4]),
+                name: 'Frequency Analysis',
+                isUnlocked: $cookies.get($scope.gameOrder[5]),
                 icon: '',
                 challenge: 1
             }, {
                 name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[5]),
+                isUnlocked: $cookies.get($scope.gameOrder[6]),
                 icon: '',
                 challenge: 2
             }]
@@ -150,18 +166,18 @@
             name: 'Vigenere Cipher',
             level: 'vigenere',
             buttons: [{
-                name: 'Encrypt',
-                isUnlocked: $cookies.get($scope.gameOrder[6]),
-                icon: 'glyphicon-pencil',
+                name: 'Introduction',
+                isUnlocked: $cookies.get($scope.gameOrder[7]),
+                icon: 'fa-puzzle-piece',
                 challenge: 'intro'
             }, {
                 name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[7]),
+                isUnlocked: $cookies.get($scope.gameOrder[8]),
                 icon: '',
                 challenge: 1
             }, {
                 name: '',
-                isUnlocked: $cookies.get($scope.gameOrder[8]),
+                isUnlocked: $cookies.get($scope.gameOrder[9]),
                 icon: '',
                 challenge: 2
             }]
@@ -316,7 +332,7 @@
     app.controller('AnswerController', ['$scope', function($scope) {
         $scope.incorrectAnswer = false;
         $scope.correctAnswer = false;
-        $scope.selectLetter = function(event, letter) {
+        $scope.selectLetter = function(letter) {
             if (!letter.selectable) return;
             var selectedLetter = letter.char;
             var nextEmptyIndex = -1;
@@ -369,6 +385,29 @@
             if (keyboardIndex == -1) return;
             $scope.keyboard[keyboardIndex].selectable = true;
             $scope.incorrectAnswer = false;
+        }
+
+        $scope.partialCompleteSolution = function(numLettersNotFilled) {
+            var letters = [];
+            // get all the keyboard letters in correct solution
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
+                var currentLetter = $scope.answerKeyboard[i].correctLetter;
+                // check to avoid duplicates
+                if ($.grep(letters, function(e){ return e.char == currentLetter; }).length == 0) {
+                    var keyboardSearchResult = $.grep($scope.keyboard, function(e){ return e.char == currentLetter; });
+                    if (keyboardSearchResult.length > 0) {
+                        letters.push(keyboardSearchResult[0]);
+                    }
+                }
+            }
+            // get number of letters to fill
+            if (numLettersNotFilled < 0) numLettersNotFilled = 0;
+            var numLettersToFill = letters.length - numLettersNotFilled;
+            if (numLettersToFill < 0) return;
+
+            for (i = 0; i < numLettersToFill; i++) {
+                $scope.selectLetter(letters[i]);
+            }
         }
 
         function checkSuccess() {
@@ -394,11 +433,10 @@
         $scope.key = Math.floor((Math.random() * 25) + 1);
         $scope.plaintext = newWord();
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-        $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
+        // determine if level is an encrypt or decrypt challenge
+        $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
         $scope.answerKeyboard = retrieveAnswer($scope.answertext);
         $scope.keyboard = createKeyboard($scope.answertext);
-        $scope.incorrectAnswer = false;
-        $scope.correctAnswer = false;
         $scope.$on('nextStage', function(e) {
             $scope.setupStage();
         });
@@ -406,84 +444,11 @@
             $scope.key = Math.floor((Math.random() * 25) + 1);
             $scope.plaintext = newWord();
             $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
+            $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
             $scope.answerKeyboard = retrieveAnswer($scope.answertext);
             $scope.keyboard = createKeyboard($scope.answertext);
             $scope.incorrectAnswer = false;
             $scope.correctAnswer = false;
-        }
-
-        $scope.selectLetter = function(event, letter) {
-            if (!letter.selectable) return;
-            var selectedLetter = letter.char;
-            var nextEmptyIndex = -1;
-            //$(event.currentTarget).find('span').text();
-            //get the index of the answer being selected
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].currentLetter == "") {
-                    nextEmptyIndex = i;
-                    break;
-                }
-            }
-            if (nextEmptyIndex == -1) return;
-            // get the letter in the answer that is being selected
-            var correctLetterToMatch = $scope.answerKeyboard[nextEmptyIndex].correctLetter;
-            // apply selection to all letters in the answer that much this letter
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].correctLetter == correctLetterToMatch) {
-                    $scope.answerKeyboard[i].currentLetter = selectedLetter;
-                    $scope.answerKeyboard[i].deselectable = true;
-                }
-            }
-            letter.selectable = !letter.selectable;
-            if (answerFilled()) {
-                $scope.correctAnswer = checkSuccess();
-                $scope.incorrectAnswer = !$scope.correctAnswer;
-                if ($scope.correctAnswer) {
-                    $scope.showModal();
-                }
-            }
-        }
-
-        $scope.deselectLetter = function(letter) {
-            if(!letter.deselectable) return;
-            var deselectedLetter = letter.currentLetter;
-            // remove all instances of the letter from the answer
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].currentLetter == deselectedLetter) {
-                    $scope.answerKeyboard[i].currentLetter = "";
-                    $scope.answerKeyboard[i].deselectable = false;
-                }
-            }
-            // match the deselected letter to the keyboard to reenable it
-            var keyboardIndex = -1;
-            for (i = 0; i < $scope.keyboard.length; i++) {
-                if ($scope.keyboard[i].char == deselectedLetter) {
-                    keyboardIndex = i;
-                    break;
-                }
-            }
-            if (keyboardIndex == -1) return;
-            $scope.keyboard[keyboardIndex].selectable = true;
-            $scope.incorrectAnswer = false;
-        }
-
-        function checkSuccess() {
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].currentLetter != $scope.answerKeyboard[i].correctLetter) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function answerFilled() {
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].currentLetter == "") {
-                    return false;
-                }
-            }
-            return true;
         }
         
         function encryptCaesar(plainText, key) {
@@ -501,6 +466,13 @@
             cipherText = cipherText.replace(/\W+/g, "");
             return cipherText;    
         }
+    }]);
+
+    app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $scope.$parent.maxStage = 1;
+        $scope.partialCompleteSolution(2);
+
     }]);
 
     app.controller('SubstitutionBaseController', ['$scope', '$window', function($scope, $window) {
@@ -558,17 +530,6 @@
             this.cipherLetter = cipher;
         }
 
-        function shuffleArray(array) {
-            var j, x, i;
-            for (i = array.length; i; i -= 1) {
-                j = Math.floor(Math.random() * i);
-                x = array[i - 1];
-                array[i - 1] = array[j];
-                array[j] = x;
-            }
-            return array;
-        }
-
         $scope.encryptString = function(text, mapping) {
             for (var i = 0; i < text.length; i++) {
                 var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
@@ -616,6 +577,7 @@
         $scope.keyboard = createKeyboard($scope.ciphertext);
         $scope.frequencies = $scope.getLetterFrequencies($scope.plaintext);
         $scope.$parent.maxStage = 1;
+        // $scope.partialCompleteSolution(2);
     });
     
     var levelState = {

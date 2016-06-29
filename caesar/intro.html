@@ -16,7 +16,7 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <script type="text/javascript" src="../js/p2.min.js"></script>
 
-    <title>Substitution Cipher Introduction</title>
+    <title>Caesar Cipher Introduction</title>
 </head>
 
 <body ng-controller="GameController as game">
@@ -24,21 +24,21 @@
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
 
-<div id="game" ng-controller="SubstitutionIntroController as level">
+<div id="game" ng-controller="CaesarIntroLevel as level">
     <header>
-        <h1 class="text-center">Substitution Cipher Introduction</h1>
+        <h1 class="text-center">Caesar Cipher Introduction</h1>
     </header>
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <h3 class="text-center">Encrypt &quot;{{plaintext}}&quot; using the substitution mapping below: Answer:
+            <h3 class="text-center">Encrypt &quot;{{plaintext}}&quot; with a key of {{key}}. Answer:
                 {{ciphertext}}</h3>
         </div>
     </div>
-    <!-- Substitution mapping -->
-    <div class="col-xs-12 col-md-6 col-lg-6" id="substitution-mapping"></div>
-
+    <!-- Cipher Wheel -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
+    <!-- Player Input -->
     <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
         <!-- Answer display -->
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
@@ -102,4 +102,4 @@
 
 </div>
 </body>
-<script type="text/javascript" src="../js/substitution.js"></script>
+<script type="text/javascript" src="../js/wheel.js"></script>
