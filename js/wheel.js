@@ -261,8 +261,8 @@ var cipherWheel = function(elem) {
 
 }
 
-var elem=document.getElementById("cipher-wheel");
-var cipherWheel=cipherWheel(elem);
+var wheelElem=document.getElementById("cipher-wheel");
+var cipherWheel=cipherWheel(wheelElem);
 
 $(window).on("resize", function() {
 

@@ -24,15 +24,21 @@
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
 
-<div id="game" ng-controller="SubstitutionBaseController as level">
+<div id="game" ng-controller="SubstitutionIntroController as level">
     <header>
         <h1 class="text-center">Substitution Cipher Introduction</h1>
     </header>
     <div class="divide50"></div>
-    <div ng-repeat="map in mapping">
-        <p>{{map.keyLetter}} --> {{map.cipherLetter}}</p>
+    <!-- Question -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3 class="text-center">Encrypt &quot;{{plaintext}}&quot; using the substitution mapping below: Answer:
+                {{ciphertext}}</h3>
+        </div>
     </div>
+    <!-- Substitution mapping -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="substitution-mapping"></div>
 
 </div>
 </body>
-<script type="text/javascript" src="../js/wheel.js"></script>
+<script type="text/javascript" src="../js/substitution.js"></script>

@@ -1,6 +1,35 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
     var levelOrder = ['caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
+    var wordList = getWordList();
+    function getWordList() {
+        // read the list of words in the words.txt file
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", "../res/words.txt", false);
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    var allText = rawFile.responseText;
+                    wordList = allText.split("\n");
+                }
+            }
+        }
+        rawFile.send(null);
+        return wordList;
+    }
+
+    function newWord() {
+        // retrieve a random plaintext from the list of words
+        var index = Math.floor(Math.random() * wordList.length);
+        var newWord = wordList[index].toUpperCase();
+        // remove the newline character at the end of each word
+        newWord = newWord.slice(0, newWord.length - 1);
+        return newWord;
+    }
+
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
@@ -226,7 +255,6 @@
         }
     }]);
     app.controller('CaesarLevel', ['$scope', '$window', function($scope, $window) {
-        this.wordList = getWordList();
         $scope.key = Math.floor((Math.random() * 25) + 1);
         $scope.plaintext = newWord();
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
@@ -321,35 +349,6 @@
             }
             return true;
         }
-        
-        
-        function getWordList() {
-            // read the list of words in the words.txt file
-            var rawFile = new XMLHttpRequest();
-            rawFile.open("GET", "../res/words.txt", false);
-            rawFile.onreadystatechange = function ()
-            {
-                if(rawFile.readyState === 4)
-                {
-                    if(rawFile.status === 200 || rawFile.status == 0)
-                    {
-                        var allText = rawFile.responseText;
-                        wordList = allText.split("\n");
-                    }
-                }
-            }
-            rawFile.send(null);
-            return wordList;
-        }
-        
-        function newWord() {
-            // retrieve a random plaintext from the list of words
-            var index = Math.floor(Math.random() * this.wordList.length);
-            var newWord = this.wordList[index].toUpperCase();
-            // remove the newline character at the end of each word
-            newWord = newWord.slice(0, newWord.length - 1);
-            return newWord;
-        }
 
         function shuffle(str) {
             var a = str.split(""),
@@ -428,7 +427,10 @@
     app.controller('SubstitutionBaseController', ['$scope', '$window', function($scope, $window) {
         $scope.sentence = getSentenceObject();
         $scope.mapping = createNewMapping();
-
+        $scope.setupStage = function() {
+            $scope.sentence = getSentenceObject();
+            $scope.mapping = createNewMapping();
+        }
 
         function getSentenceObject() {
             return "this is a sample sentence";
@@ -455,7 +457,7 @@
                     // if mapping is invalid, push letter to back of queue and take the next one
                     shuffledAlphabet.push(currentShuffledLetter);
                     // get the next top one. guaranteed to be different
-                    currentShuffledLetter = shuffledAlphabet.shift();   
+                    currentShuffledLetter = shuffledAlphabet.shift();
                     mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
                 }
             }
@@ -476,6 +478,7 @@
             this.keyLetter = plain;
             this.cipherLetter = cipher;
         }
+
         function shuffleArray(array) {
             var j, x, i;
             for (i = array.length; i; i -= 1) {
@@ -486,7 +489,31 @@
             }
             return array;
         }
+
+        $scope.encryptString = function(text, mapping) {
+            for (var i = 0; i < text.length; i++) {
+                var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
+                if (findMapping.length == 0) {
+                    // no mapping found for this character, skip it
+                    break;
+                } else {
+                    text = text.replaceAt(i, findMapping[0].cipherLetter);
+                }
+            }
+            return text;
+        }
+
+        String.prototype.replaceAt = function(index, character) {
+            return this.substr(0, index) + character + this.substr(index+character.length);
+        }
+
     }]);
+
+    app.controller('SubstitutionIntroController', function($scope, $controller) {
+        $controller('SubstitutionBaseController', {$scope: $scope});
+        $scope.plaintext = newWord();
+        $scope.ciphertext = $scope.encryptString($scope.plaintext, $scope.mapping);
+    });
     
     var levelState = {
         currentStage: 1,

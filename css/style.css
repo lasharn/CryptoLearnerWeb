@@ -233,7 +233,33 @@ button {
     cursor: pointer;
 }
 
-/** Dividers */
+/** Substitution mapping styling**/
+
+.mapping-row {
+    display: block;
+}
+
+.mapping {
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    width: 10%;
+    margin-bottom: 7%;
+    font-size: 1.5em;
+    font-size: 1.5vmax;
+}
+
+.keyLetter {
+    padding: 15%;
+    background-color: #53d8eb;
+}
+
+.cipherLetter {
+    padding: 15%;
+    background-color: #ebbf4d;
+}
+
+/** Dividers **/
 .divide10 {
 	width: 100%;
 	height: 10px;
