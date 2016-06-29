@@ -586,6 +586,25 @@
             return this.substr(0, index) + character + this.substr(index+character.length);
         }
 
+        $scope.getLetterFrequencies = function (text) {
+            var frequencyArray = new Array();
+            // initialize each letter with a frequency of 0
+            for (var i = 0; i < 26; i++) {
+                var searchLetter = String.fromCharCode(i + "A".charCodeAt(0));
+                var regexp = new RegExp(searchLetter, "gi");
+                var count = (text.match(regexp) || []).length;
+                frequencyArray[i] = new Frequency(searchLetter, count);
+            }
+            return frequencyArray;
+        }
+
+        function Frequency(letter, count) {
+            this.letter = letter;
+            this.count = count;
+        }
+
+
+
     }]);
 
     app.controller('SubstitutionIntroController', function($scope, $controller) {
@@ -595,6 +614,7 @@
         $scope.ciphertext = $scope.encryptString($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
         $scope.keyboard = createKeyboard($scope.ciphertext);
+        $scope.frequencies = $scope.getLetterFrequencies($scope.plaintext);
         $scope.$parent.maxStage = 1;
     });
     
