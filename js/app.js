@@ -30,6 +30,64 @@
         return newWord;
     }
 
+
+    function createKeyboard(answerWord) {
+        var KEYBOARD_SIZE = 10;
+        var word = answerWord;
+        var uniqueStr = "";
+        var keyboardArray = [];
+        for (i = 0; i < word.length; i++) {
+            if (uniqueStr.indexOf(word.charAt(i)) == -1) {
+                uniqueStr += word[i];
+            }
+        }
+        // pad the keyboard with random letters
+        while (uniqueStr.length < KEYBOARD_SIZE) {
+            var newLetter = String.fromCharCode(Math.floor((Math.random() * 26)) + "A".charCodeAt(0));
+            if (uniqueStr.indexOf(newLetter) == -1) {
+                uniqueStr += newLetter;
+            }
+        }
+        uniqueStr = shuffle(uniqueStr);
+        //put the string into an array which has [string, bool] objects
+        for (i = 0; i < uniqueStr.length; i++) {
+            keyboardArray.push(new KeyboardLetter(uniqueStr[i]));
+        }
+        return keyboardArray;
+    }
+
+    function shuffle(str) {
+        var a = str.split(""),
+            n = a.length;
+
+        for(var i = n - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+        }
+        return a.join("");
+    }
+
+    function KeyboardLetter(letter) {
+        this.char = letter;
+        this.selectable = true;
+    }
+
+    function AnswerLetter(correctLetter) {
+        this.correctLetter = correctLetter;
+        this.currentLetter = "";
+        this.deselectable = false;
+    }
+
+    function retrieveAnswer(answerText) {
+        var answerLetterArr = [];
+        for (i = 0; i < answerText.length; i++) {
+            answerLetterArr.push(new AnswerLetter(answerText[i]));
+        }
+        return answerLetterArr;
+    }
+
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
@@ -254,29 +312,10 @@
             return false;
         }
     }]);
-    app.controller('CaesarLevel', ['$scope', '$window', function($scope, $window) {
-        $scope.key = Math.floor((Math.random() * 25) + 1);
-        $scope.plaintext = newWord();
-        $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-        $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
-        $scope.answerKeyboard = retrieveAnswer($scope.answertext);
-        $scope.keyboard = createKeyboard($scope.answertext);
+
+    app.controller('AnswerController', ['$scope', function($scope) {
         $scope.incorrectAnswer = false;
         $scope.correctAnswer = false;
-        $scope.$on('nextStage', function(e) {
-            $scope.setupStage();
-        });
-        $scope.setupStage = function() {
-            $scope.key = Math.floor((Math.random() * 25) + 1);
-            $scope.plaintext = newWord();
-            $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
-            $scope.answerKeyboard = retrieveAnswer($scope.answertext);
-            $scope.keyboard = createKeyboard($scope.answertext);
-            $scope.incorrectAnswer = false;
-            $scope.correctAnswer = false;
-        }
-        
         $scope.selectLetter = function(event, letter) {
             if (!letter.selectable) return;
             var selectedLetter = letter.char;
@@ -308,14 +347,14 @@
                 }
             }
         }
-        
+
         $scope.deselectLetter = function(letter) {
             if(!letter.deselectable) return;
             var deselectedLetter = letter.currentLetter;
             // remove all instances of the letter from the answer
             for (i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter == deselectedLetter) {
-                    $scope.answerKeyboard[i].currentLetter = "";   
+                    $scope.answerKeyboard[i].currentLetter = "";
                     $scope.answerKeyboard[i].deselectable = false;
                 }
             }
@@ -331,80 +370,120 @@
             $scope.keyboard[keyboardIndex].selectable = true;
             $scope.incorrectAnswer = false;
         }
-        
+
         function checkSuccess() {
             for (i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter != $scope.answerKeyboard[i].correctLetter) {
-                    return false;   
+                    return false;
                 }
             }
             return true;
         }
-        
+
         function answerFilled() {
             for (i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter == "") {
-                    return false;  
+                    return false;
+                }
+            }
+            return true;
+        }
+    }]);
+    app.controller('CaesarLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('AnswerController', {$scope: $scope});
+        $scope.key = Math.floor((Math.random() * 25) + 1);
+        $scope.plaintext = newWord();
+        $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+        $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
+        $scope.answerKeyboard = retrieveAnswer($scope.answertext);
+        $scope.keyboard = createKeyboard($scope.answertext);
+        $scope.incorrectAnswer = false;
+        $scope.correctAnswer = false;
+        $scope.$on('nextStage', function(e) {
+            $scope.setupStage();
+        });
+        $scope.setupStage = function() {
+            $scope.key = Math.floor((Math.random() * 25) + 1);
+            $scope.plaintext = newWord();
+            $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+            $scope.answertext = ($scope.currentLevelIndex == 0) ? $scope.ciphertext : $scope.plaintext;
+            $scope.answerKeyboard = retrieveAnswer($scope.answertext);
+            $scope.keyboard = createKeyboard($scope.answertext);
+            $scope.incorrectAnswer = false;
+            $scope.correctAnswer = false;
+        }
+
+        $scope.selectLetter = function(event, letter) {
+            if (!letter.selectable) return;
+            var selectedLetter = letter.char;
+            var nextEmptyIndex = -1;
+            //$(event.currentTarget).find('span').text();
+            //get the index of the answer being selected
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter == "") {
+                    nextEmptyIndex = i;
+                    break;
+                }
+            }
+            if (nextEmptyIndex == -1) return;
+            // get the letter in the answer that is being selected
+            var correctLetterToMatch = $scope.answerKeyboard[nextEmptyIndex].correctLetter;
+            // apply selection to all letters in the answer that much this letter
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].correctLetter == correctLetterToMatch) {
+                    $scope.answerKeyboard[i].currentLetter = selectedLetter;
+                    $scope.answerKeyboard[i].deselectable = true;
+                }
+            }
+            letter.selectable = !letter.selectable;
+            if (answerFilled()) {
+                $scope.correctAnswer = checkSuccess();
+                $scope.incorrectAnswer = !$scope.correctAnswer;
+                if ($scope.correctAnswer) {
+                    $scope.showModal();
+                }
+            }
+        }
+
+        $scope.deselectLetter = function(letter) {
+            if(!letter.deselectable) return;
+            var deselectedLetter = letter.currentLetter;
+            // remove all instances of the letter from the answer
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter == deselectedLetter) {
+                    $scope.answerKeyboard[i].currentLetter = "";
+                    $scope.answerKeyboard[i].deselectable = false;
+                }
+            }
+            // match the deselected letter to the keyboard to reenable it
+            var keyboardIndex = -1;
+            for (i = 0; i < $scope.keyboard.length; i++) {
+                if ($scope.keyboard[i].char == deselectedLetter) {
+                    keyboardIndex = i;
+                    break;
+                }
+            }
+            if (keyboardIndex == -1) return;
+            $scope.keyboard[keyboardIndex].selectable = true;
+            $scope.incorrectAnswer = false;
+        }
+
+        function checkSuccess() {
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter != $scope.answerKeyboard[i].correctLetter) {
+                    return false;
                 }
             }
             return true;
         }
 
-        function shuffle(str) {
-            var a = str.split(""),
-                n = a.length;
-
-            for(var i = n - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var tmp = a[i];
-                a[i] = a[j];
-                a[j] = tmp;
-            }
-            return a.join("");
-        }
-        
-        function createKeyboard(answerWord) {
-            var KEYBOARD_SIZE = 10;
-            var word = answerWord;
-            var uniqueStr = "";
-            var keyboardArray = [];
-            for (i = 0; i < word.length; i++) {
-                if (uniqueStr.indexOf(word.charAt(i)) == -1) {
-                    uniqueStr += word[i];    
+        function answerFilled() {
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter == "") {
+                    return false;
                 }
             }
-            // pad the keyboard with random letters
-            while (uniqueStr.length < KEYBOARD_SIZE) {
-                var newLetter = String.fromCharCode(Math.floor((Math.random() * 26)) + "A".charCodeAt(0));
-                if (uniqueStr.indexOf(newLetter) == -1) {
-                    uniqueStr += newLetter;    
-                }
-            }
-            uniqueStr = shuffle(uniqueStr);
-            //put the string into an array which has [string, bool] objects
-            for (i = 0; i < uniqueStr.length; i++) {
-                keyboardArray.push(new KeyboardLetter(uniqueStr[i]));
-            }
-            return keyboardArray;
-        }
-
-        function KeyboardLetter(letter) {
-            this.char = letter;
-            this.selectable = true;
-        }
-        
-        function AnswerLetter(correctLetter) {
-            this.correctLetter = correctLetter;
-            this.currentLetter = "";
-            this.deselectable = false;
-        }
-        
-        function retrieveAnswer(answerText) {
-            var answerLetterArr = [];
-            for (i = 0; i < answerText.length; i++) {
-                answerLetterArr.push(new AnswerLetter(answerText[i]));
-            }
-            return answerLetterArr;
+            return true;
         }
         
         function encryptCaesar(plainText, key) {
@@ -511,8 +590,12 @@
 
     app.controller('SubstitutionIntroController', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
+        $controller('AnswerController', {$scope: $scope});
         $scope.plaintext = newWord();
         $scope.ciphertext = $scope.encryptString($scope.plaintext, $scope.mapping);
+        $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
+        $scope.keyboard = createKeyboard($scope.ciphertext);
+        $scope.$parent.maxStage = 1;
     });
     
     var levelState = {
