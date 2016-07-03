@@ -1,11 +1,13 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
     var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
-    var wordList = getWordList();
-    function getWordList() {
+    var wordList = getListFromFile("../res/words.txt");
+    var sentenceList = getListFromFile("../res/sentences.txt");
+    function getListFromFile(filename) {
         // read the list of words in the words.txt file
         var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "../res/words.txt", false);
+        rawFile.open("GET", filename, false);
+        var list = "";
         rawFile.onreadystatechange = function ()
         {
             if(rawFile.readyState === 4)
@@ -13,15 +15,15 @@
                 if(rawFile.status === 200 || rawFile.status == 0)
                 {
                     var allText = rawFile.responseText;
-                    wordList = allText.split("\n");
+                    list = allText.split("\n");
                 }
             }
         }
         rawFile.send(null);
-        return wordList;
+        return list;
     }
 
-    function newWord() {
+    function getNewWord() {
         // retrieve a random plaintext from the list of words
         var index = Math.floor(Math.random() * wordList.length);
         var newWord = wordList[index].toUpperCase();
@@ -30,6 +32,14 @@
         return newWord;
     }
 
+    function getNewSentence() {
+        // retrieve a random plaintext from the list of words
+        var index = Math.floor(Math.random() * sentenceList.length);
+        var newSentence = sentenceList[index].toUpperCase();
+        // remove the newline character at the end of each word
+        newSentence = newSentence.slice(0, newSentence.length - 1);
+        return newSentence;
+    }
 
     function createKeyboard(answerWord) {
         var KEYBOARD_SIZE = 10;
@@ -154,7 +164,7 @@
             }, {
                 name: 'Frequency Analysis',
                 isUnlocked: $cookies.get($scope.gameOrder[5]),
-                icon: '',
+                icon: 'fa-bar-chart',
                 challenge: 1
             }, {
                 name: '',
@@ -431,7 +441,7 @@
     app.controller('CaesarLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('AnswerController', {$scope: $scope});
         $scope.key = Math.floor((Math.random() * 25) + 1);
-        $scope.plaintext = newWord();
+        $scope.plaintext = getNewWord();
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
         // determine if level is an encrypt or decrypt challenge
         $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
@@ -442,7 +452,7 @@
         });
         $scope.setupStage = function() {
             $scope.key = Math.floor((Math.random() * 25) + 1);
-            $scope.plaintext = newWord();
+            $scope.plaintext = getNewWord();
             $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
             $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
             $scope.answerKeyboard = retrieveAnswer($scope.answertext);
@@ -475,17 +485,18 @@
 
     }]);
 
-    app.controller('SubstitutionBaseController', ['$scope', '$window', function($scope, $window) {
-        $scope.sentence = getSentenceObject();
+    app.controller('SubstitutionBaseController', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('AnswerController', {$scope: $scope});
+        $scope.sentence = getNewSentence();
         $scope.mapping = createNewMapping();
         $scope.setupStage = function() {
-            $scope.sentence = getSentenceObject();
+            $scope.sentence = getNewSentence();
             $scope.mapping = createNewMapping();
         }
-
-        function getSentenceObject() {
-            return "this is a sample sentence";
-        }
+        $scope.$on('nextStage', function(e) {
+            $scope.setupStage();
+            $scope.levelSetup();
+        });
 
         function createNewMapping() {
             var mapping = [];
@@ -535,7 +546,7 @@
                 var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
                 if (findMapping.length == 0) {
                     // no mapping found for this character, skip it
-                    break;
+                    continue;
                 } else {
                     text = text.replaceAt(i, findMapping[0].cipherLetter);
                 }
@@ -570,15 +581,30 @@
 
     app.controller('SubstitutionIntroController', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
-        $controller('AnswerController', {$scope: $scope});
-        $scope.plaintext = newWord();
+        $scope.plaintext = getNewWord();
         $scope.ciphertext = $scope.encryptString($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
         $scope.keyboard = createKeyboard($scope.ciphertext);
-        $scope.frequencies = $scope.getLetterFrequencies($scope.plaintext);
         $scope.$parent.maxStage = 1;
-        // $scope.partialCompleteSolution(2);
     });
+
+    app.controller('SubstitutionLevelOne', function($scope, $controller) {
+        $controller('SubstitutionBaseController', {$scope: $scope});
+        $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
+        $scope.plaintext = "ETA";
+        $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
+        $scope.answerKeyboard = retrieveAnswer($scope.answerText);
+        $scope.keyboard = createKeyboard($scope.answerText);
+        $scope.frequencies = $scope.getLetterFrequencies($scope.sentence);
+        $scope.levelSetup = function() {
+            $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
+            $scope.plaintext = "ETA";
+            $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
+            $scope.answerKeyboard = retrieveAnswer($scope.answerText);
+            $scope.keyboard = createKeyboard($scope.answerText);
+            $scope.frequencies = $scope.getLetterFrequencies($scope.sentence);
+        }
+    })
     
     var levelState = {
         currentStage: 1,
