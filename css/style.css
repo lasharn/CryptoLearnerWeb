@@ -224,9 +224,9 @@ button {
 }
 
 .box-unselectable {
-    background-color: #fafafa;
+    background-color: #fafafa !important;
     color: #ebebeb;
-    cursor: default;
+    cursor: default !important;
 }
 
 .clickable {
@@ -257,6 +257,46 @@ button {
 .cipherLetter {
     padding: 15%;
     background-color: #ebbf4d;
+}
+
+.mapping-icon {
+    display: inline-block;
+    position: relative;
+    width: 10%;
+    height: 0;
+    padding-bottom: 10%;
+    margin:1%;
+    overflow:hidden;
+}
+
+.frequency-box {
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 13%;
+    height: 0;
+    margin:1.66%;
+    padding-bottom: 13%;
+    background-color: #ebebeb;
+}
+
+.frequency-key-letter {
+    height: 0;
+    padding-bottom: 100%;
+    overflow:hidden;
+    border-top-left-radius: 15%;
+    border-top-right-radius: 15%;
+}
+
+.frequency-key-value {
+    overflow:hidden;
+    border-bottom-left-radius: 15%;
+    border-bottom-right-radius: 15%;
+    background-color: #7b7b7b;
+    color: white;
+    font-size: 1em;
+    font-size: 1vmax;
 }
 
 /** Dividers **/

@@ -478,20 +478,15 @@
         }
     }]);
 
-    app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
-        $controller('CaesarLevel', {$scope: $scope});
-        $scope.$parent.maxStage = 1;
-        $scope.partialCompleteSolution(2);
-
-    }]);
-
     app.controller('SubstitutionBaseController', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('AnswerController', {$scope: $scope});
         $scope.sentence = getNewSentence();
         $scope.mapping = createNewMapping();
+        $scope.frequencies = getLetterFrequencies($scope.sentence);
         $scope.setupStage = function() {
             $scope.sentence = getNewSentence();
             $scope.mapping = createNewMapping();
+            $scope.frequencies = getLetterFrequencies($scope.sentence);
         }
         $scope.$on('nextStage', function(e) {
             $scope.setupStage();
@@ -558,7 +553,7 @@
             return this.substr(0, index) + character + this.substr(index+character.length);
         }
 
-        $scope.getLetterFrequencies = function (text) {
+        function getLetterFrequencies(text) {
             var frequencyArray = new Array();
             // initialize each letter with a frequency of 0
             for (var i = 0; i < 26; i++) {
@@ -570,12 +565,44 @@
             return frequencyArray;
         }
 
-        function Frequency(letter, count) {
-            this.letter = letter;
+        $scope.getFrequencyCountOfLetter = function(letter, isPlaintext) {
+            isPlaintext = (typeof isPlaintext === 'undefined') ? true : isPlaintext;
+            if (isPlaintext) {
+                var findFrequency = $.grep($scope.frequencies, function(freq) {return freq.letter == letter});
+            } else {
+                var findFrequency = $.grep($scope.frequencies, function(freq) {return freq.mapping.cipherLetter == letter});
+            }
+            if (findFrequency.length == 0) return 0;
+            var count = findFrequency[0].count;
+            return count;
+        }
+
+        $scope.getFrequencyPercentOfLetter = function (letter, isPlaintext) {
+            isPlaintext = (typeof isPlaintext === 'undefined') ? true : isPlaintext;
+            var count = $scope.getFrequencyCountOfLetter(letter, isPlaintext);
+            var size = $scope.sentence.replace(/\W/g, "").length;
+            var percentValue = Math.round((count / size) * 100);
+            return percentValue;
+        }
+
+        function Frequency(plainLetter, count) {
+            this.letter = plainLetter;
             this.count = count;
+            this.mapping = new Mapping("","");
+            var findMapping = $.grep($scope.mapping, function(map){ return map.keyLetter == plainLetter; });
+            if (findMapping.length > 0) {
+                this.mapping = findMapping[0];
+            }
         }
 
 
+
+    }]);
+
+    app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $scope.$parent.maxStage = 1;
+        $scope.partialCompleteSolution(2);
 
     }]);
 
@@ -594,15 +621,31 @@
         $scope.plaintext = "ETA";
         $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.answerText);
-        $scope.keyboard = createKeyboard($scope.answerText);
-        $scope.frequencies = $scope.getLetterFrequencies($scope.sentence);
+        $scope.keyboardLetters = getKeyboardLetters($scope.answerText, $scope.frequencies);
+        $scope.keyboard = createKeyboard($scope.keyboardLetters);
         $scope.levelSetup = function() {
             $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
             $scope.plaintext = "ETA";
             $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
             $scope.answerKeyboard = retrieveAnswer($scope.answerText);
             $scope.keyboard = createKeyboard($scope.answerText);
-            $scope.frequencies = $scope.getLetterFrequencies($scope.sentence);
+        }
+
+        function getKeyboardLetters(answerText, frequencies) {
+            var KEYBOARD_SIZE = 10;
+            var sortedFreq = frequencies.sort(function(a,b) {
+                return b.count - a.count;
+            });
+            var keyboardText = answerText;
+            var i = 0;
+            while(keyboardText.length < KEYBOARD_SIZE && i < frequencies.length) {
+                var newChar = sortedFreq[i].mapping.cipherLetter;
+                if (keyboardText.indexOf(newChar) == -1) {
+                    keyboardText += newChar;
+                }
+                i++;
+            }
+            return keyboardText;
         }
     })
     
