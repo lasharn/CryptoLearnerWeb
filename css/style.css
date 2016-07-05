@@ -2,6 +2,10 @@ body {
     font-family: "Lucida Console", "Monaco";
 }
 
+h1, h2, h3 {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 /** Carousel styling */
 .carousel-inner > .item > div {
     width: 60%;

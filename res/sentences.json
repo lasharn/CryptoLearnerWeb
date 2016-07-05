@@ -1,0 +1,7 @@
+{
+  "sentences":[
+    {"sentence":"the hunters tracked the animals", "hints": ["animals","hunters","tracked"]},
+    {"sentence":"the hacker got access to the encrypted data", "hints": ["hacker","access"]},
+    {"sentence":"the enemy team attacked the base", "hints":["team", "base"]}
+  ]
+}
