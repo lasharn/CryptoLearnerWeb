@@ -344,6 +344,7 @@
         $scope.correctAnswer = false;
         $scope.selectLetter = function(letter) {
             if (!letter.selectable) return;
+            $scope.correctAnswer = false;
             var selectedLetter = letter.char;
             var nextEmptyIndex = -1;
             //$(event.currentTarget).find('span').text();
