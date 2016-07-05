@@ -16,3 +16,5 @@ $('#substitution-mapping').append("" +
         "<div class='cipherLetter'>{{map.cipherLetter}}</div>" +
     "</div>" +
     "</div>");
+
+

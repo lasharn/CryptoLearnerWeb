@@ -36,8 +36,34 @@
             <h3 class="text-center">Use frequency analysis to determine the mapping for the 3 most common English letters</h3>
         </div>
     </div>
-    <!-- Substitution mapping -->
-    <div class="col-xs-12 col-md-6 col-lg-6" id="substitution-mapping"></div>
+
+    <!-- Frequency analysis level tool -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="frequency-tool" style="font-size: 2em">
+        <!-- Display sentence user selection -->
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Encrypted message
+                </div>
+                <div class="panel-body">
+                    <div class="sentence-line" ng-repeat="line in formattedSentence">
+                        <div class="sentence-letter" ng-repeat="char in line track by $index">
+                            <div>{{char}}</div>
+                            <div class="live-preview">{{displayUserSelection(char) || "_"}}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div>Frequency of most common English letters</div>
+        <div class="mapping-row">
+        <div class="mapping" ng-repeat="map in englishFrequencies track by $index" ng-if="$index < 9">
+            <div class="mapping-frequency-letter">{{map[0]}}</div>
+            <div class="mapping-frequency-value">{{map[1].toFixed(1)}}%</div>
+        </div>
+        </div>
+    </div>
 
     <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
         <!-- Answer display -->

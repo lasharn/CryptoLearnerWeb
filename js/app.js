@@ -467,14 +467,74 @@
             for (i = 0; i < plainText.length; i++) {
                 newValue = plainText.charCodeAt(i) + key;
                 if (newValue > "Z".charCodeAt(0)) {
-                    newValue -= 26;    
+                    newValue -= 26;
                 }
                 cipherTextArray[i] = String.fromCharCode(newValue);
             }
             cipherText = cipherTextArray.join("");
             // remove non-alphabetical characters
             cipherText = cipherText.replace(/\W+/g, "");
-            return cipherText;    
+            return cipherText;
+        }
+    }]);
+
+    app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $scope.$parent.maxStage = 1;
+        $scope.partialCompleteSolution(2);
+
+    }]);
+
+    app.controller('SentenceDisplayController', ['$scope', function($scope) {
+        $scope.createFormattedSentence = function(sentence) {
+            var LINE_SIZE = 20;
+            var wordsArray = sentence.split(" ");
+            var i = 0, currentLineWidth = 0, currentSentence = "", formattedSentence = [];
+            for (var i = 0; i < wordsArray.length; i++) {
+                currentLineWidth += wordsArray[i].length;
+                if (currentLineWidth > LINE_SIZE) {
+                    formattedSentence.push(currentSentence.trim());
+                    currentLineWidth = 0;
+                    currentSentence = "";
+                    i--;
+                } else {
+                    currentSentence += wordsArray[i] + " ";
+                    currentLineWidth = currentSentence.length;
+                }
+            }
+            formattedSentence.push(currentSentence.trim());
+            return formattedSentence;
+        }
+
+        function checkSuccess() {
+            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter != $scope.answerKeyboard[i].correctLetter) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        $scope.displayUserSelection = function(char) {
+            if (char == " ") return char;
+            // if level complete, show full answer
+            if (checkSuccess()) {
+                var findMapping = $.grep($scope.mapping, function(map){ return map.cipherLetter == char; });
+                if (findMapping.length > 0) {
+                    return findMapping[0].keyLetter;
+                }
+                return "";
+            }
+            var index = -1;
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter == char) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) return "";
+            return $scope.plaintext[index];
+
         }
     }]);
 
@@ -483,6 +543,34 @@
         $scope.sentence = getNewSentence();
         $scope.mapping = createNewMapping();
         $scope.frequencies = getLetterFrequencies($scope.sentence);
+        $scope.englishFrequencies = [
+            ["E", 12.7],
+            ["T", 9.1],
+            ["A", 8.2],
+            ["O", 7.5],
+            ["I", 7.0],
+            ["N", 6.7],
+            ["S", 6.3],
+            ["H", 6.1],
+            ["R", 6.0],
+            ["D", 4.3],
+            ["L", 4.0],
+            ["C", 2.8],
+            ["U", 2.8],
+            ["M", 2.4],
+            ["W", 2.4],
+            ["F", 2.2],
+            ["G", 2.0],
+            ["Y", 2.0],
+            ["P", 1.9],
+            ["B", 1.5],
+            ["V", 1.0],
+            ["K", 0.8],
+            ["J", 0.2],
+            ["X", 0.2],
+            ["Q", 0.1],
+            ["Z", 0.1]
+        ];
         $scope.setupStage = function() {
             $scope.sentence = getNewSentence();
             $scope.mapping = createNewMapping();
@@ -599,13 +687,6 @@
 
     }]);
 
-    app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
-        $controller('CaesarLevel', {$scope: $scope});
-        $scope.$parent.maxStage = 1;
-        $scope.partialCompleteSolution(2);
-
-    }]);
-
     app.controller('SubstitutionIntroController', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
         $scope.plaintext = getNewWord();
@@ -617,18 +698,22 @@
 
     app.controller('SubstitutionLevelOne', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
+        $controller('SentenceDisplayController', {$scope: $scope});
         $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
         $scope.plaintext = "ETA";
         $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.answerText);
         $scope.keyboardLetters = getKeyboardLetters($scope.answerText, $scope.frequencies);
         $scope.keyboard = createKeyboard($scope.keyboardLetters);
+        $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
         $scope.levelSetup = function() {
             $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
             $scope.plaintext = "ETA";
             $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
             $scope.answerKeyboard = retrieveAnswer($scope.answerText);
-            $scope.keyboard = createKeyboard($scope.answerText);
+            $scope.keyboardLetters = getKeyboardLetters($scope.answerText, $scope.frequencies);
+            $scope.keyboard = createKeyboard($scope.keyboardLetters);
+            $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
         }
 
         function getKeyboardLetters(answerText, frequencies) {

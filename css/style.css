@@ -237,6 +237,7 @@ button {
 
 .mapping-row {
     display: block;
+    cursor: default;
 }
 
 .mapping {
@@ -289,6 +290,21 @@ button {
     border-top-right-radius: 15%;
 }
 
+.mapping-frequency-letter {
+    padding: 15%;
+    background-color: #53d8eb;
+    color: #7b7b7b;
+    background-color: #ebebeb;
+}
+
+.mapping-frequency-value {
+    font-size: 0.7em;
+    font-size: 1vmax;
+    padding: 10%;
+    background-color: #7b7b7b;
+    color: white;
+}
+
 .frequency-key-value {
     overflow:hidden;
     border-bottom-left-radius: 15%;
@@ -297,6 +313,20 @@ button {
     color: white;
     font-size: 1em;
     font-size: 1vmax;
+}
+
+.sentence-line {
+    display: block;
+}
+
+.sentence-letter {
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    width: 5%;
+    margin-bottom: 7%;
+    font-size: 1.5em;
+    font-size: 1.5vmax;
 }
 
 /** Dividers **/
