@@ -39,7 +39,7 @@
 
     <!-- Frequency analysis level tool -->
     <div class="col-xs-12 col-md-6 col-lg-6" id="frequency-tool" style="font-size: 2em">
-        <!-- Display sentence user selection -->
+        <!-- Display sentenceObject user selection -->
         <div>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert alert-info" role="alert">Hint: The word "" is in the message</div>
+            <div class="alert alert-info" role="alert">Hint: The word &quot;{{sentenceObject.hints[Math.floor(Math.random() * sentenceObject.hints.length)]}}&quot; is in the message</div>
         </div>
         <div>Frequency of most common English letters</div>
         <div class="mapping-row">

@@ -2,7 +2,7 @@
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
     var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     var wordList = getListFromFile("../res/words.txt");
-    var sentenceList = getListFromFile("../res/sentences.txt");
+    var sentenceList = getSentenceList();
     function getListFromFile(filename) {
         // read the list of words in the words.txt file
         var rawFile = new XMLHttpRequest();
@@ -23,6 +23,40 @@
         return list;
     }
 
+    function getSentenceList() {
+        var jsonResponse = getJsonFromFile("../res/sentences.json");
+        var jsonSentences = jsonResponse.sentences;
+        var sentenceList = [];
+        for (var i in jsonSentences) {
+            sentenceList.push(new Sentence(jsonSentences[i].sentence.toUpperCase(), jsonSentences[i].hints.map(function (hint) { return hint.toUpperCase()})))
+        }
+        return sentenceList;
+    }
+
+    function Sentence(sentence, hints) {
+        this.sentence = sentence;
+        this.hints = hints;
+    }
+
+    function getJsonFromFile(filename) {
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", filename, false);
+        var allText = "";
+        rawFile.onreadystatechange = function ()
+        {
+            if(rawFile.readyState === 4)
+            {
+                if(rawFile.status === 200 || rawFile.status == 0)
+                {
+                    allText = JSON.parse(rawFile.responseText);
+
+                }
+            }
+        }
+        rawFile.send(null);
+        return allText;
+    }
+
     function getNewWord() {
         // retrieve a random plaintext from the list of words
         var index = Math.floor(Math.random() * wordList.length);
@@ -32,13 +66,11 @@
         return newWord;
     }
 
-    function getNewSentence() {
+    function getNewSentenceObject() {
         // retrieve a random plaintext from the list of words
         var index = Math.floor(Math.random() * sentenceList.length);
-        var newSentence = sentenceList[index].toUpperCase();
-        // remove the newline character at the end of each word
-        newSentence = newSentence.slice(0, newSentence.length - 1);
-        return newSentence;
+        var newSentenceObject = sentenceList[index];
+        return newSentenceObject;
     }
 
     function createKeyboard(answerWord) {
@@ -439,6 +471,7 @@
             return true;
         }
     }]);
+
     app.controller('CaesarLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('AnswerController', {$scope: $scope});
         $scope.key = Math.floor((Math.random() * 25) + 1);
@@ -541,9 +574,10 @@
 
     app.controller('SubstitutionBaseController', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('AnswerController', {$scope: $scope});
-        $scope.sentence = getNewSentence();
+        $scope.Math = window.Math;
+        $scope.sentenceObject = getNewSentenceObject();
         $scope.mapping = createNewMapping();
-        $scope.frequencies = getLetterFrequencies($scope.sentence);
+        $scope.frequencies = getLetterFrequencies($scope.sentenceObject.sentence);
         $scope.englishFrequencies = [
             ["E", 12.7],
             ["T", 9.1],
@@ -573,9 +607,9 @@
             ["Z", 0.1]
         ];
         $scope.setupStage = function() {
-            $scope.sentence = getNewSentence();
+            $scope.sentenceObject = getNewSentenceObject();
             $scope.mapping = createNewMapping();
-            $scope.frequencies = getLetterFrequencies($scope.sentence);
+            $scope.frequencies = getLetterFrequencies($scope.sentenceObject.sentence);
         }
         $scope.$on('nextStage', function(e) {
             $scope.setupStage();
@@ -669,7 +703,7 @@
         $scope.getFrequencyPercentOfLetter = function (letter, isPlaintext) {
             isPlaintext = (typeof isPlaintext === 'undefined') ? true : isPlaintext;
             var count = $scope.getFrequencyCountOfLetter(letter, isPlaintext);
-            var size = $scope.sentence.replace(/\W/g, "").length;
+            var size = $scope.sentenceObject.sentence.replace(/\W/g, "").length;
             var percentValue = Math.round((count / size) * 100);
             return percentValue;
         }
@@ -700,7 +734,7 @@
     app.controller('SubstitutionLevelOne', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
         $controller('SentenceDisplayController', {$scope: $scope});
-        $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
+        $scope.encryptedSentence = $scope.encryptString($scope.sentenceObject.sentence, $scope.mapping);
         $scope.plaintext = "ETA";
         $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.answerText);
@@ -708,7 +742,7 @@
         $scope.keyboard = createKeyboard($scope.keyboardLetters);
         $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
         $scope.levelSetup = function() {
-            $scope.encryptedSentence = $scope.encryptString($scope.sentence, $scope.mapping);
+            $scope.encryptedSentence = $scope.encryptString($scope.sentenceObject.sentence, $scope.mapping);
             $scope.plaintext = "ETA";
             $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
             $scope.answerKeyboard = retrieveAnswer($scope.answerText);
