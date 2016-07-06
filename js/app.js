@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
-    var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'substitution/3', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
+    var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     var wordList = getListFromFile("../res/words.txt");
     var sentenceList = getSentenceList();
     function getListFromFile(filename) {
@@ -16,6 +16,7 @@
                 {
                     var allText = rawFile.responseText;
                     list = allText.split("\n");
+                    list = list.map(function(x) { return x.slice(0, x.length - 1)});
                 }
             }
         }
@@ -61,8 +62,13 @@
         // retrieve a random plaintext from the list of words
         var index = Math.floor(Math.random() * wordList.length);
         var newWord = wordList[index].toUpperCase();
-        // remove the newline character at the end of each word
-        newWord = newWord.slice(0, newWord.length - 1);
+        return newWord;
+    }
+
+    function getWordFromList(list) {
+        // retrieve a random plaintext from the list of words
+        var index = Math.floor(Math.random() * list.length);
+        var newWord = list[index].toUpperCase();
         return newWord;
     }
 
@@ -205,7 +211,7 @@
                 challenge: 2
             }]
         }, {
-            name: 'Vigenere Cipher',
+            name: 'Vigènere Cipher',
             level: 'vigenere',
             buttons: [{
                 name: 'Introduction',
@@ -659,7 +665,7 @@
             this.cipherLetter = cipher;
         }
 
-        $scope.encryptString = function(text, mapping) {
+        $scope.encryptSubstitution = function(text, mapping) {
             for (var i = 0; i < text.length; i++) {
                 var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
                 if (findMapping.length == 0) {
@@ -725,7 +731,7 @@
     app.controller('SubstitutionIntroController', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
         $scope.plaintext = getNewWord();
-        $scope.ciphertext = $scope.encryptString($scope.plaintext, $scope.mapping);
+        $scope.ciphertext = $scope.encryptSubstitution($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
         $scope.keyboard = createKeyboard($scope.ciphertext);
         $scope.$parent.maxStage = 1;
@@ -734,17 +740,17 @@
     app.controller('SubstitutionLevelOne', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
         $controller('SentenceDisplayController', {$scope: $scope});
-        $scope.encryptedSentence = $scope.encryptString($scope.sentenceObject.sentence, $scope.mapping);
+        $scope.encryptedSentence = $scope.encryptSubstitution($scope.sentenceObject.sentence, $scope.mapping);
         $scope.plaintext = "ETA";
-        $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
+        $scope.answerText = $scope.encryptSubstitution($scope.plaintext, $scope.mapping);
         $scope.answerKeyboard = retrieveAnswer($scope.answerText);
         $scope.keyboardLetters = getKeyboardLetters($scope.answerText, $scope.frequencies);
         $scope.keyboard = createKeyboard($scope.keyboardLetters);
         $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
         $scope.levelSetup = function() {
-            $scope.encryptedSentence = $scope.encryptString($scope.sentenceObject.sentence, $scope.mapping);
+            $scope.encryptedSentence = $scope.encryptSubstitution($scope.sentenceObject.sentence, $scope.mapping);
             $scope.plaintext = "ETA";
-            $scope.answerText = $scope.encryptString($scope.plaintext, $scope.mapping);
+            $scope.answerText = $scope.encryptSubstitution($scope.plaintext, $scope.mapping);
             $scope.answerKeyboard = retrieveAnswer($scope.answerText);
             $scope.keyboardLetters = getKeyboardLetters($scope.answerText, $scope.frequencies);
             $scope.keyboard = createKeyboard($scope.keyboardLetters);
@@ -767,7 +773,52 @@
             }
             return keyboardText;
         }
-    })
+    });
+
+    app.controller('VigenereBaseController', function($scope, $controller) {
+        $scope.keyword = getNewKeyword();
+        
+        function getNewKeyword() {
+            var MAX_KEY_SIZE = 3;
+            var shortWordList = wordList.filter(function(x) {return x.length <= MAX_KEY_SIZE});
+            return getWordFromList(shortWordList);
+        }
+
+        $scope.encryptVigenere = function(plaintext, keyword) {
+            plaintext = plaintext.toUpperCase();
+            var keyValues = keyword.split("").map(function(x) { return x.charCodeAt(0) - "A".charCodeAt(0)});
+            var cipherTextArray = [];
+            for (i = 0; i < plaintext.length; i++) {
+                // skip non-word characters
+                if (/\W/.test(plaintext[i])) continue;
+                var key = keyValues[i % keyValues.length];
+                var newValue = plaintext.charCodeAt(i) + key;
+                if (newValue > "Z".charCodeAt(0)) {
+                    newValue -= 26;
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            var cipherText = cipherTextArray.join("");
+            return cipherText;
+        }
+
+
+
+
+    });
+
+    app.controller('VigenereIntroController', function($scope, $controller) {
+        $controller('VigenereBaseController', {$scope: $scope});
+        $scope.plaintext = getNewPlainWord();
+        $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
+        $scope.$parent.maxStage = 1;
+
+        function getNewPlainWord() {
+            var MIN_WORD_SIZE = 4;
+            var longWordList = wordList.filter(function(x) { return x.length >= MIN_WORD_SIZE});
+            return getWordFromList(longWordList);
+        }
+    });
     
     var levelState = {
         currentStage: 1,

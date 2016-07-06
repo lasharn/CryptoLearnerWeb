@@ -17,11 +17,9 @@
 *                                                                         *
 ***************************************************************************/
 
-var key = 0;
-
-
-
-var rotateWheel=function(elem){
+var rotateWheel=function(elem, keyIsNumber){
+    keyIsNumber = (typeof keyIsNumber === 'undefined') ? true : keyIsNumber;
+    var key = 0;
     var output={};
     //Preventing elem to being selected on IE
     if(document.all && !window.opera) elem.setAttribute("unselectable","on");
@@ -50,6 +48,7 @@ var rotateWheel=function(elem){
     var Dx=[];
     var Dy=[];
     var dummy;
+    updateKey();
     //Public Methods
     output.onchange=function(e){
         updateKey();
@@ -60,7 +59,7 @@ var rotateWheel=function(elem){
         var keyText = document.getElementById("cipher-key");
         //calculate value of key
         key = (26 - (Math.round((output.deg % 360) / (360 / 26)))) % 26;
-        keyText.textContent = key; 
+        keyText.textContent = keyIsNumber ? key : String.fromCharCode(key + "A".charCodeAt(0));
     }
     function snapToLetter(e) {
         //setting control variables
@@ -231,7 +230,7 @@ var rotateWheel=function(elem){
 	return output;
 }
 
-var cipherWheel = function(elem) {
+var createCipherWheel = function(elem, keyIsNum) {
     var outerWheel = document.createElement("img");
     outerWheel.setAttribute("src", "../img/outerwheel.png");
     outerWheel.setAttribute("id", "outer-wheel");
@@ -239,7 +238,6 @@ var cipherWheel = function(elem) {
     innerWheel.setAttribute("src", "../img/innerwheel.png");
     innerWheel.setAttribute("alt", "inner cipher wheel");
     innerWheel.setAttribute("id", "inner-wheel");
-    var spinWheel = rotateWheel(innerWheel);
     var keyDisplay = document.createElement("div");
     keyDisplay.setAttribute("id", "key-display");
     var keyIcon = document.createElement("i");
@@ -248,27 +246,37 @@ var cipherWheel = function(elem) {
     keyDisplay.appendChild(keyIcon);
     var keyValue = document.createElement("span");
     keyValue.setAttribute("id", "cipher-key");
-    var valueText = document.createTextNode(key);
+    var valueText = document.createTextNode(0);
     keyValue.appendChild(valueText);
     keyDisplay.appendChild(keyValue);
 
     // var cipherHeight = outerWheel.width;
     // elem.style.minHeight = cipherHeight+"px";
-    
+
     elem.appendChild(outerWheel);
     elem.appendChild(innerWheel);
     elem.appendChild(keyDisplay);
+    var spinWheel = rotateWheel(innerWheel, keyIsNum);
 
 }
-
-var wheelElem=document.getElementById("cipher-wheel");
-var cipherWheel=cipherWheel(wheelElem);
+var cipherWheel = null;
+if (document.getElementById("cipher-wheel") != null) {
+    var cipherWheel = createCipherWheel(document.getElementById("cipher-wheel"), true);
+} else if (document.getElementById("vigenere-wheel") != null) {
+    var cipherWheel = createCipherWheel(document.getElementById("vigenere-wheel"), false);
+}
 
 $(window).on("resize", function() {
-
-    var cipherWheel = document.getElementById("cipher-wheel");
-    var cipherHeight = cipherWheel.firstElementChild.offsetWidth;
-    cipherWheel.style.minHeight = cipherHeight+"px";
+    cipherWheel = null;
+    if (document.getElementById("cipher-wheel") != null) {
+        var cipherWheel = document.getElementById("cipher-wheel");
+    } else if (document.getElementById("vigenere-wheel") != null) {
+        var cipherWheel = document.getElementById("vigenere-wheel");
+    }
+    if (cipherWheel != null) {
+        var cipherHeight = cipherWheel.firstElementChild.offsetWidth;
+        cipherWheel.style.minHeight = cipherHeight+"px";
+    }
 });
 
 $(window).trigger('resize');
