@@ -99,7 +99,7 @@
         uniqueStr = shuffle(uniqueStr);
         //put the string into an array which has [string, bool] objects
         for (i = 0; i < uniqueStr.length; i++) {
-            keyboardArray.push(new KeyboardLetter(uniqueStr[i]));
+            keyboardArray.push(new KeyboardLetter(i, uniqueStr[i]));
         }
         return keyboardArray;
     }
@@ -128,21 +128,24 @@
         return array;
     }
 
-    function KeyboardLetter(letter) {
+    function KeyboardLetter(num, letter) {
+        this.id = num;
         this.char = letter;
         this.selectable = true;
     }
 
-    function AnswerLetter(correctLetter) {
+    function AnswerLetter(id, correctLetter) {
+        this.id = id;
         this.correctLetter = correctLetter;
         this.currentLetter = "";
         this.deselectable = false;
+        this.keyboardLetterId = -1;
     }
 
     function retrieveAnswer(answerText) {
         var answerLetterArr = [];
         for (i = 0; i < answerText.length; i++) {
-            answerLetterArr.push(new AnswerLetter(answerText[i]));
+            answerLetterArr.push(new AnswerLetter(i, answerText[i]));
         }
         return answerLetterArr;
     }
@@ -385,9 +388,8 @@
             $scope.correctAnswer = false;
             var selectedLetter = letter.char;
             var nextEmptyIndex = -1;
-            //$(event.currentTarget).find('span').text();
             //get the index of the answer being selected
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter == "") {
                     nextEmptyIndex = i;
                     break;
@@ -481,30 +483,32 @@
     app.controller('VigenereAnswerController', ['$scope', function($scope) {
         $scope.incorrectAnswer = false;
         $scope.correctAnswer = false;
-        $scope.selectLetter = function(letter) {
-            if (!letter.selectable) return;
+        $scope.currentAnswerIndex = 0;
+        $scope.selectLetter = function(keyboardLetter) {
+            if (!keyboardLetter.selectable || $scope.currentAnswerIndex == -1) return;
             $scope.correctAnswer = false;
-            var selectedLetter = letter.char;
+            var selectedLetter = keyboardLetter.char;
             var nextEmptyIndex = -1;
-            //$(event.currentTarget).find('span').text();
-            //get the index of the answer being selected
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+            var index = $scope.currentAnswerIndex;
+
+            // if there is already a selection. remove that selection
+            if ($scope.answerKeyboard[index] != "") {
+                $scope.deselectLetter($scope.answerKeyboard[index]);
+            }
+            // insert the selected keyboardLetter into the answer
+            $scope.answerKeyboard[index].currentLetter = selectedLetter;
+            $scope.answerKeyboard[index].keyboardLetterId = keyboardLetter.id;
+            $scope.answerKeyboard[index].deselectable = true;
+            //get index of earliest empty keyboardLetter and highlight it
+            $scope.currentAnswerIndex = -1;
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter == "") {
-                    nextEmptyIndex = i;
+                    $scope.currentAnswerIndex = i;
                     break;
                 }
             }
             if (nextEmptyIndex == -1) return;
-            // get the letter in the answer that is being selected
-            var correctLetterToMatch = $scope.answerKeyboard[nextEmptyIndex].correctLetter;
-            // apply selection to all letters in the answer that much this letter
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].correctLetter == correctLetterToMatch) {
-                    $scope.answerKeyboard[i].currentLetter = selectedLetter;
-                    $scope.answerKeyboard[i].deselectable = true;
-                }
-            }
-            letter.selectable = !letter.selectable;
+            keyboardLetter.selectable = !keyboardLetter.selectable;
             if (answerFilled()) {
                 $scope.correctAnswer = checkSuccess();
                 $scope.incorrectAnswer = !$scope.correctAnswer;
@@ -514,24 +518,15 @@
             }
         }
 
-        $scope.deselectLetter = function(letter) {
-            if(!letter.deselectable) return;
-            var deselectedLetter = letter.currentLetter;
-            // remove all instances of the letter from the answer
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
-                if ($scope.answerKeyboard[i].currentLetter == deselectedLetter) {
-                    $scope.answerKeyboard[i].currentLetter = "";
-                    $scope.answerKeyboard[i].deselectable = false;
-                }
-            }
-            // match the deselected letter to the keyboard to reenable it
-            var keyboardIndex = -1;
-            for (i = 0; i < $scope.keyboard.length; i++) {
-                if ($scope.keyboard[i].char == deselectedLetter) {
-                    keyboardIndex = i;
-                    break;
-                }
-            }
+        $scope.deselectLetter = function(answerKeyboardletter) {
+            // get index of deselected answerKeyboardletter
+            $scope.currentAnswerIndex = answerKeyboardletter.id;
+            if(!answerKeyboardletter.deselectable) return;
+            var deselectedLetter = answerKeyboardletter.currentLetter;
+            // remove all instances of the answerKeyboardletter from the answer
+            $scope.answerKeyboard[$scope.currentAnswerIndex].currentLetter = "";
+            // match the deselected answerKeyboardletter to the keyboard to reenable it
+            var keyboardIndex = answerKeyboardletter.keyboardLetterId;
             if (keyboardIndex == -1) return;
             $scope.keyboard[keyboardIndex].selectable = true;
             $scope.incorrectAnswer = false;
@@ -572,7 +567,7 @@
             keyboardLetters = shuffle(keyboardLetters);
             //put the string into an array which has [string, bool] objects
             for (i = 0; i < keyboardLetters.length; i++) {
-                keyboardArray.push(new KeyboardLetter(keyboardLetters[i]));
+                keyboardArray.push(new KeyboardLetter(i, keyboardLetters[i]));
             }
             return keyboardArray;
         }
@@ -593,6 +588,21 @@
                 }
             }
             return true;
+        }
+
+        $scope.createKeywordKeyboard = function (plaintext, keyword) {
+            var keywordKeyboard = [];
+            for (var i = 0; i < plaintext.length; i++) {
+                var num = i % keyword.length;
+                keywordKeyboard.push(new KeywordLetter(num, keyword[num]));
+            }
+            return keywordKeyboard;
+        }
+
+        function KeywordLetter (number, letter) {
+            this.keywordNumber = number;
+            this.letter = letter;
+            this.isSelected = false;
         }
     }]);
 
@@ -896,11 +906,19 @@
     app.controller('VigenereBaseController', function($scope, $controller) {
         $controller('VigenereAnswerController', {$scope: $scope});
         $scope.keyword = getNewKeyword();
-        
+        $scope.plainWord = getNewPlainWord();
+        $scope.keywordKeyboard = $scope.createKeywordKeyboard($scope.plainWord, $scope.keyword);
+
         function getNewKeyword() {
             var MAX_KEY_SIZE = 3;
             var shortWordList = wordList.filter(function(x) {return x.length <= MAX_KEY_SIZE});
             return getWordFromList(shortWordList);
+        }
+
+        function getNewPlainWord() {
+            var MIN_WORD_SIZE = 4;
+            var longWordList = wordList.filter(function(x) { return x.length >= MIN_WORD_SIZE});
+            return getWordFromList(longWordList);
         }
 
         $scope.encryptVigenere = function(plaintext, keyword) {
@@ -924,17 +942,12 @@
 
     app.controller('VigenereIntroController', function($scope, $controller) {
         $controller('VigenereBaseController', {$scope: $scope});
-        $scope.plaintext = getNewPlainWord();
+        $scope.plaintext = $scope.plainWord
         $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
-        $scope.keyboard = $scope.createVigenereKeyboard($scope.ciphertext);
+        $scope.keyboard = $scope.createVigenereKeyboard($scope.plaintext, $scope.ciphertext);
         $scope.$parent.maxStage = 1;
 
-        function getNewPlainWord() {
-            var MIN_WORD_SIZE = 4;
-            var longWordList = wordList.filter(function(x) { return x.length >= MIN_WORD_SIZE});
-            return getWordFromList(longWordList);
-        }
     });
     
     var levelState = {

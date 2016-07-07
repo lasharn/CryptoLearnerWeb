@@ -46,7 +46,7 @@
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+            <div ng-class="['answer-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
                  ng-click="deselectLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
@@ -63,10 +63,25 @@
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in plaintext track by $index">
+            <div ng-class="['plaintext-box', $index == currentAnswerIndex ? 'highlight' : '']" ng-repeat="letter in plaintext track by $index">
                 <div class="box-content">
                     <div>
                         <span>{{letter}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Keyword display -->
+        <div class="answer-section">
+            <div class="icon-box">
+                <div class="box-content">
+                    <i class="fa fa-key fa-2x"></i>
+                </div>
+            </div>
+            <div ng-class="['plaintext-box', $index == currentAnswerIndex ? 'highlight' : '']" ng-repeat="letter in keywordKeyboard track by $index">
+                <div class="box-content">
+                    <div>
+                        <span>{{letter.letter}}</span>
                     </div>
                 </div>
             </div>

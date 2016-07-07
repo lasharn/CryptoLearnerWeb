@@ -410,7 +410,6 @@ cattle
 cause
 caution
 cave
-cd
 ceiling
 celery
 celeste
@@ -1732,7 +1731,6 @@ ovary
 oven
 owl
 owner
-ox
 oxen
 oxford
 oxygen
@@ -2662,7 +2660,6 @@ turtle
 tussle
 tutu
 tuxedo
-tv
 twig
 twine
 twist

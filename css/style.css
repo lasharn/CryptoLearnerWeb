@@ -333,6 +333,12 @@ button {
     font-size: 1.5vmax;
 }
 
+/** Vigenere styling**/
+
+.highlight {
+    border: 2px solid black;
+}
+
 /** Dividers **/
 .divide10 {
 	width: 100%;
