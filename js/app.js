@@ -488,7 +488,6 @@
             if (!keyboardLetter.selectable || $scope.currentAnswerIndex == -1) return;
             $scope.correctAnswer = false;
             var selectedLetter = keyboardLetter.char;
-            var nextEmptyIndex = -1;
             var index = $scope.currentAnswerIndex;
 
             // if there is already a selection. remove that selection
@@ -507,7 +506,6 @@
                     break;
                 }
             }
-            if (nextEmptyIndex == -1) return;
             keyboardLetter.selectable = !keyboardLetter.selectable;
             if (answerFilled()) {
                 $scope.correctAnswer = checkSuccess();
