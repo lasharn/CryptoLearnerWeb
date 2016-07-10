@@ -23,7 +23,7 @@
 <div id="navBar">
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
-<div id="game" ng-controller="CaesarLevel as level">
+<div id="game" ng-controller="CaesarLevelTwo as level">
     <header>
         <h1 class="text-center">Caesar Cipher Challenge 2: Decrypt</h1>
     </header>
@@ -32,8 +32,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; with a key of {{key}}. Answer:
-                {{plaintext}}</h3>
+            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; given a single mapping.</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->

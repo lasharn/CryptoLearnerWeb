@@ -438,7 +438,7 @@
             $scope.incorrectAnswer = false;
         }
 
-        $scope.partialCompleteSolution = function(numLettersNotFilled) {
+        $scope.partialCompleteSolutionLettersNotFilled = function (numLettersNotFilled) {
             var letters = [];
             // get all the keyboard letters in correct solution
             for (var i = 0; i < $scope.answerKeyboard.length; i++) {
@@ -457,6 +457,25 @@
             if (numLettersToFill < 0) return;
 
             for (i = 0; i < numLettersToFill; i++) {
+                $scope.selectLetter(letters[i]);
+            }
+        }
+
+        $scope.partialCompleteSolutionLettersFilled = function (numLettersFilled) {
+            var letters = [];
+            // get all the keyboard letters in correct solution
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
+                var currentLetter = $scope.answerKeyboard[i].correctLetter;
+                // check to avoid duplicates
+                if ($.grep(letters, function(e){ return e.char == currentLetter; }).length == 0) {
+                    var keyboardSearchResult = $.grep($scope.keyboard, function(e){ return e.char == currentLetter; });
+                    if (keyboardSearchResult.length > 0) {
+                        letters.push(keyboardSearchResult[0]);
+                    }
+                }
+            }
+            if (numLettersFilled > letters.length) numLettersFilled = letters.length;
+            for (i = 0; i < numLettersFilled; i++) {
                 $scope.selectLetter(letters[i]);
             }
         }
@@ -530,7 +549,7 @@
             $scope.incorrectAnswer = false;
         }
 
-        $scope.partialCompleteSolution = function(numLettersNotFilled) {
+        $scope.partialCompleteSolutionLettersNotFilled = function(numLettersNotFilled) {
             var letters = [];
             // get all the keyboard letters in correct solution
             for (var i = 0; i < $scope.answerKeyboard.length; i++) {
@@ -615,6 +634,7 @@
         $scope.keyboard = createKeyboard($scope.answertext);
         $scope.$on('nextStage', function(e) {
             $scope.setupStage();
+            $scope.levelSetup();
         });
         $scope.setupStage = function() {
             $scope.key = Math.floor((Math.random() * 25) + 1);
@@ -647,8 +667,22 @@
     app.controller('CaesarIntroLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('CaesarLevel', {$scope: $scope});
         $scope.$parent.maxStage = 1;
-        $scope.partialCompleteSolution(2);
+        $scope.partialCompleteSolutionLettersNotFilled(2);
 
+    }]);
+
+    app.controller('CaesarLevelOne', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $scope.levelSetup = function() {
+        }
+    }]);
+
+    app.controller('CaesarLevelTwo', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $scope.partialCompleteSolutionLettersFilled(1);
+        $scope.levelSetup = function() {
+            $scope.partialCompleteSolutionLettersFilled(1);
+        }
     }]);
 
     app.controller('SentenceDisplayController', ['$scope', function($scope) {
