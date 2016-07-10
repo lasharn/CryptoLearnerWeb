@@ -32,8 +32,7 @@
     <!-- Question -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <h3 class="text-center">Encrypt &quot;{{plaintext}}&quot; with a key of {{key}}. Answer:
-                {{ciphertext}}</h3>
+            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; with a key of {{key}}. We have partially completed the solution to get you started.</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
@@ -57,14 +56,14 @@
                 </div>
             </div>
         </div>
-        <!-- Plaintext display -->
+        <!-- Cipher display -->
         <div class="answer-section">
             <div class="icon-box">
                 <div class="box-content">
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in plaintext track by $index">
+            <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
                 <div class="box-content">
                     <div>
                         <span>{{letter}}</span>

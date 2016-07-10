@@ -610,7 +610,7 @@
         $scope.plaintext = getNewWord();
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
         // determine if level is an encrypt or decrypt challenge
-        $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
+        $scope.answertext = ($scope.currentLevelIndex == 1) ? $scope.ciphertext : $scope.plaintext;
         $scope.answerKeyboard = retrieveAnswer($scope.answertext);
         $scope.keyboard = createKeyboard($scope.answertext);
         $scope.$on('nextStage', function(e) {
@@ -620,7 +620,7 @@
             $scope.key = Math.floor((Math.random() * 25) + 1);
             $scope.plaintext = getNewWord();
             $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
-            $scope.answertext = ($scope.currentLevelIndex <= 1) ? $scope.ciphertext : $scope.plaintext;
+            $scope.answertext = ($scope.currentLevelIndex == 1) ? $scope.ciphertext : $scope.plaintext;
             $scope.answerKeyboard = retrieveAnswer($scope.answertext);
             $scope.keyboard = createKeyboard($scope.answertext);
             $scope.incorrectAnswer = false;
