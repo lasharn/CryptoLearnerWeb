@@ -648,16 +648,21 @@
         }
         
         function encryptCaesar(plainText, key) {
+            var zCharCode = "Z".charCodeAt(0);
+            var aCharCode = "A".charCodeAt(0);
             plainText = plainText.toUpperCase();
-            cipherTextArray = [];
-            for (i = 0; i < plainText.length; i++) {
-                newValue = plainText.charCodeAt(i) + key;
-                if (newValue > "Z".charCodeAt(0)) {
+            var cipherTextArray = [];
+            for (var i = 0; i < plainText.length; i++) {
+                var charCode = plainText.charCodeAt(i);
+                // skip non alphabetical characters
+                if (charCode < aCharCode || charCode > zCharCode) continue;
+                var newValue = charCode + key;
+                if (newValue > zCharCode) {
                     newValue -= 26;
                 }
                 cipherTextArray[i] = String.fromCharCode(newValue);
             }
-            cipherText = cipherTextArray.join("");
+            var cipherText = cipherTextArray.join("");
             // remove non-alphabetical characters
             cipherText = cipherText.replace(/\W+/g, "");
             return cipherText;
@@ -671,17 +676,62 @@
 
     }]);
 
-    app.controller('CaesarLevelOne', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+    app.controller('CaesarEncrypt', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('CaesarLevel', {$scope: $scope});
         $scope.levelSetup = function() {
         }
     }]);
 
-    app.controller('CaesarLevelTwo', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+    app.controller('CaesarDecrypt', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('CaesarLevel', {$scope: $scope});
         $scope.partialCompleteSolutionLettersFilled(1);
         $scope.levelSetup = function() {
             $scope.partialCompleteSolutionLettersFilled(1);
+        }
+    }]);
+
+    app.controller('CaesarBruteForce', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
+        $controller('CaesarLevel', {$scope: $scope});
+        $controller('SentenceDisplayController', {$scope: $scope});
+        $scope.sentenceObject = getNewSentenceObject();
+        $scope.plaintext = $scope.sentenceObject.sentence;
+        $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+        $scope.formattedSentence = $scope.createFormattedSentence($scope.ciphertext);
+        $scope.currentKey = parseInt($('#cipher-key').text());
+        $scope.levelSetup = function() {
+            $scope.sentenceObject = getNewSentenceObject();
+            $scope.plaintext = $scope.sentenceObject.sentence;
+            $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
+            $scope.formattedSentence = $scope.createFormattedSentence($scope.ciphertext);
+        }
+
+        $scope.displayLiveDecrypt = function(char, currentKey) {
+            if (char == " ") return " ";
+            var charCode = char.charCodeAt(0);
+            var newCode = charCode - currentKey;
+            newCode = (newCode < "A".charCodeAt(0)) ? newCode + 26 : newCode;
+            return String.fromCharCode(newCode);
+        }
+
+        function encryptCaesar(plainText, key) {
+            var zCharCode = "Z".charCodeAt(0);
+            var aCharCode = "A".charCodeAt(0);
+            plainText = plainText.toUpperCase();
+            var cipherTextArray = [];
+            for (var i = 0; i < plainText.length; i++) {
+                var charCode = plainText.charCodeAt(i);
+                var newValue = charCode;
+                // skip non alphabetical characters
+                if (charCode >= aCharCode && charCode <= zCharCode) {
+                    newValue = charCode + key;
+                    if (newValue > zCharCode) {
+                        newValue -= 26;
+                    }
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            var cipherText = cipherTextArray.join("");
+            return cipherText;
         }
     }]);
 
@@ -707,7 +757,7 @@
         }
 
         function checkSuccess() {
-            for (i = 0; i < $scope.answerKeyboard.length; i++) {
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
                 if ($scope.answerKeyboard[i].currentLetter != $scope.answerKeyboard[i].correctLetter) {
                     return false;
                 }

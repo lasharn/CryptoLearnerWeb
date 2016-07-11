@@ -24,7 +24,7 @@
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
 
-<div id="game" ng-controller="CaesarLevel as level">
+<div id="game" ng-controller="CaesarBruteForce as level">
     <header>
         <h1 class="text-center">Caesar Cipher Challenge 3: Brute Force</h1>
     </header>
@@ -33,67 +33,25 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; without knowing the key. Answer:
-                {{plaintext}}</h3>
+            <h3 class="text-center">Use brute force to decrypt the following sentence without knowing the key. Answer:
+                &quot;{{plaintext}}&quot;</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
     <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
     <!-- Player Input -->
-    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
-        <!-- Answer display -->
-        <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
-            <div class="icon-box">
-                <div class="box-content">
-                    <i class="fa fa-unlock fa-2x"></i>
-                </div>
-            </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
-                 ng-click="deselectLetter(letter)"
-                 ng-repeat="letter in answerKeyboard track by $index">
-                <div class='box-content'>
-                    <div>
-                        <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Ciphertext display -->
-        <div class="answer-section">
-            <div class="icon-box">
-                <div class="box-content">
-                    <i class="fa fa-lock fa-2x"></i>
-                </div>
-            </div>
-            <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
-                <div class="box-content">
-                    <div>
-                        <span>{{letter}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="divide100"></div>
-        <!-- Keyboard display -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="frequency-tool" style="font-size: 2em">
+        <!-- Display sentenceObject user selection -->
         <div>
-            <div class="keyboard-row">
-                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
-                     ng-click="selectLetter(letter)"
-                     ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
-                    <div class="box-content">
-                        <div>
-                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
-                        </div>
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Encrypted message
                 </div>
-            </div>
-            <div class="keyboard-row">
-                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
-                     ng-click="selectLetter(letter)"
-                     ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
-                    <div class="box-content">
-                        <div>
-                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                <div class="panel-body">
+                    <div class="sentence-line" ng-repeat="line in formattedSentence">
+                        <div class="sentence-letter" ng-repeat="char in line track by $index">
+                            <div>{{char}}</div>
+                            <div class="live-preview">{{displayLiveDecrypt(char, currentKey) || "_"}}</div>
                         </div>
                     </div>
                 </div>
