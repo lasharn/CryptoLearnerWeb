@@ -24,7 +24,7 @@
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
 
-<div id="game" ng-mousemove="updateKey()" ng-controller="CaesarBruteForce as level">
+<div id="game" ontouchmove="updateKeyTouch()" ng-mousemove="updateKey()" ng-controller="CaesarBruteForce as level">
     <header>
         <h1 class="text-center">Caesar Cipher Challenge 3: Brute Force</h1>
     </header>
@@ -48,13 +48,25 @@
                 </div>
                 <div class="panel-body">
                     <div class="sentence-line" ng-repeat="line in formattedSentence">
-                        <div class="sentence-letter" ng-repeat="char in line track by $index">
+                        <div class="single-letter" ng-repeat="char in line track by $index">
                             <div>{{char}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Decrypted message
+                </div>
+                <div class="panel-body">
+                    <div class="sentence-line" ng-repeat="line in formattedSentence">
+                        <div class="single-letter" ng-repeat="char in line track by $index">
                             <div class="live-preview">{{displayLiveDecrypt(char) || "_"}}</div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button class="btn btn-primary btn-lg btn-block" ng-click="submitAnswer()">Submit</button>
         </div>
     </div>
 

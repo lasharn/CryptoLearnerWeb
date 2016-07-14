@@ -38,9 +38,9 @@ h1, h2, h3 {
     visibility: hidden;
 }
 
-button {
-		width: 90% !important;
-	}
+.level-buttons button {
+    width: 90% !important;
+}
 
 /** General level styling **/
 #navBar {
@@ -110,6 +110,18 @@ button {
     overflow:hidden;
     font-size: 20px; 
     font-size: 1.5vw;
+}
+
+/** Caesar brute force level styling **/
+
+.single-letter {
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    width: 5%;
+    margin-bottom: 3%;
+    font-size: 1.5em;
+    font-size: 1.5vmax;
 }
 
 /** Answer styling **/

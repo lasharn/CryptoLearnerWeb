@@ -738,6 +738,19 @@
         $scope.updateKey = function() {
             $scope.currentKey = currentKey;
         }
+
+        updateKeyTouch = function() {
+            var scope = angular.element($("#game")).scope();
+            scope.$apply(function(){
+                $scope.currentKey = currentKey;
+            })
+        }
+
+        $scope.submitAnswer = function() {
+            if ($scope.currentKey == $scope.key) {
+                $scope.showModal();
+            }
+        }
     }]);
 
     app.controller('SentenceDisplayController', ['$scope', function($scope) {
