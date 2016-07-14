@@ -733,6 +733,10 @@
             var cipherText = cipherTextArray.join("");
             return cipherText;
         }
+        
+        $scope.updateKey = function() {
+            $scope.currentKey = parseInt($('#cipher-key').text());
+        }
     }]);
 
     app.controller('SentenceDisplayController', ['$scope', function($scope) {

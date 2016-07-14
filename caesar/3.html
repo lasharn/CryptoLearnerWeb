@@ -24,7 +24,7 @@
     <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
 </div>
 
-<div id="game" ng-controller="CaesarBruteForce as level">
+<div id="game" ng-mousemove="updateKey()" ng-controller="CaesarBruteForce as level">
     <header>
         <h1 class="text-center">Caesar Cipher Challenge 3: Brute Force</h1>
     </header>
@@ -33,8 +33,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Use brute force to decrypt the following sentence without knowing the key. Answer:
-                &quot;{{plaintext}}&quot;</h3>
+            <h3 class="text-center">Use brute force to decrypt the following sentence without knowing the key.</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
