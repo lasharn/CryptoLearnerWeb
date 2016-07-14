@@ -749,6 +749,12 @@
         $scope.submitAnswer = function() {
             if ($scope.currentKey == $scope.key) {
                 $scope.showModal();
+                $(".live-preview").addClass("correct-letter");
+            } else {
+                setTimeout(function() {
+                    $(".live-preview").addClass("incorrect-letter");
+                }, 1);
+                $(".live-preview").removeClass("incorrect-letter");
             }
         }
     }]);
