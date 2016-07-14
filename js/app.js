@@ -697,18 +697,19 @@
         $scope.plaintext = $scope.sentenceObject.sentence;
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
         $scope.formattedSentence = $scope.createFormattedSentence($scope.ciphertext);
-        $scope.currentKey = parseInt($('#cipher-key').text());
+        $scope.currentKey = currentKey;
         $scope.levelSetup = function() {
             $scope.sentenceObject = getNewSentenceObject();
             $scope.plaintext = $scope.sentenceObject.sentence;
             $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
             $scope.formattedSentence = $scope.createFormattedSentence($scope.ciphertext);
+            $scope.currentKey = currentKey;
         }
 
-        $scope.displayLiveDecrypt = function(char, currentKey) {
+        $scope.displayLiveDecrypt = function(char) {
             if (char == " ") return " ";
             var charCode = char.charCodeAt(0);
-            var newCode = charCode - currentKey;
+            var newCode = charCode - $scope.currentKey;
             newCode = (newCode < "A".charCodeAt(0)) ? newCode + 26 : newCode;
             return String.fromCharCode(newCode);
         }
@@ -735,7 +736,7 @@
         }
         
         $scope.updateKey = function() {
-            $scope.currentKey = parseInt($('#cipher-key').text());
+            $scope.currentKey = currentKey;
         }
     }]);
 

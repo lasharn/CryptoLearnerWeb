@@ -50,7 +50,7 @@
                     <div class="sentence-line" ng-repeat="line in formattedSentence">
                         <div class="sentence-letter" ng-repeat="char in line track by $index">
                             <div>{{char}}</div>
-                            <div class="live-preview">{{displayLiveDecrypt(char, currentKey) || "_"}}</div>
+                            <div class="live-preview">{{displayLiveDecrypt(char) || "_"}}</div>
                         </div>
                     </div>
                 </div>

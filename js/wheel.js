@@ -17,6 +17,7 @@
 *                                                                         *
 ***************************************************************************/
 
+var currentKey = 0;
 var rotateWheel=function(elem, keyIsNumber){
     keyIsNumber = (typeof keyIsNumber === 'undefined') ? true : keyIsNumber;
     var key = 0;
@@ -58,9 +59,11 @@ var rotateWheel=function(elem, keyIsNumber){
         // set the value of the cipher key based on the current rotation
         var keyText = document.getElementById("cipher-key");
         //calculate value of key
-        key = (26 - (Math.round((output.deg % 360) / (360 / 26)))) % 26;
+        currentKey = (26 - (Math.round((output.deg % 360) / (360 / 26)))) % 26;
+        key = currentKey;
         keyText.textContent = keyIsNumber ? key : String.fromCharCode(key + "A".charCodeAt(0));
     }
+
     function snapToLetter(e) {
         //setting control variables
         var cursorRad;
