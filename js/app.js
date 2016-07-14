@@ -846,10 +846,15 @@
             ["Q", 0.1],
             ["Z", 0.1]
         ];
+        $scope.getRandomHint = function(sentenceObject) {
+            return sentenceObject.hints[Math.floor(Math.random() * sentenceObject.hints.length)]
+        }
+        $scope.hintWord = $scope.getRandomHint($scope.sentenceObject);
         $scope.setupStage = function() {
             $scope.sentenceObject = getNewSentenceObject();
             $scope.mapping = createNewMapping();
             $scope.frequencies = getLetterFrequencies($scope.sentenceObject.sentence);
+            $scope.hintWord = $scope.getRandomHint($scope.sentenceObject);
         }
         $scope.$on('nextStage', function(e) {
             $scope.setupStage();
