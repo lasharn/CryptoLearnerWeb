@@ -595,6 +595,7 @@
                     return false;
                 }
             }
+            $scope.currentAnswerIndex = 0;
             return true;
         }
 
@@ -646,7 +647,7 @@
             $scope.incorrectAnswer = false;
             $scope.correctAnswer = false;
         }
-        
+
         function encryptCaesar(plainText, key) {
             var zCharCode = "Z".charCodeAt(0);
             var aCharCode = "A".charCodeAt(0);
@@ -734,7 +735,7 @@
             var cipherText = cipherTextArray.join("");
             return cipherText;
         }
-        
+
         $scope.updateKey = function() {
             $scope.currentKey = currentKey;
         }
@@ -1019,6 +1020,15 @@
         $scope.keyword = getNewKeyword();
         $scope.plainWord = getNewPlainWord();
         $scope.keywordKeyboard = $scope.createKeywordKeyboard($scope.plainWord, $scope.keyword);
+        $scope.setupStage = function() {
+            $scope.keyword = getNewKeyword();
+            $scope.plainWord = getNewPlainWord();
+            $scope.keywordKeyboard = $scope.createKeywordKeyboard($scope.plainWord, $scope.keyword);
+        }
+        $scope.$on('nextStage', function(e) {
+            $scope.setupStage();
+            $scope.levelSetup();
+        });
 
         function getNewKeyword() {
             var MAX_KEY_SIZE = 3;
@@ -1058,9 +1068,34 @@
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
         $scope.keyboard = $scope.createVigenereKeyboard($scope.ciphertext);
         $scope.$parent.maxStage = 1;
+    });
+
+
+    app.controller('VigenereLevelOne', function($scope, $controller) {
+        $controller('VigenereBaseController', {$scope: $scope});
+        $scope.plaintext = $scope.plainWord
+        $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
+        $scope.repeatedKeyword = createLongKeyword($scope.keyword, $scope.plaintext.length);
+        $scope.answerKeyboard = retrieveAnswer($scope.repeatedKeyword);
+        $scope.keyboard = $scope.createVigenereKeyboard($scope.repeatedKeyword);
+        $scope.levelSetup = function () {
+            $scope.plaintext = $scope.plainWord
+            $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
+            $scope.repeatedKeyword = createLongKeyword($scope.keyword, $scope.plaintext.length);
+            $scope.answerKeyboard = retrieveAnswer($scope.repeatedKeyword);
+            $scope.keyboard = $scope.createVigenereKeyboard($scope.repeatedKeyword);
+        }
+
+        function createLongKeyword(keyword, length) {
+            var longKeyword = "";
+            for (var i = 0; i < length; i++) {
+                longKeyword += keyword[i % keyword.length];
+            }
+            return longKeyword;
+        }
 
     });
-    
+
     var levelState = {
         currentStage: 1,
         maxStage: 3
