@@ -1056,7 +1056,7 @@
         $scope.plaintext = $scope.plainWord
         $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
         $scope.answerKeyboard = retrieveAnswer($scope.ciphertext);
-        $scope.keyboard = $scope.createVigenereKeyboard($scope.plaintext, $scope.ciphertext);
+        $scope.keyboard = $scope.createVigenereKeyboard($scope.ciphertext);
         $scope.$parent.maxStage = 1;
 
     });

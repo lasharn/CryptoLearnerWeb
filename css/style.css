@@ -222,7 +222,6 @@ h1, h2, h3 {
 }
 
 .keyboard-box {
-/*    float:left;*/
     display: inline-block;
     position: relative;
     width: 13%;
@@ -345,13 +344,19 @@ h1, h2, h3 {
     font-size: 1.5vmax;
 }
 
+/** Other substitution styling stuff **/
+.alert-info {
+    font-size: 1em;
+    font-size: 1vmax;
+}
+
 /** Vigenere styling**/
 
 .highlight {
     border: 4px solid black;
 }
 
-/** Incorrect answer animations **/
+/** Incorrect/correct answer animations/styling **/
 @-webkit-keyframes incorrect-letter {
     0% {
         color: red;
