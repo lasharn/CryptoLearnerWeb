@@ -181,7 +181,7 @@
             }, {
                 name: 'Encrypt',
                 isUnlocked: $cookies.get($scope.gameOrder[1]),
-                icon: '',
+                icon: 'fa-pencil',
                 challenge: 1
             }, {
                 name: 'Decrypt',
@@ -191,7 +191,7 @@
             }, {
                 name: 'Brute Force',
                 isUnlocked: $cookies.get($scope.gameOrder[3]),
-                icon: '',
+                icon: 'fa-bomb',
                 challenge: 3
             }]
         }, {
@@ -222,9 +222,9 @@
                 icon: 'fa-puzzle-piece',
                 challenge: 'intro'
             }, {
-                name: '',
+                name: 'Keyword',
                 isUnlocked: $cookies.get($scope.gameOrder[8]),
-                icon: '',
+                icon: 'fa-pencil',
                 challenge: 1
             }, {
                 name: '',
@@ -535,6 +535,44 @@
             }
         }
 
+        $scope.selectAllLetter = function(keyboardLetter) {
+            if (!keyboardLetter.selectable || $scope.currentAnswerIndex == -1) return;
+            $scope.correctAnswer = false;
+            var selectedLetter = keyboardLetter.char;
+            var index = $scope.currentAnswerIndex;
+
+            // if there is already a selection. remove that selection from entire answer
+            if ($scope.answerKeyboard[index].currentLetter != "") {
+                $scope.deselectAllLetter($scope.answerKeyboard[index]);
+            }
+            // insert selected letter into answer for every keyword repeat
+            var keywordIndex = index % $scope.keyword.length;
+            var correctLetter = $scope.answerKeyboard[index].correctLetter;
+            for (var i = keywordIndex; i < $scope.answerKeyboard.length; i += $scope.keyword.length) {
+                if ($scope.answerKeyboard[i].correctLetter == correctLetter) {
+                    $scope.answerKeyboard[i].currentLetter = selectedLetter;
+                    $scope.answerKeyboard[i].keyboardLetterId = keyboardLetter.id;
+                    $scope.answerKeyboard[i].deselectable = true;
+                }
+            }
+            //get index of earliest empty keyboardLetter and highlight it
+            $scope.currentAnswerIndex = -1;
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].currentLetter == "") {
+                    $scope.currentAnswerIndex = i;
+                    break;
+                }
+            }
+            keyboardLetter.selectable = !keyboardLetter.selectable;
+            if (answerFilled()) {
+                $scope.correctAnswer = checkSuccess();
+                $scope.incorrectAnswer = !$scope.correctAnswer;
+                if ($scope.correctAnswer) {
+                    $scope.showModal();
+                }
+            }
+        }
+
         $scope.deselectLetter = function(answerKeyboardletter) {
             // get index of deselected answerKeyboardletter
             $scope.currentAnswerIndex = answerKeyboardletter.id;
@@ -544,6 +582,26 @@
             $scope.answerKeyboard[$scope.currentAnswerIndex].currentLetter = "";
             // match the deselected answerKeyboardletter to the keyboard to reenable it
             var keyboardIndex = answerKeyboardletter.keyboardLetterId;
+            if (keyboardIndex == -1) return;
+            $scope.keyboard[keyboardIndex].selectable = true;
+            $scope.incorrectAnswer = false;
+        }
+
+        $scope.deselectAllLetter = function(answerKeyboardLetter) {
+            // get index of deselected answerKeyboardletter
+            $scope.currentAnswerIndex = answerKeyboardLetter.id;
+            var index = $scope.currentAnswerIndex;
+            var keywordIndex = index % $scope.keyword.length;
+            var correctLetter = answerKeyboardLetter.correctLetter;
+            for (var i = keywordIndex; i < $scope.answerKeyboard.length; i += $scope.keyword.length) {
+                if ($scope.answerKeyboard[i].correctLetter == correctLetter) {
+                    if(!$scope.answerKeyboard[i].deselectable) continue;
+                    $scope.answerKeyboard[i].currentLetter = "";
+                    $scope.answerKeyboard[i].deselectable = false;
+                }
+            }
+            // match the deselected answerKeyboardletter to the keyboard to reenable it
+            var keyboardIndex = answerKeyboardLetter.keyboardLetterId;
             if (keyboardIndex == -1) return;
             $scope.keyboard[keyboardIndex].selectable = true;
             $scope.incorrectAnswer = false;
@@ -1077,13 +1135,13 @@
         $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
         $scope.repeatedKeyword = createLongKeyword($scope.keyword, $scope.plaintext.length);
         $scope.answerKeyboard = retrieveAnswer($scope.repeatedKeyword);
-        $scope.keyboard = $scope.createVigenereKeyboard($scope.repeatedKeyword);
+        $scope.keyboard = $scope.createVigenereKeyboard($scope.keyword);
         $scope.levelSetup = function () {
             $scope.plaintext = $scope.plainWord
             $scope.ciphertext = $scope.encryptVigenere($scope.plaintext, $scope.keyword);
             $scope.repeatedKeyword = createLongKeyword($scope.keyword, $scope.plaintext.length);
             $scope.answerKeyboard = retrieveAnswer($scope.repeatedKeyword);
-            $scope.keyboard = $scope.createVigenereKeyboard($scope.repeatedKeyword);
+            $scope.keyboard = $scope.createVigenereKeyboard($scope.keyword);
         }
 
         function createLongKeyword(keyword, length) {

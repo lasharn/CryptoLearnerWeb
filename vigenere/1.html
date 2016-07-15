@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div ng-class="['answer-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
-                 ng-click="deselectLetter(letter)"
+                 ng-click="deselectAllLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
                     <div>
@@ -92,7 +92,7 @@
         <div>
             <div class="keyboard-row">
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
-                     ng-click="selectLetter(letter)"
+                     ng-click="selectAllLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
                     <div class="box-content">
                         <div>
@@ -103,7 +103,7 @@
             </div>
             <div class="keyboard-row">
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
-                     ng-click="selectLetter(letter)"
+                     ng-click="selectAllLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
                     <div class="box-content">
                         <div>
