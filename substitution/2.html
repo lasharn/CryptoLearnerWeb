@@ -47,7 +47,8 @@
                 </div>
                 <div class="panel-body">
                     <div class="sentence-line" ng-repeat="line in formattedSentence">
-                        <div class="sentence-letter" ng-repeat="char in line track by $index">
+                        <div ng-class="['sentence-letter', plaintext.indexOf(char) == -1 ? 'faded' : 'strong', plaintext.indexOf(char) == currentAnswerIndex ? 'highlight' : '']"
+                             ng-repeat="char in line track by $index">
                             <div>{{char}}</div>
                             <div ng-if="plaintext.indexOf(char) == -1" class="live-preview">{{displayCorrectLetter(char) || "_"}}</div>
                             <div ng-if="plaintext.indexOf(char) != -1" class="live-preview">{{displayUserSelection(char) || "_"}}</div>
