@@ -50,7 +50,6 @@
                         <div class="sentence-letter" ng-repeat="char in line track by $index">
                             <div>{{char}}</div>
                             <div ng-if="plaintext.indexOf(char) == -1" class="live-preview">{{displayCorrectLetter(char) || "_"}}</div>
-                            <!-- NEED DECRYPTED CHAR FOR THIS DIV -->
                             <div ng-if="plaintext.indexOf(char) != -1" class="live-preview">{{displayUserSelection(char) || "_"}}</div>
                         </div>
                     </div>
@@ -69,7 +68,7 @@
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+            <div ng-class="['answer-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
                  ng-click="deselectLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index"
                  style="margin-right: 7%">
@@ -104,7 +103,9 @@
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in plaintext track by $index"
+            <div ng-class="['plaintext-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
+                 ng-click="deselectLetter(answerKeyboard[$index])"
+                 ng-repeat="letter in plaintext track by $index"
                  style="margin-right: 7%">
                 <div class="box-content">
                     <div>

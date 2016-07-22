@@ -170,6 +170,12 @@
             $window.location.href = path;
         };
 
+        $scope.unlockAllLevels = function() {
+            for (var i = 0; i < $scope.gameOrder.length; i++) {
+                $cookies.put($scope.gameOrder[i], true);
+            }
+        }
+
         this.levels = [{
             name: 'Caesar Cipher',
             level: 'caesar',
@@ -208,9 +214,9 @@
                 icon: 'fa-bar-chart',
                 challenge: 1
             }, {
-                name: '',
+                name: 'Word Guess',
                 isUnlocked: $cookies.get($scope.gameOrder[6]),
-                icon: '',
+                icon: 'fa-language',
                 challenge: 2
             }]
         }, {
@@ -1075,6 +1081,7 @@
     app.controller('SubstitutionLevelTwo', function($scope, $controller) {
         $controller('SubstitutionBaseController', {$scope: $scope});
         $controller('SentenceDisplayController', {$scope: $scope});
+        $controller('VigenereAnswerController', {$scope: $scope});
         $scope.encryptedSentence = $scope.encryptSubstitution($scope.sentenceObject.sentence, $scope.mapping);
         $scope.removedLetters = removeRandomLetters($scope.sentenceObject.sentence);
         $scope.plaintext = $scope.encryptSubstitution($scope.removedLetters, $scope.mapping);
@@ -1142,6 +1149,24 @@
                 // no mapping found for this character return nothing
                 return " ";
             }
+        }
+
+        $scope.displayUserSelection = function (char) {
+            if (char == " ") return char;
+            // if level complete, show full answer
+            var findMapping = $.grep($scope.mapping, function(map){ return map.cipherLetter == char; });
+            var mappedLetter = "";
+            if (findMapping.length > 0) {
+                mappedLetter = findMapping[0].keyLetter;
+            } else {
+                return "";
+            }
+            for (var i = 0; i < $scope.answerKeyboard.length; i++) {
+                if ($scope.answerKeyboard[i].correctLetter == mappedLetter) {
+                    return $scope.answerKeyboard[i].currentLetter;
+                }
+            }
+            return "";
         }
     });
 
