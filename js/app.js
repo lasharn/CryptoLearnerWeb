@@ -867,7 +867,6 @@
             }
             if (index == -1) return "";
             return $scope.plaintext[index];
-
         }
     }]);
 
@@ -1070,6 +1069,79 @@
                 i++;
             }
             return keyboardText;
+        }
+    });
+
+    app.controller('SubstitutionLevelTwo', function($scope, $controller) {
+        $controller('SubstitutionBaseController', {$scope: $scope});
+        $controller('SentenceDisplayController', {$scope: $scope});
+        $scope.encryptedSentence = $scope.encryptSubstitution($scope.sentenceObject.sentence, $scope.mapping);
+        $scope.removedLetters = removeRandomLetters($scope.sentenceObject.sentence);
+        $scope.plaintext = $scope.encryptSubstitution($scope.removedLetters, $scope.mapping);
+        $scope.answerText = $scope.removedLetters;
+        $scope.answerKeyboard = retrieveAnswer($scope.answerText);
+        $scope.keyboard = createKeyboard($scope.answerText);
+        $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
+        $scope.levelSetup = function() {
+            $scope.encryptedSentence = $scope.encryptSubstitution($scope.sentenceObject.sentence, $scope.mapping);
+            $scope.removedLetters = removeRandomLetters($scope.sentenceObject.sentence);
+            $scope.plaintext = $scope.encryptSubstitution($scope.removedLetters, $scope.mapping);
+            $scope.answerText = $scope.removedLetters;
+            $scope.answerKeyboard = retrieveAnswer($scope.answerText);
+            $scope.keyboard = createKeyboard($scope.answerText);
+            $scope.formattedSentence = $scope.createFormattedSentence($scope.encryptedSentence);
+        }
+
+        function removeRandomLetters(sentenceString) {
+            sentenceString = sentenceString.replace(/\s/g, '').toUpperCase();
+            var lettersInSentence = '';
+            var charCount = {};
+            // count letter occurrence
+            for (var i = 0; i < sentenceString.length; i++) {
+                var currentLetter = sentenceString[i];
+                if (lettersInSentence.indexOf(currentLetter) == -1) {
+                    lettersInSentence += currentLetter;
+                }
+                if (charCount[currentLetter] == null) {
+                    charCount[currentLetter] = 1;
+                } else {
+                    charCount[currentLetter]++;
+                }
+            }
+            // remove most common letters
+            for (var i = 0; i < 3; i++) {
+                var max = 1;
+                var maxChar = '';
+                // iterate dictionary
+                for (var char in charCount) {
+                    var count = charCount[char];
+                    if (count > max) {
+                        max = count;
+                        maxChar = char;
+                    }
+                }
+                var regex = new RegExp(maxChar, "g");
+                delete charCount[maxChar];
+                lettersInSentence = lettersInSentence.replace(regex, '');
+            }
+            // get 4 random letters from remaining letters
+            lettersInSentence = shuffle(lettersInSentence);
+            lettersInSentence = lettersInSentence.substr(0, 4);
+            return lettersInSentence;
+        }
+
+        $scope.displayCorrectLetter = function (char) {
+            if (char == " ") return char;
+            var findMapping = $.grep($scope.mapping, function(map){ return map.cipherLetter == char; });
+            if (findMapping.length > 0) {
+                var mappedChar = findMapping[0].keyLetter;
+                // check if letter is a removed letter
+                if ($scope.removedLetters.indexOf(mappedChar) != -1) return "";
+                return mappedChar;
+            } else {
+                // no mapping found for this character return nothing
+                return " ";
+            }
         }
     });
 

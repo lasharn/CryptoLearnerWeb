@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html ng-app="cryptoLearner">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script src="https://use.fontawesome.com/13139b496b.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script type="text/javascript" src="../js/p2.min.js"></script>
+
+    <title>Substitution Cipher Challenge 2: Word Guessing</title>
+</head>
+
+<body ng-controller="GameController as game">
+<div id="navBar">
+    <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
+</div>
+
+<div id="game" ng-controller="SubstitutionLevelTwo as level">
+    <header>
+        <h1 class="text-center">Substitution Cipher Challenge 2: Word Guessing</h1>
+    </header>
+    <div class="divide50"></div>
+    <!-- Question -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
+            <h3 class="text-center">Finish decrypting the following sentence by guessing common English words</h3>
+        </div>
+    </div>
+
+    <!-- Frequency analysis level tool -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="frequency-tool" style="font-size: 2em">
+        <!-- Display sentenceObject user selection -->
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Encrypted message
+                </div>
+                <div class="panel-body">
+                    <div class="sentence-line" ng-repeat="line in formattedSentence">
+                        <div class="sentence-letter" ng-repeat="char in line track by $index">
+                            <div>{{char}}</div>
+                            <div ng-if="plaintext.indexOf(char) == -1" class="live-preview">{{displayCorrectLetter(char) || "_"}}</div>
+                            <!-- NEED DECRYPTED CHAR FOR THIS DIV -->
+                            <div ng-if="plaintext.indexOf(char) != -1" class="live-preview">{{displayUserSelection(char) || "_"}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Answer display -->
+        <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]"
+             style="margin-bottom: -3%">
+            <div class="icon-box"
+                 style="margin-right: 5%">
+                <div class="box-content">
+                    <i class="fa fa-unlock fa-2x"></i>
+                </div>
+            </div>
+            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+                 ng-click="deselectLetter(letter)"
+                 ng-repeat="letter in answerKeyboard track by $index"
+                 style="margin-right: 7%">
+                <div class='box-content'>
+                    <div>
+                        <span ng-attr-id="{{ 'answer-' + $index }}">{{letter.currentLetter}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mapping icon display -->
+        <div class="answer-section" style="margin-bottom: -3%">
+            <div class="icon-box"
+                 style="margin-right: 5%">
+                <div class="box-content">
+                </div>
+            </div>
+            <div class="mapping-icon" ng-repeat="letter in plaintext track by $index"
+                 style="margin-right: 7%">
+                <div class="box-content">
+                    <div>
+                        <span><i class="fa fa-exchange fa-rotate-90"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Plaintext display -->
+        <div class="answer-section">
+            <div class="icon-box"
+                 style="margin-right: 5%">
+                <div class="box-content">
+                    <i class="fa fa-lock fa-2x"></i>
+                </div>
+            </div>
+            <div class="plaintext-box" ng-repeat="letter in plaintext track by $index"
+                 style="margin-right: 7%">
+                <div class="box-content">
+                    <div>
+                        <span>{{letter}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="divide100"></div>
+        <!-- Keyboard display -->
+        <div>
+            <div class="keyboard-row">
+                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                     ng-click="selectLetter(letter)"
+                     ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
+                    <div class="box-content">
+                        <div>
+                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="keyboard-row">
+                <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                     ng-click="selectLetter(letter)"
+                     ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
+                    <div class="box-content">
+                        <div>
+                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script type="text/javascript" src="../js/substitution.js"></script>
