@@ -18,8 +18,11 @@
     
     <body ng-controller="MenuController as menu">
         <header>
-            <h1 class="text-center">CryptoLearner</h1>
-            <button class="btn btn-lg" ng-click="unlockAllLevels()">Unlock all</button>
+            <div id="navBar">
+                <h1 class="text-center">CryptoLearner</h1>
+                <a href="./tools.html"><i style="float: right" class="fa fa-wrench fa-5x"></i></a>
+                <button class="btn btn-lg" ng-click="unlockAllLevels()">Unlock all</button>
+            </div>
         </header>
         <div class="divide100"></div>
         <carousel no-wrap="noWrapSlides">

@@ -239,6 +239,23 @@
                 challenge: 2
             }]
         }];
+
+        this.tools = [{
+            name: 'Caesar Encryptor',
+            path: 'caesar-encryptor'
+        }, {
+            name: 'Caesar Decryptor',
+            path: 'caesar-decryptor'
+        }, {
+            name: 'Substitution Encryptor',
+            path: 'substitution-encryptor'
+        }, {
+            name: 'Vigènere Encryptor',
+            path: 'vigenere-encryptor'
+        }, {
+            name: 'Vigènere Decryptor',
+            path: 'vigenere-decryptor'
+        }];
     }]);
 
     app.controller('GameController', ['$scope', '$window', '$compile', '$cookies', function($scope, $window, $compile, $cookies) {

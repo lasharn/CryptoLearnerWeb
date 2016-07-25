@@ -398,6 +398,21 @@ h1, h2, h3 {
     color: #54FF62;
 }
 
+/** Tools menu styling **/
+
+.thumbnail-box {
+    margin-top: 100%;
+}
+.thumbnail {
+    position: absolute;
+    top: 15px;
+    bottom: 0;
+    left: 15px;
+    right: 0;
+    text-align:center;
+    padding-top:calc(50% - 30px);
+}
+
 /** Dividers **/
 .divide10 {
 	width: 100%;
