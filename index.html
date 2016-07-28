@@ -8,11 +8,17 @@
 
         <script src="https://use.fontawesome.com/13139b496b.js"></script>
         <script type="text/javascript" src="js/angular.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/ui-bootstrap-tpls.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+
         <title>CryptoLearner</title>
     </head>
     
@@ -20,7 +26,7 @@
         <header>
             <div id="navBar">
                 <h1 class="text-center">CryptoLearner</h1>
-                <a href="./tools.html"><i style="float: right" class="fa fa-wrench fa-5x"></i></a>
+                <a href="./tools.html"><i style="float: right" data-toggle="tooltip" data-placement="bottom" title="Cryptography Tools" class="fa fa-wrench fa-5x"></i></a>
                 <button class="btn btn-lg" ng-click="unlockAllLevels()">Unlock all</button>
             </div>
         </header>
@@ -40,7 +46,6 @@
                     </div>
                 </slide>        
         </carousel>
-        
     </body>
 
 
