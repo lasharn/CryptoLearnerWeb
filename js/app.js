@@ -1273,6 +1273,56 @@
         maxStage: 3
     };
 
+    app.controller('CaesarTool', function($scope, $controller) {
+        $scope.inputText = "";
+        $scope.outputText = "";
+    });
+
+    app.controller('CaesarEncryptTool', function($scope, $controller) {
+        $controller('CaesarTool', {$scope: $scope});
+        $controller('CaesarBruteForce', {$scope: $scope});
+        $scope.outputText = encryptCaesar($scope.inputText, $scope.currentKey);
+        $scope.updateOutput = function() {
+            $scope.outputText = encryptCaesar($scope.inputText, $scope.currentKey);
+        }
+
+        updateOutput = function () {
+            var scope = angular.element($("#game")).scope();
+            scope.$apply(function(){
+                $scope.updateOutput();
+            })
+        }
+
+        function encryptCaesar(plainText, key) {
+            var ZCharCode = "Z".charCodeAt(0);
+            var ACharCode = "A".charCodeAt(0);
+            var aCharCode = "a".charCodeAt(0);
+            var zCharCode = "z".charCodeAt(0);
+
+            var cipherTextArray = [];
+            for (var i = 0; i < plainText.length; i++) {
+                var charCode = plainText.charCodeAt(i);
+                var newValue = charCode;
+                // encrypt uppercase letters
+                if (charCode >= ACharCode && charCode <= ZCharCode) {
+                    newValue = charCode + key;
+                    if (newValue > ZCharCode) {
+                        newValue -= 26;
+                    }
+                //encrypt lowercase letters
+                } else if (charCode >= aCharCode && charCode <= zCharCode) {
+                    newValue = charCode + key;
+                    if (newValue > zCharCode) {
+                        newValue -= 26;
+                    }
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            var cipherText = cipherTextArray.join("");
+            return cipherText;
+        }
+    });
+
 
         
 })();

@@ -413,6 +413,16 @@ h1, h2, h3 {
     padding-top:calc(50% - 30px);
 }
 
+/** Caesar tool styling **/
+
+.top-icon {
+    vertical-align: top;
+}
+
+.center-icon {
+    text-align: center;
+}
+
 /** Dividers **/
 .divide10 {
 	width: 100%;
