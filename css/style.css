@@ -6,6 +6,10 @@ h1, h2, h3 {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+textarea {
+    resize: none;
+}
+
 /** Carousel styling */
 .carousel-inner > .item > div {
     width: 60%;

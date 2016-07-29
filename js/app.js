@@ -1274,26 +1274,10 @@
     };
 
     app.controller('CaesarTool', function($scope, $controller) {
+        $controller('CaesarBruteForce', {$scope: $scope});
         $scope.inputText = "";
         $scope.outputText = "";
-    });
-
-    app.controller('CaesarEncryptTool', function($scope, $controller) {
-        $controller('CaesarTool', {$scope: $scope});
-        $controller('CaesarBruteForce', {$scope: $scope});
-        $scope.outputText = encryptCaesar($scope.inputText, $scope.currentKey);
-        $scope.updateOutput = function() {
-            $scope.outputText = encryptCaesar($scope.inputText, $scope.currentKey);
-        }
-
-        updateOutput = function () {
-            var scope = angular.element($("#game")).scope();
-            scope.$apply(function(){
-                $scope.updateOutput();
-            })
-        }
-
-        function encryptCaesar(plainText, key) {
+        $scope.encryptCaesar = function(plainText, key) {
             var ZCharCode = "Z".charCodeAt(0);
             var ACharCode = "A".charCodeAt(0);
             var aCharCode = "a".charCodeAt(0);
@@ -1309,7 +1293,7 @@
                     if (newValue > ZCharCode) {
                         newValue -= 26;
                     }
-                //encrypt lowercase letters
+                    //encrypt lowercase letters
                 } else if (charCode >= aCharCode && charCode <= zCharCode) {
                     newValue = charCode + key;
                     if (newValue > zCharCode) {
@@ -1323,6 +1307,37 @@
         }
     });
 
+    app.controller('CaesarEncryptTool', function($scope, $controller) {
+        $controller('CaesarTool', {$scope: $scope});
+        $scope.outputText = $scope.encryptCaesar($scope.inputText, $scope.currentKey);
+        $scope.updateOutput = function() {
+            $scope.outputText = $scope.encryptCaesar($scope.inputText, $scope.currentKey);
+        }
 
+        updateOutput = function () {
+            var scope = angular.element($("#game")).scope();
+            scope.$apply(function(){
+                $scope.updateOutput();
+            })
+        }
+    });
+
+    app.controller('CaesarDecryptTool', function($scope, $controller) {
+        $controller('CaesarTool', {$scope: $scope});
+        $scope.outputList = decryptCaesarBruteForce($scope.inputText);
+        $scope.updateOutput = function() {
+            $scope.outputList = decryptCaesarBruteForce($scope.inputText);
+        }
+
+        function decryptCaesarBruteForce(inputText) {
+            var results = [];
+            for (var i = 0; i < 26; i++) {
+                results[i] = $scope.encryptCaesar(inputText, 26 - i);
+            }
+            return results;
+        }
+
+
+    });
         
 })();
