@@ -235,10 +235,10 @@ var rotateWheel=function(elem, keyIsNumber){
 
 var createCipherWheel = function(elem, keyIsNum) {
     var outerWheel = document.createElement("img");
-    outerWheel.setAttribute("src", "../img/outerwheel2.png");
+    outerWheel.setAttribute("src", "../img/outerwheel.png");
     outerWheel.setAttribute("id", "outer-wheel");
     var innerWheel = document.createElement("img");
-    innerWheel.setAttribute("src", "../img/innerwheel2.png");
+    innerWheel.setAttribute("src", "../img/innerwheel.png");
     innerWheel.setAttribute("alt", "inner cipher wheel");
     innerWheel.setAttribute("id", "inner-wheel");
     var keyDisplay = document.createElement("div");
