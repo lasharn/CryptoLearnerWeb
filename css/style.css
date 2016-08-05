@@ -77,11 +77,11 @@ textarea {
 }
 
 #inner-wheel {
-    margin-top: 10%;
-    left: 10%;
+    margin-top: 10.2%;
+    left: 10.2%;
     position: absolute;
     cursor: pointer;
-    width: 80%;
+    width: 79.5%;
     object-position: center;
     
 }

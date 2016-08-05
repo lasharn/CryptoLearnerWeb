@@ -1339,5 +1339,60 @@
 
 
     });
+
+    app.controller('VigenereTool', function ($scope)  {
+        $scope.inputText = "";
+        $scope.keyword = "";
+        $scope.encryptVigenere = function(plaintext, keyword) {
+            var ZCharCode = "Z".charCodeAt(0);
+            var ACharCode = "A".charCodeAt(0);
+            var aCharCode = "a".charCodeAt(0);
+            var zCharCode = "z".charCodeAt(0);
+            keyword = keyword.toUpperCase();
+            var keyValues = keyword.split("").map(function(x) { return x.charCodeAt(0) - "A".charCodeAt(0)});
+            if (keyValues.length == 0) {
+                return plaintext;
+            }
+            var cipherTextArray = [];
+            var actualIndex = 0;
+            for (var i = 0; i < plaintext.length; i++) {
+                var key = keyValues[actualIndex % keyValues.length];
+                var charCode = plaintext.charCodeAt(i);
+                var newValue = charCode;
+                // encrypt uppercase letters
+                if (charCode >= ACharCode && charCode <= ZCharCode) {
+                    newValue = charCode + key;
+                    if (newValue > ZCharCode) {
+                        newValue -= 26;
+                    }
+                    //encrypt lowercase letters
+                } else if (charCode >= aCharCode && charCode <= zCharCode) {
+                    newValue = charCode + key;
+                    if (newValue > zCharCode) {
+                        newValue -= 26;
+                    }
+                }
+                // increment index of keyword for letters
+                if (newValue != charCode) {
+                    actualIndex++;
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            var cipherText = cipherTextArray.join("");
+            return cipherText;
+        }
+    });
+
+    app.controller('VigenereEncryptTool', function ($scope, $controller)  {
+        $controller('VigenereTool', {$scope : $scope});
+        $scope.outputText = $scope.encryptVigenere($scope.inputText, $scope.keyword);
+        $scope.updateOutput = function() {
+            // validate keyword
+            $scope.keyword = $scope.keyword.replace(/[^a-zA-Z]/g, "");
+            $scope.outputText = $scope.encryptVigenere($scope.inputText, $scope.keyword);
+        }
+
+
+    });
         
 })();
