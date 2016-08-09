@@ -1384,6 +1384,48 @@
             var cipherText = cipherTextArray.join("");
             return cipherText;
         }
+
+        $scope.decryptVigenere = function(ciphertext, keyword) {
+            var ZCharCode = "Z".charCodeAt(0);
+            var ACharCode = "A".charCodeAt(0);
+            var aCharCode = "a".charCodeAt(0);
+            var zCharCode = "z".charCodeAt(0);
+            keyword = keyword.toUpperCase();
+            var keyValues = keyword.split("").map(function(x) { return x.charCodeAt(0) - "A".charCodeAt(0)});
+            if (keyValues.length == 0) {
+                return ciphertext;
+            }
+            var cipherTextArray = [];
+            var actualIndex = 0;
+            for (var i = 0; i < ciphertext.length; i++) {
+                var isLetter = false;
+                var key = keyValues[actualIndex % keyValues.length];
+                var charCode = ciphertext.charCodeAt(i);
+                var newValue = charCode;
+                // decrypt uppercase letters
+                if (charCode >= ACharCode && charCode <= ZCharCode) {
+                    isLetter = true;
+                    newValue = charCode - key;
+                    if (newValue < ACharCode) {
+                        newValue += 26;
+                    }
+                    //decrypt lowercase letters
+                } else if (charCode >= aCharCode && charCode <= zCharCode) {
+                    isLetter = true;
+                    newValue = charCode - key;
+                    if (newValue < aCharCode) {
+                        newValue += 26;
+                    }
+                }
+                // increment index of keyword for letters
+                if (isLetter) {
+                    actualIndex++;
+                }
+                cipherTextArray[i] = String.fromCharCode(newValue);
+            }
+            var plaintext = cipherTextArray.join("");
+            return plaintext;
+        }
     });
 
     app.controller('VigenereEncryptTool', function ($scope, $controller)  {
@@ -1394,8 +1436,16 @@
             $scope.keyword = $scope.keyword.replace(/[^a-zA-Z]/g, "");
             $scope.outputText = $scope.encryptVigenere($scope.inputText, $scope.keyword);
         }
+    });
 
-
+    app.controller('VigenereDecryptTool', function ($scope, $controller)  {
+        $controller('VigenereTool', {$scope : $scope});
+        $scope.outputText = $scope.decryptVigenere($scope.inputText, $scope.keyword);
+        $scope.updateOutput = function() {
+            // validate keyword
+            $scope.keyword = $scope.keyword.replace(/[^a-zA-Z]/g, "");
+            $scope.outputText = $scope.decryptVigenere($scope.inputText, $scope.keyword);
+        }
     });
         
 })();

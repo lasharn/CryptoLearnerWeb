@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="cryptoLearner">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script src="https://use.fontawesome.com/13139b496b.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script type="text/javascript" src="../js/p2.min.js"></script>
+
+    <title>Vig&#232;nere Decryption Tool</title>
+</head>
+
+<body>
+
+<div id="game" ng-controller="VigenereDecryptTool as level">
+    <header>
+        <div id="navBar">
+            <a href="../tools.html"><i id="homeBtn" class="fa fa-chevron-left fa-5x"></i></a>
+            <h1 class="text-center">Vig&#232;nere Decryption Tool</h1>
+        </div>
+    </header>
+    <div class="divide100"></div>
+    <!-- Input area -->
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Input text -->
+        <div class="row">
+            <div class="icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-unlock fa-2x"></i>
+                </div>
+            </div>
+            <textarea rows="12" cols="72" ng-model="inputText" ng-change="updateOutput()" autofocus placeholder="Type the encrypted message..."></textarea>
+        </div>
+        <div class="divide50"></div>
+        <div class="row">
+            <div class="form-inline">
+
+                <div class="icon-box top-icon">
+                    <div class="box-content">
+                        <i class="fa fa-key fa-2x"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input id="keyword" type="text" ng-model="keyword" ng-change="updateOutput()" class="form-control" style="text-transform: uppercase" maxlength="18" placeholder="Enter keyword">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Player Input -->
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Output text -->
+        <div class="row">
+            <div class="icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-lock fa-2x"></i>
+                </div>
+            </div>
+            <textarea rows="12" ng-model="outputText" cols="72" disabled readonly></textarea>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/wheel.js"></script>
