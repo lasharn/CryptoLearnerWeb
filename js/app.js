@@ -1356,24 +1356,27 @@
             var cipherTextArray = [];
             var actualIndex = 0;
             for (var i = 0; i < plaintext.length; i++) {
+                var isLetter = false;
                 var key = keyValues[actualIndex % keyValues.length];
                 var charCode = plaintext.charCodeAt(i);
                 var newValue = charCode;
                 // encrypt uppercase letters
                 if (charCode >= ACharCode && charCode <= ZCharCode) {
+                    isLetter = true;
                     newValue = charCode + key;
                     if (newValue > ZCharCode) {
                         newValue -= 26;
                     }
                     //encrypt lowercase letters
                 } else if (charCode >= aCharCode && charCode <= zCharCode) {
+                    isLetter = true;
                     newValue = charCode + key;
                     if (newValue > zCharCode) {
                         newValue -= 26;
                     }
                 }
                 // increment index of keyword for letters
-                if (newValue != charCode) {
+                if (isLetter) {
                     actualIndex++;
                 }
                 cipherTextArray[i] = String.fromCharCode(newValue);
