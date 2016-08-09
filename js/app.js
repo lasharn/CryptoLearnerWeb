@@ -128,6 +128,49 @@
         return array;
     }
 
+    function createNewMapping() {
+        var mapping = [];
+        var alphabet = new Array();
+        var shuffledAlphabet = new Array();
+        // create array of ordered alphabet
+        for (i = 0; i < 26; i++) {
+            alphabet[i] = String.fromCharCode(i + "A".charCodeAt(0));
+            shuffledAlphabet[i] = alphabet[i];
+        }
+        // shuffle the shuffledAlphabet
+        var shuffledAlphabet = shuffleArray(shuffledAlphabet);
+        // map the ordered alphabet to shuffled queue
+        for (i = 0; i < alphabet.length - 1; i++) {
+            var currentShuffledLetter = shuffledAlphabet.shift();
+            // map to the top of queue if key doesn't match value (i.e. "A" won't map to "A")
+            if (alphabet[i] != currentShuffledLetter) {
+                mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
+            } else {
+                // if mapping is invalid, push letter to back of queue and take the next one
+                shuffledAlphabet.push(currentShuffledLetter);
+                // get the next top one. guaranteed to be different
+                currentShuffledLetter = shuffledAlphabet.shift();
+                mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
+            }
+        }
+        // handle mapping the last letter ("Z")
+        var lastLetter = shuffledAlphabet.shift();
+        if (alphabet[alphabet.length-1] != lastLetter) {
+            mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], lastLetter);
+        } else {
+            // if the letters match, need to swap with another entry
+            var firstValue = mapping[0].cipherLetter;
+            mapping[0] = new Mapping(alphabet[0], lastLetter);
+            mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], currentShuffledLetter);
+        }
+        return mapping;
+    }
+
+    function Mapping(plain, cipher) {
+        this.keyLetter = plain;
+        this.cipherLetter = cipher;
+    }
+
     function KeyboardLetter(num, letter) {
         this.id = num;
         this.char = letter;
@@ -942,49 +985,6 @@
             $scope.levelSetup();
         });
 
-        function createNewMapping() {
-            var mapping = [];
-            var alphabet = new Array();
-            var shuffledAlphabet = new Array();
-            // create array of ordered alphabet
-            for (i = 0; i < 26; i++) {
-                alphabet[i] = String.fromCharCode(i + "A".charCodeAt(0));
-                shuffledAlphabet[i] = alphabet[i];
-            }
-            // shuffle the shuffledAlphabet
-            var shuffledAlphabet = shuffleArray(shuffledAlphabet);
-            // map the ordered alphabet to shuffled queue
-            for (i = 0; i < alphabet.length - 1; i++) {
-                var currentShuffledLetter = shuffledAlphabet.shift();
-                // map to the top of queue if key doesn't match value (i.e. "A" won't map to "A")
-                if (alphabet[i] != currentShuffledLetter) {
-                    mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
-                } else {
-                    // if mapping is invalid, push letter to back of queue and take the next one
-                    shuffledAlphabet.push(currentShuffledLetter);
-                    // get the next top one. guaranteed to be different
-                    currentShuffledLetter = shuffledAlphabet.shift();
-                    mapping[i] = new Mapping(alphabet[i], currentShuffledLetter);
-                }
-            }
-            // handle mapping the last letter ("Z")
-            var lastLetter = shuffledAlphabet.shift();
-            if (alphabet[alphabet.length-1] != lastLetter) {
-                mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], lastLetter);
-            } else {
-                // if the letters match, need to swap with another entry
-                var firstValue = mapping[0].cipherLetter;
-                mapping[0] = new Mapping(alphabet[0], lastLetter);
-                mapping[alphabet.length-1] = new Mapping(alphabet[alphabet.length-1], currentShuffledLetter);
-            }
-            return mapping;
-        }
-
-        function Mapping(plain, cipher) {
-            this.keyLetter = plain;
-            this.cipherLetter = cipher;
-        }
-
         $scope.encryptSubstitution = function(text, mapping) {
             for (var i = 0; i < text.length; i++) {
                 var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
@@ -1447,5 +1447,37 @@
             $scope.outputText = $scope.decryptVigenere($scope.inputText, $scope.keyword);
         }
     });
-        
+
+    app.controller('SubstitutionTool', function ($scope) {
+        $scope.mapping = createNewMapping();
+        $scope.inputText = "";
+
+        $scope.generateNewMapping = function () {
+            $scope.mapping = createNewMapping();
+        }
+
+        $scope.encryptSubstitution = function(text, mapping) {
+            for (var i = 0; i < text.length; i++) {
+                var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
+                if (findMapping.length == 0) {
+                    // no mapping found for this character, skip it
+                    continue;
+                } else {
+                    text = text.replaceAt(i, findMapping[0].cipherLetter);
+                }
+            }
+            return text;
+        }
+
+    });
+
+    app.controller('SubstitutionEncryptTool', function ($scope, $controller)  {
+        $controller('SubstitutionTool', {$scope : $scope});
+        $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
+        $scope.updateOutput = function() {
+            $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
+        }
+    });
+
+
 })();

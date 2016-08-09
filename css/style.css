@@ -74,14 +74,17 @@ textarea {
     left: 0%;
     object-position: center;
     width: 100%;
+    padding: 5%;
+
 }
 
 #inner-wheel {
-    margin-top: 10.2%;
-    left: 10.2%;
+    padding: 5%;
+    margin-top: 9.4%;
+    left: 9.4%;
     position: absolute;
     cursor: pointer;
-    width: 79.5%;
+    width: 81.3%;
     object-position: center;
     
 }
@@ -271,12 +274,12 @@ textarea {
 
 .keyLetter {
     padding: 15%;
-    background-color: #53d8eb;
+    background-color: #AAD9F7;
 }
 
 .cipherLetter {
     padding: 15%;
-    background-color: #ebbf4d;
+    background-color: #FFAA44;
 }
 
 .mapping-icon {
