@@ -20,10 +20,32 @@
 </head>
 
 <body ng-controller="GameController as game">
-<div id="navBar">
-    <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
-</div>
 
+    <div class="menu">
+        <nav class="navbar navbar-default" role="navigation" id="navBar">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/index.html" data-toggle="tooltip" data-placement="bottom" title="Home">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="#" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="Help" >
+                        <i class="fa fa-question-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+    </div>
 <div id="game" ng-controller="CaesarIntroLevel as level">
     <header>
         <h1 class="text-center">Caesar Cipher Introduction</h1>
@@ -43,7 +65,7 @@
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-lock fa-2x"></i>
+                    <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
             <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
@@ -60,7 +82,7 @@
         <div class="answer-section">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-unlock fa-2x"></i>
+                    <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
             <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">

@@ -47,6 +47,30 @@ textarea {
 }
 
 /** General level styling **/
+
+.menu, .navbar {
+    background-color: #49B1C6;
+    border-color: #49B1C6;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFF9F0;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav {
+    width: 100%;
+    text-align: center;
+  }
+  .navbar-nav > li {
+    float: none;
+    display: inline-block;
+  }
+  .navbar-nav > li.navbar-right {
+    float: right !important;
+  }
+}
+
 #navBar {
     width: 80%;
     margin: auto;
