@@ -196,6 +196,7 @@
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
+        $scope.clickCount = 0;
         setupCookies();
 
         function setupCookies() {
@@ -217,6 +218,16 @@
             for (var i = 0; i < $scope.gameOrder.length; i++) {
                 $cookies.put($scope.gameOrder[i], true);
             }
+        }
+
+        $scope.lockAllLevels = function() {
+            for (var i = 1; i < $scope.gameOrder.length; i++) {
+                $cookies.put($scope.gameOrder[i], false);
+            }
+        }
+
+        $scope.incrementCount = function() {
+            $scope.clickCount++;
         }
 
         this.levels = [{
