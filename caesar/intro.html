@@ -66,10 +66,10 @@
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-unlock fa-2x"></i>
+                    <i class="fa fa-unlock fa-2x unlock"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+            <div ng-class="['plain', 'answer-box', letter.deselectable ? 'clickable' : '']"
                  ng-click="deselectLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
@@ -83,10 +83,10 @@
         <div class="answer-section">
             <div class="icon-box">
                 <div class="box-content">
-                    <i class="fa fa-lock fa-2x"></i>
+                    <i class="fa fa-lock fa-2x lock"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
+            <div class="cipher plaintext-box" ng-repeat="letter in ciphertext track by $index">
                 <div class="box-content">
                     <div>
                         <span>{{letter}}</span>

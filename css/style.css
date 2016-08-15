@@ -165,6 +165,31 @@ textarea {
     color: #54FF62;
 }
 
+.cipher {
+    /*background-color: #F7ECE4 !important;*/
+    background-color: #FFAA44 !important;
+    color: #fff !important;
+}
+
+.plain {
+    /*background-color: #E6F6F7 !important;*/
+    background-color: #AAD9F7 !important;
+    color: #7b7b7b !important;
+}
+
+.lock {
+    /*color: #FFAA44 !important;*/
+
+    /*-webkit-text-stroke-width: 5px;*/
+    /*-webkit-text-stroke-color: #FFAA44;*/
+
+}
+
+.unlock {
+    /*color: #AAD9F7 !important;*/
+
+}
+
 .answer-section {
     width: 80%;
     text-align: center;
