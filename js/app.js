@@ -1505,7 +1505,7 @@
         $scope.canSave = isMappingValid();
 
         function getMapping() {
-            return $scope.mapping;;
+            return $scope.mapping;
         }
 
         function isMappingValid() {
@@ -1543,22 +1543,21 @@
         }
 
         $scope.clearMapping = function () {
-            var clearMapping = [];
-            for (i = 0; i < 26; i++) {
-                var letter = String.fromCharCode(i + "A".charCodeAt(0));
-                $scope.deselectLetter(letter);
-                clearMapping[i] = new Mapping(letter, "_");
+            // need to create a new mapping to remove reference between editMapping and mapping variable
+            $scope.editMapping = createNewMapping();
+            for (var i = 0; i < $scope.editMapping.length; i++) {
+                $scope.deselectLetter($scope.editMapping[i].keyLetter);
             }
-            $scope.editMapping = clearMapping;
-            $scope.canSave = isMappingValid();
         }
 
         $scope.closeMapping = function() {
         }
 
         $scope.saveMapping = function() {
-            $scope.mapping = $scope.editMapping;
-            $scope.updateOutput();
+            if (isMappingValid()) {
+                $scope.mapping = $scope.editMapping;
+                $scope.updateOutput();
+            }
         }
 
         $scope.selectLetter = function(keyboardLetter) {
