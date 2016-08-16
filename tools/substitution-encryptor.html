@@ -38,6 +38,23 @@
 
     <!-- Player Input -->
     <div class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Input text -->
+        <div class="row">
+            <div class="icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-unlock fa-2x"></i>
+                </div>
+            </div>
+            <textarea rows="12" cols="72" ng-model="inputText" ng-disabled="isInputDisabled" ng-change="updateOutput()" autofocus placeholder="Type something to encrypt..."></textarea>
+        </div>
+        <div class="row center-icon">
+            <div class="icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-chevron-down fa-2x"></i>
+                </div>
+            </div>
+
+        </div>
         <!-- Output text -->
         <div class="row">
             <div class="icon-box top-icon">
@@ -46,6 +63,30 @@
                 </div>
             </div>
             <textarea rows="12" ng-model="outputText" cols="72" disabled readonly></textarea>
+        </div>
+
+        <!-- Custom mapping modal -->
+        <div style="padding-right: 17px;" aria-hidden="true" aria-labelledby="successLabel" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1" class="modal fade in" id="mappings-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="successLabel">Edit Substitution Mappings</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class='mapping-row'>
+                            <div class='mapping' ng-repeat='map in mapping'>
+                                <div class='keyLetter'>{{map.keyLetter}}</div>
+                                <div class='cipherLetter'>{{map.cipherLetter}}</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-default" ng-click="applyRandomMapping()"><span><i class="fa fa-lg fa-random"></i></span> Random Mapping</button>
+                        <button class="btn btn-default" ng-click="clearMapping()"><span><i class="fa fa-lg fa-times"></i></span> Clear All</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default ng-scope" data-dismiss="modal" ng-click="closeMapping()">Close</button>
+                        <button class="btn btn-primary ng-scope" data-dismiss="modal" ng-click="saveMapping()">Save &amp; Close</button></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

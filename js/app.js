@@ -193,6 +193,10 @@
         return answerLetterArr;
     }
 
+    String.prototype.replaceAt = function(index, character) {
+        return this.substr(0, index) + character + this.substr(index+character.length);
+    }
+
     app.controller('MenuController', ['$scope', '$window', '$cookies', function($scope, $window, $cookies) {
         $scope.noWrapSlides = true;
         $scope.gameOrder = levelOrder;
@@ -1009,10 +1013,6 @@
             return text;
         }
 
-        String.prototype.replaceAt = function(index, character) {
-            return this.substr(0, index) + character + this.substr(index+character.length);
-        }
-
         function getLetterFrequencies(text) {
             var frequencyArray = new Array();
             // initialize each letter with a frequency of 0
@@ -1465,16 +1465,25 @@
 
         $scope.generateNewMapping = function () {
             $scope.mapping = createNewMapping();
+            $scope.updateOutput();
         }
 
         $scope.encryptSubstitution = function(text, mapping) {
+            var originalText = text.toUpperCase();
             for (var i = 0; i < text.length; i++) {
-                var findMapping = $.grep(mapping, function(map){ return map.keyLetter == text[i]; });
+                var findMapping = $.grep(mapping, function(map){ return map.keyLetter == originalText[i]; });
                 if (findMapping.length == 0) {
                     // no mapping found for this character, skip it
                     continue;
                 } else {
-                    text = text.replaceAt(i, findMapping[0].cipherLetter);
+                    // check if mapping should be upper or lower case
+                    if (text[i] == originalText[i]) {
+                        // upper case
+                        text = text.replaceAt(i, findMapping[0].cipherLetter);
+                    } else {
+                        // lower case
+                        text = text.replaceAt(i, findMapping[0].cipherLetter.toLowerCase());
+                    }
                 }
             }
             return text;
@@ -1482,11 +1491,24 @@
 
     });
 
+    app.controller('SubstitutionMappingTool', function ($scope) {
+        $scope.closeMapping = function() {
+        }
+
+        $scope.saveMapping = function() {
+        }
+    })
+
     app.controller('SubstitutionEncryptTool', function ($scope, $controller)  {
         $controller('SubstitutionTool', {$scope : $scope});
+        $controller('SubstitutionMappingTool', {$scope : $scope});
         $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
         $scope.updateOutput = function() {
             $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
+        }
+
+        $scope.openCustomMapping = function() {
+            $('#mappings-modal').modal('show');
         }
     });
 
