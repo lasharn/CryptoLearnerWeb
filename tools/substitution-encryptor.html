@@ -74,17 +74,39 @@
                     </div>
                     <div class="modal-body">
                         <div class='mapping-row'>
-                            <div class='mapping' ng-repeat='map in mapping'>
+                            <div ng-class="['mapping', $index == currentAnswerIndex ? 'highlight' : '']"
+                                 ng-repeat='map in editMapping'
+                            ng-click="deselectLetter(map.keyLetter)">
                                 <div class='keyLetter'>{{map.keyLetter}}</div>
                                 <div class='cipherLetter'>{{map.cipherLetter}}</div>
                             </div>
                         </div>
-                        <button class="btn btn-default" ng-click="applyRandomMapping()"><span><i class="fa fa-lg fa-random"></i></span> Random Mapping</button>
-                        <button class="btn btn-default" ng-click="clearMapping()"><span><i class="fa fa-lg fa-times"></i></span> Clear All</button>
+                        <div class="alert alert-warning alert-dismissible" role="alert" ng-hide="canSave">
+                            <strong>Invalid mapping!</strong> Make sure all letters are mapped and no letters are mapped to itself.
+                        </div>
+                        <hr>
+                        <div style="text-align: center">
+                            <button class="btn btn-default" ng-click="applyRandomMapping()"><span><i class="fa fa-lg fa-random"></i></span> Random Mapping</button>
+                            <button class="btn btn-default" ng-click="clearMapping()"><span><i class="fa fa-lg fa-times"></i></span> Clear All</button>
+                        </div>
+                        <div class="divide20"></div>
+                        <div>
+                            <div class="keyboard-row">
+                                <div ng-class="['small-keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                                     ng-click="selectLetter(letter)"
+                                     ng-repeat="letter in keyboard track by $index">
+                                    <div class="box-content">
+                                        <div>
+                                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-default ng-scope" data-dismiss="modal" ng-click="closeMapping()">Close</button>
-                        <button class="btn btn-primary ng-scope" data-dismiss="modal" ng-click="saveMapping()">Save &amp; Close</button></div>
+                        <button class="btn btn-primary ng-scope" data-dismiss="modal" ng-disabled="!canSave" ng-click="saveMapping()">Save &amp; Close</button></div>
                 </div>
             </div>
         </div>

@@ -290,6 +290,20 @@ textarea {
     background-color: #ebebeb;
 }
 
+.small-keyboard-box {
+    display: inline-block;
+    position: relative;
+    width: 10%;
+    height: 0;
+    padding-bottom: 10%;
+    margin:0.2%;
+    overflow:hidden;
+    cursor: pointer;
+    border-radius: 0%;
+    background-color: #ebebeb;
+    font-size: 0.7em;
+}
+
 .box-selectable {
     color: #7b7b7b;
 }

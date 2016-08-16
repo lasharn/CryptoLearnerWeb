@@ -3,6 +3,7 @@
     var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
     var wordList = getListFromFile("../res/words.txt");
     var sentenceList = getSentenceList();
+
     function getListFromFile(filename) {
         // read the list of words in the words.txt file
         var rawFile = new XMLHttpRequest();
@@ -175,6 +176,12 @@
         this.id = num;
         this.char = letter;
         this.selectable = true;
+    }
+
+    function KeyboardLetter(num, letter, selectable) {
+        this.id = num;
+        this.char = letter;
+        this.selectable = selectable;
     }
 
     function AnswerLetter(id, correctLetter) {
@@ -1492,10 +1499,116 @@
     });
 
     app.controller('SubstitutionMappingTool', function ($scope) {
+        $scope.editMapping = getMapping();
+        $scope.keyboard = createAlphabetKeyboard();
+        $scope.currentAnswerIndex = 0;
+        $scope.canSave = isMappingValid();
+
+        function getMapping() {
+            return $scope.mapping;;
+        }
+
+        function isMappingValid() {
+            var checkedLetters = [];
+            for (var i = 0; i < $scope.editMapping.length; i++) {
+                var key = $scope.editMapping[i].keyLetter;
+                var cipher = $scope.editMapping[i].cipherLetter;
+                if (key == cipher || cipher == "_") return false;
+                if (checkedLetters.indexOf(cipher) != -1) return false;
+                checkedLetters.push(cipher);
+            }
+            return true;
+        }
+
+        function createAlphabetKeyboard() {
+            var keyboardArray = [];
+            for (var i = 0; i < 26; i++) {
+                var letter = String.fromCharCode(i + "A".charCodeAt(0));
+                var searchForLetter = $.grep($scope.editMapping, function(e){ return e.cipherLetter == letter; });
+                var isAlreadySelected = (searchForLetter.length > 0) ? true : false;
+                keyboardArray.push(new KeyboardLetter(i, letter, !isAlreadySelected));
+            }
+            return keyboardArray;
+            $scope.canSave = isMappingValid();
+
+        }
+
+        $scope.applyRandomMapping = function() {
+            $scope.editMapping = createNewMapping();
+            //disable keyboard letters as all mappings will be filled
+            for (var i = 0; i < $scope.keyboard.length; i++) {
+                $scope.keyboard[i].selectable = false;
+            }
+            $scope.canSave = isMappingValid();
+        }
+
+        $scope.clearMapping = function () {
+            var clearMapping = [];
+            for (i = 0; i < 26; i++) {
+                var letter = String.fromCharCode(i + "A".charCodeAt(0));
+                $scope.deselectLetter(letter);
+                clearMapping[i] = new Mapping(letter, "_");
+            }
+            $scope.editMapping = clearMapping;
+            $scope.canSave = isMappingValid();
+        }
+
         $scope.closeMapping = function() {
         }
 
         $scope.saveMapping = function() {
+            $scope.mapping = $scope.editMapping;
+            $scope.updateOutput();
+        }
+
+        $scope.selectLetter = function(keyboardLetter) {
+            if (!keyboardLetter.selectable || $scope.currentAnswerIndex == -1) return;
+            $scope.correctAnswer = false;
+            var selectedLetter = keyboardLetter.char;
+            var index = $scope.currentAnswerIndex;
+
+            // if there is already a selection. remove that selection
+            var existingLetter = $scope.editMapping[index].cipherLetter;
+            if (existingLetter != "_") {
+                $scope.deselectLetter($scope.editMapping[index].keyLetter);
+            }
+            //change mapping to selected letter
+            $scope.editMapping[index].cipherLetter = selectedLetter;
+            //get index of earliest empty mapping and highlight it, if there isn't an empty mapping keep same selection
+            for (var i = 0; i < $scope.editMapping.length; i++) {
+                if ($scope.editMapping[i].cipherLetter == "_") {
+                    $scope.currentAnswerIndex = i;
+                    break;
+                }
+            }
+            keyboardLetter.selectable = !keyboardLetter.selectable;
+            $scope.canSave = isMappingValid();
+        }
+
+        $scope.deselectLetter = function(keyLetter) {
+            var index = -1;
+            // find index of deselected letter
+            for (var i = 0; i < $scope.editMapping.length; i++) {
+                if ($scope.editMapping[i].keyLetter == keyLetter) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) return;
+            $scope.currentAnswerIndex = index;
+
+            // get index of letter in the keyboard
+            var keyboardIndex = -1;
+            for (var i = 0; i < $scope.keyboard.length; i++) {
+                if ($scope.keyboard[i].char == $scope.editMapping[index].cipherLetter) {
+                    keyboardIndex = i;
+                    break;
+                }
+            }
+            if (keyboardIndex == -1) return;
+            $scope.keyboard[keyboardIndex].selectable = true;
+            $scope.editMapping[index].cipherLetter = "_";
+            $scope.canSave = isMappingValid();
         }
     })
 
