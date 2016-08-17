@@ -100,7 +100,7 @@
         uniqueStr = shuffle(uniqueStr);
         //put the string into an array which has [string, bool] objects
         for (i = 0; i < uniqueStr.length; i++) {
-            keyboardArray.push(new KeyboardLetter(i, uniqueStr[i]));
+            keyboardArray.push(new KeyboardLetter(i, uniqueStr[i], true));
         }
         return keyboardArray;
     }
