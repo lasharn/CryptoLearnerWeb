@@ -236,11 +236,19 @@ var rotateWheel=function(elem, keyIsNumber){
 var createCipherWheel = function(elem, keyIsNum) {
     var outerWheel = document.createElement("img");
     outerWheel.setAttribute("src", "../img/outerwheel.png");
-    outerWheel.setAttribute("id", "outer-wheel");
+    outerWheel.setAttribute("class", "outer-wheel");
     var innerWheel = document.createElement("img");
     innerWheel.setAttribute("src", "../img/innerwheel.png");
     innerWheel.setAttribute("alt", "inner cipher wheel");
-    innerWheel.setAttribute("id", "inner-wheel");
+    innerWheel.setAttribute("class", "inner-wheel");
+    var cipherText = document.createElement("img");
+    cipherText.setAttribute("src", "../img/ciphertext.png");
+    cipherText.setAttribute("alt", "Cipher text");
+    cipherText.setAttribute("class", "inner-wheel");
+    var plainText = document.createElement("img");
+    plainText.setAttribute("src", "../img/plaintext.png");
+    plainText.setAttribute("alt", "Plain text");
+    plainText.setAttribute("class", "outer-wheel");
     var keyDisplay = document.createElement("div");
     keyDisplay.setAttribute("id", "key-display");
     var keyIcon = document.createElement("i");
@@ -256,6 +264,8 @@ var createCipherWheel = function(elem, keyIsNum) {
     // var cipherHeight = outerWheel.width;
     // elem.style.minHeight = cipherHeight+"px";
 
+    elem.appendChild(plainText);
+    elem.appendChild(cipherText);
     elem.appendChild(outerWheel);
     elem.appendChild(innerWheel);
     elem.appendChild(keyDisplay);

@@ -48,14 +48,16 @@
         </nav>
     </div>
 <div id="game" ng-controller="CaesarIntroLevel as level">
-    <header>
-        <h1 class="text-center">Caesar Cipher Introduction</h1>
-    </header>
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <header>
+                <h1 class="text-center">Caesar Cipher Introduction</h1>
+            </header>
+        </div>
         <div class="panel-body">
-            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; with a key of {{key}}. We have partially completed the solution to get you started.</h3>
+            <h3 class="text-center">Decrypt <code>{{ciphertext}}</code> with a key of <code>{{key}}</code>. We have partially completed the solution to get you started.</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
@@ -96,8 +98,13 @@
         </div>
         <div class="divide100"></div>
         <!-- Keyboard display -->
-        <div>
+        <div class="row">
             <div class="keyboard-row">
+                    <div class="icon-box">
+                    <div class="box-content">
+                        <i class="fa fa-keyboard-o fa-2x lock"></i>
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
@@ -109,6 +116,10 @@
                 </div>
             </div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">

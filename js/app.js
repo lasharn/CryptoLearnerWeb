@@ -730,7 +730,7 @@
             keyboardLetters = shuffle(keyboardLetters);
             //put the string into an array which has [string, bool] objects
             for (i = 0; i < keyboardLetters.length; i++) {
-                keyboardArray.push(new KeyboardLetter(i, keyboardLetters[i]));
+                keyboardArray.push(new KeyboardLetter(i, keyboardLetters[i], true));
             }
             return keyboardArray;
         }
