@@ -3,6 +3,17 @@
     {"sentence":"the hunters tracked the animals", "hints": ["animals","hunters","tracked"]},
     {"sentence":"the hacker got access to the encrypted data", "hints": ["hacker","access"]},
     {"sentence":"the enemy team attacked the base", "hints":["team", "base"]},
-    {"sentence":"the fierce dragon always escapes the knights torture", "hints":["fierce", "dragon", "escapes", "knights", "torture", "always"]}
+    {"sentence":"the fierce dragon always escapes the knights torture", "hints":["fierce", "dragon", "escapes", "knights", "torture", "always"]},
+    {"sentence":"things arent always as you would expect", "hints":["things", "always", "expect"]},
+    {"sentence":"everyone enjoys driving a toyota at the track", "hints":["enjoys", "toyota"]},
+    {"sentence":"the martians are coming to get us", "hints":["are", "get"]},
+    {"sentence":"time and space are more complicated than you appreciate", "hints":["more", "than"]},
+    {"sentence":"teaching is a difficult task to undertake", "hints":["difficult", "undertake"]},
+    {"sentence":"a desert is no place for a tractor", "hints":["desert", "tractor"]},
+    {"sentence":"this sentence is a hard one to decrypt", "hints":["this", "hard"]},
+    {"sentence":"im going to make him an offer that he cant refuse", "hint":["going", "offer", "make", "that"]},
+    {"sentence":"what weve got here is a failure to communicate", "hint":["here", "what"]},
+    {"sentence":"the stuff that dreams are made of", "hint":["that", "made"]},
+    {"sentence":"grammar is not a strength of mine", "hint":["strength", "grammar"]}
   ]
 }
