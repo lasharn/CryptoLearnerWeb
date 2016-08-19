@@ -13,6 +13,7 @@
         <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/ui-bootstrap-tpls.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+
         <script>
             $(document).ready(function(){
                 $('[data-toggle="tooltip"]').tooltip();
@@ -23,32 +24,7 @@
     </head>
     
     <body ng-controller="MenuController as menu">
-        <div class="menu">
-            <nav class="navbar navbar-default" role="navigation" id="navBar">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
-                        <li class="navbar-right">
-                            <a href="/tools.html" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="Cryptography Tools" >
-                                <i class="fa fa-wrench fa-2x"></i>
-                            </a>
-                        </li>
-                        <li class="navbar-right">
-                            <a href="/about.html" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="About" >
-                                <i class="fa fa-info-circle fa-2x"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+        <div id="home-nav"></div>
         <header>
         </header>
         <div class="divide100"></div>
@@ -75,6 +51,7 @@
                     </div>
                 </slide>        
         </carousel>
+        <script src="/js/custom.js" type="text/javascript"></script>
     </body>
 
 
