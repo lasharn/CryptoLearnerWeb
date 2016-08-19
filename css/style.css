@@ -346,12 +346,6 @@ textarea {
     color: #fafafa;
 }
 
-.box-selectable:hover {
-    border-color: #337c8c;
-    background-color: #337c8c;
-    color: #ffffff;
-}
-
 .box-unselectable {
     background-color: #fafafa !important;
     color: #ebebeb;
