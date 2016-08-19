@@ -43,12 +43,41 @@ textarea {
 
 .level-buttons button {
     width: 90% !important;
-    font-size: 1vmax !important;
+    font-size: 3vw !important;
+    max-font-size: 30px;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    border-color: #49B1C6;
+    background-color: #49B1C6;
+    color: #FFF9F0;
 
+}
+
+.level-buttons button:hover {
+    border-color: #337c8c !important;
+    background-color: #337c8c !important;
+    color: #ffffff !important;
+}
+
+/* Extra small devices (phones, up to 480px) */
+@media screen and (max-width: 767px) {
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+}
+/* tablets/desktops and up ----------- */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .level-buttons button {
+        font-size: 1vw !important;
+    }
+}
+/* large desktops and up ----------- */
+@media screen and (min-width: 1200px) {
+    .level-buttons button {
+        font-size: 1vw !important;
+    }
 }
 
 /** General level styling **/
@@ -86,6 +115,11 @@ textarea {
     float: left;
 }
 
+.panel-heading {
+    background-color: #49B1C6 !important;
+    color: #FFFFFF !important;
+}
+
 /** Cipher wheel styling **/
 #cipher-wheel {
     position: relative;
@@ -109,13 +143,12 @@ textarea {
 
 .inner-wheel {
     padding: 5%;
-    margin-top: 9.4%;
-    left: 9.4%;
+    margin-top: 9.45%;
+    left: 9.45%;
     position: absolute;
     cursor: pointer;
     width: 81.3%;
     object-position: center;
-    
 }
 
 #key-display {
