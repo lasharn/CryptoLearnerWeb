@@ -23,7 +23,6 @@ textarea {
 .carousel-inner > .item > div > div > div > button {
 	text-align: center;
 	height: 100px;
-	font-size: 20px;
 	margin-bottom: 5%;
 }
 
@@ -44,6 +43,12 @@ textarea {
 
 .level-buttons button {
     width: 90% !important;
+    font-size: 1vmax !important;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
 }
 
 /** General level styling **/
