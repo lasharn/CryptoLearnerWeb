@@ -11,9 +11,9 @@
     {"sentence":"teaching is a difficult task to undertake", "hints":["difficult", "undertake"]},
     {"sentence":"a desert is no place for a tractor", "hints":["desert", "tractor"]},
     {"sentence":"this sentence is a hard one to decrypt", "hints":["this", "hard"]},
-    {"sentence":"im going to make him an offer that he cant refuse", "hint":["going", "offer", "make", "that"]},
-    {"sentence":"what weve got here is a failure to communicate", "hint":["here", "what"]},
-    {"sentence":"the stuff that dreams are made of", "hint":["that", "made"]},
-    {"sentence":"grammar is not a strength of mine", "hint":["strength", "grammar"]}
+    {"sentence":"im going to make him an offer that he cant refuse", "hints":["going", "offer", "make", "that"]},
+    {"sentence":"what weve got here is a failure to communicate", "hints":["here", "what"]},
+    {"sentence":"the stuff that dreams are made of", "hints":["that", "made"]},
+    {"sentence":"grammar is not a strength of mine", "hints":["strength", "grammar"]}
   ]
 }
