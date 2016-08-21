@@ -332,6 +332,10 @@
 
         setup();
 
+        $scope.openHelp = function () {
+            $('#help-modal').modal('show');
+        }
+
         $scope.showModal = function () {
             if ($scope.stage == $scope.maxStage) {
                 // unlock next challenge

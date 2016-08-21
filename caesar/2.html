@@ -16,12 +16,35 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
     <script type="text/javascript" src="../js/p2.min.js"></script>
 
-    <title>Caesar Cipher Challenge 2</title>
+    <title>Caesar Cipher Challenge 2: Decrypt</title>
 </head>
 
 <body ng-controller="GameController as game">
-<div id="navBar">
-    <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
+<div class="menu">
+    <nav class="navbar navbar-default" role="navigation" id="navBar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/index.html" data-toggle="tooltip" data-placement="bottom" title="Home">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="#" ng-click="openHelp()" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="Help" >
+                        <i class="fa fa-question-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 <div id="game" ng-controller="CaesarDecrypt as level">
     <header>
@@ -30,9 +53,14 @@
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <header>
+                <h1 class="text-center">Caesar Cipher Challenge 2: Decrypt</h1>
+            </header>
+        </div>
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Decrypt &quot;{{ciphertext}}&quot; given a single mapping.</h3>
+            <h3 class="text-center">Decrypt <code>{{ciphertext}}</code> given a single mapping.</h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
@@ -46,7 +74,7 @@
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+            <div ng-class="['plain', 'answer-box', letter.deselectable ? 'clickable' : '']"
                  ng-click="deselectLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
@@ -63,7 +91,7 @@
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in ciphertext track by $index">
+            <div class="cipher plaintext-box" ng-repeat="letter in ciphertext track by $index">
                 <div class="box-content">
                     <div>
                         <span>{{letter}}</span>
@@ -94,6 +122,27 @@
                             <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div aria-hidden="true" aria-labelledby="HelpTitle" role="dialog" tabindex="-1" class="modal fade in" id="help-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="HelpTitle">Help</h3>
+                </div>
+                <div class="modal-body">
+                    <p>The Caesar cipher is one of the earliest known and simplest ciphers. Each letter in the plaintext is shifted a certain
+                        number of places down the alphabet.</p>
+                    <p>For example, with a shift of 1, A would be replaced by B, B would become C, and so on. The method is named after Julius Caesar,
+                        who used it to communicate with his army.</p>
+                    <p><em>Tip: Use the given mapping to determine the key on the wheel</em></p>
+                    <br>
+                    <p><a href="https://en.wikipedia.org/wiki/Caesar_cipher" target="_blank">More information</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
