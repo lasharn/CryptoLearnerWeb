@@ -20,26 +20,51 @@
 </head>
 
 <body ng-controller="GameController as game">
-<div id="navBar">
-    <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
+<div class="menu">
+    <nav class="navbar navbar-default" role="navigation" id="navBar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/index.html" data-toggle="tooltip" data-placement="bottom" title="Home">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="#" ng-click="openHelp()" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="Help" >
+                        <i class="fa fa-question-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
 <div id="game" ng-controller="VigenereLevelOne as level">
-    <header>
-        <h1 class="text-center">Vig&#232;nere Cipher Challenge 1: Keyword</h1>
-    </header>
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <header>
+                <h1 class="text-center">Vig&#232;nere Cipher Challenge 1: Keyword</h1>
+            </header>
+        </div>
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
-            <h3 class="text-center">Determine the keyword that is used to generate &quot;{{ciphertext}}&quot; given the original text &quot;{{plaintext}}&quot; . Answer: {{keyword}}</h3>
+            <h3 class="text-center">Determine the keyword that is used to generate <code>{{ciphertext}}</code> given the original text <code>{{plaintext}}</code></h3>
         </div>
     </div>
     <!-- Cipher Wheel -->
-    <div class="col-xs-12 col-md-6 col-lg-6" id="vigenere-wheel"></div>
+    <div class="col-xs-12 col-md-5 col-lg-5" id="vigenere-wheel"></div>
     <!-- Player Input -->
-    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
+    <div id="playerInput" class="col-xs-12 col-md-7 col-lg-7">
         <!-- Cipher display -->
         <div class="answer-section">
             <div class="icon-box">
@@ -47,7 +72,7 @@
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['plaintext-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
+            <div ng-class="['cipher', 'plaintext-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
                  ng-click="deselectAllLetter(answerKeyboard[$index])"
                  ng-repeat="letter in ciphertext track by $index">
                 <div class="box-content">
@@ -64,7 +89,7 @@
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['plaintext-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
+            <div ng-class="['plain', 'plaintext-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
                  ng-click="deselectAllLetter(answerKeyboard[$index])"
                  ng-repeat="letter in plaintext track by $index">
                 <div class="box-content">
@@ -81,7 +106,7 @@
                     <i class="fa fa-key fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
+            <div ng-class="['key', 'answer-box', 'clickable', $index == currentAnswerIndex ? 'highlight' : '']"
                  ng-click="deselectAllLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index">
                 <div class='box-content'>
@@ -95,6 +120,11 @@
         <!-- Keyboard display -->
         <div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                        <i class="fa fa-keyboard-o fa-2x lock"></i>
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectAllLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
@@ -106,6 +136,10 @@
                 </div>
             </div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectAllLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
@@ -118,7 +152,33 @@
             </div>
         </div>
     </div>
-
+    <div aria-hidden="true" aria-labelledby="HelpTitle" role="dialog" tabindex="-1" class="modal fade in" id="help-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="HelpTitle">Help</h3>
+                </div>
+                <div class="modal-body">
+                    <p>The Vigen&#232;re cipher consists of several Caesar ciphers in sequence with different shift values. In this cipher
+                        the keyword is repeated to the end of the plaintext. Each letter in the plaintext uses its corresponding keyword letter
+                        to determine the cipher text letter.</p>
+                    <p>The example below uses the keyword <code>SECRET</code> to encrypt a message:</p>
+                    <p>Plaintext:&nbsp;&nbsp;&nbsp;&nbsp;<code>HELLO WORLD</code></p>
+                    <p>Keyword:&nbsp;&nbsp;&nbsp;&nbsp;<code>SECRE TSECR</code></p>
+                    <p>Ciphertext:&nbsp;&nbsp;<code>ZINCS PGVNU</code></p>
+                    <p>Because the key repeats, this cipher can be cracked if an adversary guesses the key&apos;s length. The
+                        <a href="https://en.wikipedia.org/wiki/Kasiski_examination" target="_blank">Kasiski test</a> is one method used to
+                        break this cipher.</p>
+                    <p><em>Tip: Use the cipher wheel to get the keyword letters from the mappings given to you</em></p>
+                    <br>
+                    <p><a href="https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher" target="_blank">More information</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
 </div>
 </body>
 <script type="text/javascript" src="../js/wheel.js"></script>
+<script src="../js/custom.js" type="text/javascript"></script>
