@@ -20,8 +20,31 @@
 </head>
 
 <body ng-controller="GameController as game">
-<div id="navBar">
-    <a href="../index.html"><i id="homeBtn" class="fa fa-home fa-5x"></i></a>
+<div class="menu">
+    <nav class="navbar navbar-default" role="navigation" id="navBar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/index.html" data-toggle="tooltip" data-placement="bottom" title="Home">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="#" ng-click="openHelp()" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="Help" >
+                        <i class="fa fa-question-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
 <div id="game" ng-controller="SubstitutionLevelOne as level">
@@ -31,6 +54,11 @@
     <div class="divide50"></div>
     <!-- Question -->
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <header>
+                <h1 class="text-center">Substitution Cipher Challenge 1: Frequency Analysis</h1>
+            </header>
+        </div>
         <div class="panel-body">
             <h2 class="text-center">Stage {{stage}} / {{maxStage}}</h2>
             <h3 class="text-center">Use frequency analysis to determine the mapping for the 3 most common English letters</h3>
@@ -38,7 +66,7 @@
     </div>
 
     <!-- Frequency analysis level tool -->
-    <div class="col-xs-12 col-md-6 col-lg-6" id="frequency-tool" style="font-size: 2em">
+    <div class="col-xs-12 col-md-5 col-lg-5" id="frequency-tool" style="font-size: 2em">
         <!-- Display sentenceObject user selection -->
         <div>
             <div class="panel panel-default">
@@ -54,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="alert alert-info" role="alert">Hint: The word &quot;{{hintWord}}&quot; is in the message</div>
+            <div class="alert alert-info" role="alert">Hint: The word <code>{{hintWord}}</code> is in the message</div>
         </div>
         <div>Frequency of most common English letters</div>
         <div class="mapping-row">
@@ -65,7 +93,7 @@
         </div>
     </div>
 
-    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
+    <div id="playerInput" class="col-xs-12 col-md-7 col-lg-7">
         <!-- Answer display -->
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]"
             style="margin-bottom: -3%">
@@ -75,7 +103,7 @@
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <div ng-class="['answer-box', letter.deselectable ? 'clickable' : '']"
+            <div ng-class="['cipher', 'answer-box', letter.deselectable ? 'clickable' : '']"
                  ng-click="deselectLetter(letter)"
                  ng-repeat="letter in answerKeyboard track by $index"
                 style="margin-right: 10%">
@@ -110,7 +138,7 @@
                     <i class="fa fa-unlock fa-2x"></i>
                 </div>
             </div>
-            <div class="plaintext-box" ng-repeat="letter in plaintext track by $index"
+            <div class="plain plaintext-box" ng-repeat="letter in plaintext track by $index"
                  style="margin-right: 10%">
                 <div class="box-content">
                     <div>
@@ -123,6 +151,11 @@
         <!-- Keyboard display -->
         <div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                        <i class="fa fa-keyboard-o fa-2x lock"></i>
+                    </div>
+                </div>
                 <div ng-class="['frequency-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
@@ -139,6 +172,10 @@
                 </div>
             </div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                    </div>
+                </div>
                 <div ng-class="['frequency-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
@@ -156,7 +193,31 @@
             </div>
         </div>
     </div>
+    <div aria-hidden="true" aria-labelledby="HelpTitle" role="dialog" tabindex="-1" class="modal fade in" id="help-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="HelpTitle">Help</h3>
+                </div>
+                <div class="modal-body">
+                    <p>In the simple substitution cipher, the letters of the alphabet are shuffled such that no letter is mapped to itself.
+                        Plaintext characters are substituted for their respective letter in the cipher alphabet.</p>
+                    <p>The cipher alphabet acts as the key for this cipher where each key is 26 letters long. The number of possible
+                        keys is large (26! &ap; 2<sup>88.4</sup>) but it is still not a strong cipher. This cipher can still be cracked
+                        frequency analysis, word guesses and knowledge of the underlying structure of the English language.</p>
+                    <p><em>Tip: Your selection automatically updates the encrypted sentence. Use the hint word to figure out which letters
+                    you&apos;ve guessed are correct</em></p>
+                    <br>
+                    <p><a href="https://en.wikipedia.org/wiki/Substitution_cipher" target="_blank">More information</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 </body>
 <script type="text/javascript" src="../js/substitution.js"></script>
+<script src="../js/custom.js" type="text/javascript"></script>

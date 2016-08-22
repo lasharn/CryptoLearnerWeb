@@ -64,9 +64,9 @@
         </div>
     </div>
     <!-- Cipher Wheel -->
-    <div class="col-xs-12 col-md-6 col-lg-6" id="cipher-wheel"></div>
+    <div class="col-xs-12 col-md-5 col-lg-5" id="cipher-wheel"></div>
     <!-- Player Input -->
-    <div id="playerInput" class="col-xs-12 col-md-6 col-lg-6">
+    <div id="playerInput" class="col-xs-12 col-md-7 col-lg-7">
         <!-- Answer display -->
         <div ng-class="['answer-section', {'incorrect-answer': incorrectAnswer && !correctAnswer}, {'correct-answer': correctAnswer}]">
             <div class="icon-box">
@@ -103,6 +103,11 @@
         <!-- Keyboard display -->
         <div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                        <i class="fa fa-keyboard-o fa-2x lock"></i>
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index < (keyboard.length / 2)">
@@ -114,6 +119,10 @@
                 </div>
             </div>
             <div class="keyboard-row">
+                <div class="icon-box">
+                    <div class="box-content">
+                    </div>
+                </div>
                 <div ng-class="['keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
                      ng-click="selectLetter(letter)"
                      ng-repeat="letter in keyboard track by $index" ng-if="$index >= (keyboard.length / 2)">
@@ -151,3 +160,4 @@
 </div>
 </body>
 <script type="text/javascript" src="../js/wheel.js"></script>
+<script src="../js/custom.js" type="text/javascript"></script>
