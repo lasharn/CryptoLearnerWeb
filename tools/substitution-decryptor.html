@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html ng-app="cryptoLearner">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+    <script src="https://use.fontawesome.com/13139b496b.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/app.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../js/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.js"></script>
+    <script type="text/javascript" src="../js/p2.min.js"></script>
+
+    <title>Substitution Decryption Tool</title>
+</head>
+
+<body>
+<div class="menu">
+    <nav class="navbar navbar-default" role="navigation" id="navBar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/tools.html" data-toggle="tooltip" data-placement="bottom" title="Back">
+                        <i class="fa fa-chevron-left fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="/about.html" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="About" >
+                        <i class="fa fa-info-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div id="game" ng-controller="SubstitutionDecryptTool as level">
+    <div class="divide50"></div>
+    <header>
+        <div>
+            <hr>
+            <h1 class="text-center">Substitution Decryption Tool</h1>
+            <hr>
+        </div>
+    </header>
+    <div class="divide50"></div>
+    <!-- Input area -->
+    <div class="col-xs-12 col-md-6 col-lg-6" id="substitution-mapping">
+        <button ng-click="generateNewMapping()" class="btn btn-default btn-lg"><span class="fa fa-lg fa-random"></span> Create Random Mapping</button>
+        <button ng-click="openCustomMapping()" class="btn btn-default btn-lg"><span class="fa fa-lg fa-pencil"></span> Create Custom Mapping</button>
+        <div class="divide20"></div>
+    </div>
+
+    <!-- Player Input -->
+    <div class="col-xs-12 col-md-6 col-lg-6">
+        <!-- Input text -->
+        <div class="row">
+            <div class="col-xs-2 icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-unlock fa-2x"></i>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <textarea class="plain-textarea" rows="12" cols="72" ng-model="inputText" ng-disabled="isInputDisabled" ng-change="updateOutput()" autofocus placeholder="Insert text to decrypt..."></textarea>
+            </div>
+        </div>
+        <!-- middle icon -->
+        <div class="row">
+            <div class="col-xs-2 icon-box top-icon">
+                <div class="box-content">
+                </div>
+            </div>
+            <div class="col-xs-10 center-icon">
+                <div class="icon-box top-icon">
+                    <div class="box-content">
+                        <i class="fa fa-chevron-down fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Output text -->
+        <div class="row">
+            <div class="col-xs-2 icon-box top-icon">
+                <div class="box-content">
+                    <i class="fa fa-lock fa-2x"></i>
+                </div>
+            </div>
+            <div class="col-xs-10">
+                <textarea class="cipher-textarea" rows="12" placeholder="Decrypted output will automatically generate here..." ng-model="outputText" cols="72" disabled readonly></textarea>
+            </div>
+        </div>
+
+        <!-- Custom mapping modal -->
+        <div style="padding-right: 17px;" aria-hidden="true" aria-labelledby="successLabel" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1" class="modal fade in" id="mappings-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="successLabel">Edit Substitution Mappings</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class='mapping-row'>
+                            <div ng-class="['mapping', $index == currentAnswerIndex ? 'highlight' : '']"
+                                 ng-repeat='map in editMapping'
+                                 ng-click="deselectLetter(map.keyLetter)">
+                                <div class='keyLetter'>{{map.keyLetter}}</div>
+                                <div class='cipherLetter'>{{map.cipherLetter}}</div>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning alert-dismissible" role="alert" ng-hide="canSave">
+                            <strong>Invalid mapping!</strong> Make sure all letters are mapped and no letters are mapped to itself.
+                        </div>
+                        <hr>
+                        <div style="text-align: center">
+                            <button class="btn btn-default" ng-click="applyRandomMapping()"><span><i class="fa fa-lg fa-random"></i></span> Random Mapping</button>
+                            <button class="btn btn-default" ng-click="clearMapping()"><span><i class="fa fa-lg fa-times"></i></span> Clear All</button>
+                        </div>
+                        <div class="divide20"></div>
+                        <div>
+                            <div class="keyboard-row">
+                                <div ng-class="['small-keyboard-box', letter.selectable ? 'box-selectable' : 'box-unselectable']"
+                                     ng-click="selectLetter(letter)"
+                                     ng-repeat="letter in keyboard track by $index">
+                                    <div class="box-content">
+                                        <div>
+                                            <span ng-attr-id="{{ 'keyboard-' + $index }}">{{letter.char}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default ng-scope" data-dismiss="modal" ng-click="closeMapping()">Close</button>
+                        <button class="btn btn-primary ng-scope" data-dismiss="modal" ng-disabled="!canSave" ng-click="saveMapping()">Save &amp; Close</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/custom.js" type="text/javascript"></script>
+</body>
+<script type="text/javascript" src="../js/substitution.js"></script>

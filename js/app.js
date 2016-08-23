@@ -315,6 +315,9 @@
             name: 'Substitution Encryptor',
             path: 'substitution-encryptor'
         }, {
+            name: 'Substitution Decryptor',
+            path: 'substitution-decryptor'
+        }, {
             name: 'Vigènere Encryptor',
             path: 'vigenere-encryptor'
         }, {
@@ -1500,6 +1503,27 @@
             return text;
         }
 
+        $scope.decryptSubstitution = function(text, mapping) {
+            var originalText = text.toUpperCase();
+            for (var i = 0; i < text.length; i++) {
+                var findMapping = $.grep(mapping, function(map){ return map.cipherLetter == originalText[i]; });
+                if (findMapping.length == 0) {
+                    // no mapping found for this character, skip it
+                    continue;
+                } else {
+                    // check if mapping should be upper or lower case
+                    if (text[i] == originalText[i]) {
+                        // upper case
+                        text = text.replaceAt(i, findMapping[0].keyLetter);
+                    } else {
+                        // lower case
+                        text = text.replaceAt(i, findMapping[0].keyLetter.toLowerCase());
+                    }
+                }
+            }
+            return text;
+        }
+
     });
 
     app.controller('SubstitutionMappingTool', function ($scope) {
@@ -1627,6 +1651,19 @@
         $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
         $scope.updateOutput = function() {
             $scope.outputText = $scope.encryptSubstitution($scope.inputText, $scope.mapping);
+        }
+
+        $scope.openCustomMapping = function() {
+            $('#mappings-modal').modal('show');
+        }
+    });
+
+    app.controller('SubstitutionDecryptTool', function ($scope, $controller)  {
+        $controller('SubstitutionTool', {$scope : $scope});
+        $controller('SubstitutionMappingTool', {$scope : $scope});
+        $scope.outputText = $scope.decryptSubstitution($scope.inputText, $scope.mapping);
+        $scope.updateOutput = function() {
+            $scope.outputText = $scope.decryptSubstitution($scope.inputText, $scope.mapping);
         }
 
         $scope.openCustomMapping = function() {
