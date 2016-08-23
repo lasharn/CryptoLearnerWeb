@@ -20,25 +20,55 @@
 </head>
 
 <body>
+<div class="menu">
+    <nav class="navbar navbar-default" role="navigation" id="navBar">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="/index.html">CryptoLearner</a></li>
+                <li class="navbar-left">
+                    <a href="/tools.html" data-toggle="tooltip" data-placement="bottom" title="Back">
+                        <i class="fa fa-chevron-left fa-2x"></i>
+                    </a>
+                </li>
+                <li class="navbar-right">
+                    <a href="/about.html" class="menu-btn" data-toggle="tooltip" data-placement="bottom" title="About" >
+                        <i class="fa fa-info-circle fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 
 <div id="game" ng-controller="CaesarDecryptTool as level">
+    <div class="divide50"></div>
     <header>
-        <div id="navBar">
-            <a href="../tools.html"><i id="homeBtn" class="fa fa-chevron-left fa-5x"></i></a>
+        <div>
+            <hr>
             <h1 class="text-center">Caesar Decryption Tool</h1>
+            <hr>
         </div>
     </header>
-    <div class="divide100"></div>
+    <div class="divide50"></div>
     <!-- Player Input -->
     <div class="col-xs-12 col-md-6 col-lg-6">
         <!-- Input text -->
         <div class="row">
-            <div class="icon-box top-icon">
+            <div class="col-xs-2 icon-box top-icon">
                 <div class="box-content">
                     <i class="fa fa-lock fa-2x"></i>
                 </div>
             </div>
-            <textarea rows="12" cols="72" ng-model="inputText" ng-change="updateOutput()" autofocus placeholder="Insert text to decrypt..."></textarea>
+            <div class="col-xs-10">
+                <textarea class="cipher-textarea"  rows="12" ng-model="inputText" ng-change="updateOutput()" autofocus placeholder="Insert text to decrypt..."></textarea>
+            </div>
         </div>
     </div>
     <!-- Output area -->
@@ -68,5 +98,6 @@
     </div>
 
 </div>
+<script src="../js/custom.js" type="text/javascript"></script>
 </body>
 <script type="text/javascript" src="../js/wheel.js"></script>

@@ -8,6 +8,10 @@ h1, h2, h3 {
 
 textarea {
     resize: none;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 /** Carousel styling */
@@ -55,7 +59,7 @@ textarea {
 
 }
 
-.level-buttons button:hover {
+.level-buttons button:hover, #substitution-mapping button:hover {
     border-color: #337c8c !important;
     background-color: #337c8c !important;
     color: #ffffff !important;
@@ -338,7 +342,7 @@ textarea {
     overflow:hidden;
     cursor: pointer;
     border-radius: 0%;
-    background-color: #ebebeb;
+    background-color: #49B1C6;
     font-size: 0.7em;
 }
 
@@ -375,12 +379,20 @@ textarea {
 
 .keyLetter {
     padding: 15%;
-    background-color: #AAD9F7;
+    border: 2px solid #49B1C6;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    background-color: #E6F6F7;
+    color: black;
 }
 
 .cipherLetter {
     padding: 15%;
-    background-color: #FFAA44;
+    border: 2px solid #FFAA44;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    background-color: #F7ECE4;
+    color: black;
 }
 
 .mapping-icon {
@@ -522,6 +534,15 @@ textarea {
     right: 0;
     text-align:center;
     padding-top:calc(50% - 30px);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-color: #49B1C6;
+    background-color: #49B1C6;
+    color: #FFF9F0;
+}
+.thumbnail:hover {
+    border-color: #337c8c ;
+    background-color: #337c8c;
+    color: #ffffff;
 }
 
 /** Caesar tool styling **/
@@ -532,6 +553,26 @@ textarea {
 
 .center-icon {
     text-align: center;
+}
+
+/** Substitution tool styling **/
+#substitution-mapping button {
+    margin-bottom: 1%;
+    border-color: #49B1C6;
+    background-color: #49B1C6;
+    color: #FFF9F0;
+}
+
+.plain-textarea {
+    border: 2px solid #49B1C6;
+    background-color: #E6F6F7;
+    color: black;
+}
+
+.cipher-textarea {
+    border: 2px solid #FFAA44;
+    background-color: #F7ECE4;
+    color: black;
 }
 
 /** Dividers **/

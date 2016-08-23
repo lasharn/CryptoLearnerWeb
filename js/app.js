@@ -1509,7 +1509,13 @@
         $scope.canSave = isMappingValid();
 
         function getMapping() {
-            return $scope.mapping;
+            var mapping = [];
+            for (var i = 0; i < $scope.mapping.length; i++) {
+                var plain = $scope.mapping[i].keyLetter;
+                var cipher = $scope.mapping[i].cipherLetter;
+                mapping[i] = new Mapping(plain, cipher);
+            }
+            return mapping;
         }
 
         function isMappingValid() {
