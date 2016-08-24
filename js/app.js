@@ -1579,7 +1579,7 @@
         $scope.clearMapping = function () {
             // need to create a new mapping to remove reference between editMapping and mapping variable
             $scope.editMapping = createNewMapping();
-            for (var i = 0; i < $scope.editMapping.length; i++) {
+            for (var i = $scope.editMapping.length - 1; i >= 0; i--) {
                 $scope.deselectLetter($scope.editMapping[i].keyLetter);
             }
         }
