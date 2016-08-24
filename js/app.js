@@ -1,6 +1,6 @@
 (function () {
     var app = angular.module('cryptoLearner', ['ui.bootstrap', 'ngCookies']);
-    var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'vigenere/intro', 'vigenere/1', 'vigenere/2' , 'vigenere/3'];
+    var levelOrder = ['caesar/intro','caesar/1','caesar/2', 'caesar/3', 'substitution/intro', 'substitution/1', 'substitution/2', 'vigenere/intro', 'vigenere/1'/*, 'vigenere/2'*/];
     var wordList = getListFromFile("../res/words.txt");
     var sentenceList = getSentenceList();
 
@@ -297,12 +297,12 @@
                 isUnlocked: $cookies.get($scope.gameOrder[8]),
                 icon: 'fa-pencil',
                 challenge: 1
-            }, {
+            }/*, {
                 name: '',
                 isUnlocked: $cookies.get($scope.gameOrder[9]),
                 icon: '',
                 challenge: 2
-            }]
+            }*/]
         }];
 
         this.tools = [{
@@ -353,12 +353,12 @@
         $scope.nextChallenge = function () {
             //navigate to main menu if at last level or current level not detected
             if ($scope.currentLevelIndex == $scope.gameOrder.length - 1 || $scope.currentLevelIndex == -1) {
-                $window.location.href = '/index.html';
+                $window.location.href = '../index.html';
                 return;
             }
             // navigate to next page
             var nextLevel = $scope.gameOrder[$scope.currentLevelIndex + 1];
-            $window.location.href = '/' + nextLevel + '.html';
+            $window.location.href = '../' + nextLevel + '.html';
             return;
         }
 
