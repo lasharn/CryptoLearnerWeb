@@ -211,14 +211,14 @@
         setupCookies();
 
         function setupCookies() {
-            $cookies.put($scope.gameOrder[0], true);
+            $cookies.put($scope.gameOrder[0], true, {'path':'/'});
             $scope.gameOrder.forEach(setupCookie)
         }
         function setupCookie(level) {
             var cookieValue = $cookies.get(level);
             if (cookieValue == null) {
                 // lock levels that don't have a cookie
-                $cookies.put(level, false);
+                $cookies.put(level, false, {'path':'/'});
             }
         }
         $scope.go = function (path) {
@@ -227,13 +227,13 @@
 
         $scope.unlockAllLevels = function() {
             for (var i = 0; i < $scope.gameOrder.length; i++) {
-                $cookies.put($scope.gameOrder[i], true);
+                $cookies.put($scope.gameOrder[i], true, {'path':'/'});
             }
         }
 
         $scope.lockAllLevels = function() {
             for (var i = 1; i < $scope.gameOrder.length; i++) {
-                $cookies.put($scope.gameOrder[i], false);
+                $cookies.put($scope.gameOrder[i], false, {'path':'/'});
             }
         }
 
