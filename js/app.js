@@ -285,7 +285,7 @@
                 challenge: 2
             }]
         }, {
-            name: 'Vigènere Cipher',
+            name: 'Vigenère Cipher',
             level: 'vigenere',
             buttons: [{
                 name: 'Introduction',
