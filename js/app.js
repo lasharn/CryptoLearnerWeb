@@ -780,6 +780,7 @@
     app.controller('CaesarLevel', ['$scope', '$window', '$controller', function($scope, $window, $controller) {
         $controller('AnswerController', {$scope: $scope});
         $scope.key = Math.floor((Math.random() * 25) + 1);
+        $scope.keyAsLetter = String.fromCharCode($scope.key + "A".charCodeAt(0));
         $scope.plaintext = getNewWord();
         $scope.ciphertext = encryptCaesar($scope.plaintext, $scope.key);
         // determine if level is an encrypt or decrypt challenge
@@ -799,6 +800,8 @@
             $scope.keyboard = createKeyboard($scope.answertext);
             $scope.incorrectAnswer = false;
             $scope.correctAnswer = false;
+            $scope.keyAsLetter = String.fromCharCode($scope.key + "A".charCodeAt(0));
+
         }
 
         function encryptCaesar(plainText, key) {

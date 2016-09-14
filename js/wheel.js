@@ -61,7 +61,7 @@ var rotateWheel=function(elem, keyIsNumber){
         //calculate value of key
         currentKey = (26 - (Math.round((output.deg % 360) / (360 / 26)))) % 26;
         key = currentKey;
-        keyText.textContent = keyIsNumber ? key : String.fromCharCode(key + "A".charCodeAt(0));
+        keyText.textContent = /*keyIsNumber ? key : */String.fromCharCode(key + "A".charCodeAt(0));
     }
 
     function snapToLetter(e) {
